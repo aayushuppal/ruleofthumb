@@ -50,10 +50,9 @@ public class Tokenizer {
 		String tokArr[]=str.split(delim);
 		for(String s:tokArr){
 			tok=new Token();
-			tok.setTermText(s);;
+			tok.setTermText(s);	
 			arrListTok.add(tok);
-		}
-		
+			}
 		ts=new TokenStream(arrListTok);
 		return ts;
 	}

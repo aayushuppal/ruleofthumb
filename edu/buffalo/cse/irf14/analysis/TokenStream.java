@@ -15,8 +15,8 @@ import java.util.ListIterator;
  */
 public class TokenStream implements Iterator<Token>{
 	
-	ArrayList<Token> arrListToken;
-	ListIterator<Token> listItToken;
+	public ArrayList<Token> arrListToken;
+	public ListIterator<Token> listItToken;
 	/**
 	 * Method that checks if there is any Token left in the stream
 	 * with regards to the current pointer.
