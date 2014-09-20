@@ -24,16 +24,16 @@ public class Parser {
 	 * @return The parsed and fully loaded Document object
 	 * @throws ParserException In case any error occurs during parsing
 	 */
-	static String 	fName="",
-					fileID="",
-					category="",
-					title="",
-					author="",
-					org="",
-					month="",
-					date="",
-					place="",
-					content="";
+	static String 	fName=null,
+					fileID=null,
+					category=null,
+					title=null,
+					author=null,
+					org=null,
+					month=null,
+					date=null,
+					place=null,
+					content=null;
 	static int		titleEndIndex,dateStartIndex,titleLineIndex=0,dateEndIndex=0,lineCount=0;
 	static File 	f;
 
@@ -120,8 +120,7 @@ public class Parser {
 					}
 				}
 			
-			else if(sample.contains(",")){
-				
+			else if(sample.contains(",")){				
 						place=sample.split(",")[0].trim();
 						if(place.contains("-")){
 							place=place.split("-")[0].trim();
@@ -193,7 +192,7 @@ public class Parser {
 					String s2[];
 					String s3[];
 					s2=m.group(2).split(",");
-					s3=s2[0].toLowerCase().split("by");
+					s3=s2[0].split("(?i)by");
 					author=s3[s3.length-1].trim();
 					if(s2.length>=2)
 						org=s2[s2.length-1].trim();
@@ -233,16 +232,16 @@ public class Parser {
 	}
 	
 	public static void cleaner(){
-				fName="";
-				fileID="";
-				category="";
-				title="";
-				author="";
-				org="";
-				month="";
-				date="";
-				place="";
-				content="";
+				fName=null;
+				fileID=null;
+				category=null;
+				title=null;
+				author=null;
+				org=null;
+				month=null;
+				date=null;
+				place=null;
+				content=null;
 				titleEndIndex=0;
 				dateStartIndex=0;
 				titleLineIndex=0;
