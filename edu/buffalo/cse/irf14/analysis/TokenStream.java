@@ -67,7 +67,7 @@ public class TokenStream implements Iterator<Token>{
 	 */
 	public void reset() {
 		//TODO : YOU MUST IMPLEMENT THIS
-		listItToken = null;
+//		listItToken = null;
 		listItToken = arrListToken.listIterator();
 	}
 	
@@ -100,10 +100,15 @@ public class TokenStream implements Iterator<Token>{
 		//TODO: YOU MUST IMPLEMENT THIS
 		listItToken.next();
 		Token token = listItToken.previous();
-		if (token != null) {
+		if (token != null)
 			return token;
-		}
-		return null;
+		else return null;
+	}
+	public Token previous(){
+		Token token=listItToken.previous();
+		if(token!=null)
+			return token;
+		else return null;
 	}
 	
 }

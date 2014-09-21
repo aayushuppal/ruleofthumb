@@ -24,7 +24,7 @@ public abstract class TokenFilter implements Analyzer {
 		tokenStream=stream;
 	}
 	
-	public abstract void filter();
+	public abstract TokenStream filter();
 	
 	public abstract void setNextFilter(TokenFilter filter);
 	

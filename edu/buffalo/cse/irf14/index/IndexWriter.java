@@ -41,11 +41,16 @@ public class IndexWriter {
 		Tokenizer tokenizer = new Tokenizer(" ");
 		TokenFilter filter;
 		TokenStream stream;
-		AnalyzerFactory aFactory;
+		AnalyzerFactory aFactory=AnalyzerFactory.getInstance();
 		s=d.getField(FieldNames.TITLE)[0];
 		stream=tokenizer.consume(s);
 //		System.out.println(stream.next().getTermText());
-		
+		DateTokenFilter stf = new DateTokenFilter(stream);
+		stream=stf.filter();
+		stream.reset();
+		while(stream.hasNext()){
+			System.out.println(stream.next().getTermText());
+		}
 		//TODO : YOU MUST IMPLEMENT THIS
 	}
 	

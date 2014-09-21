@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Arrays;
 
+import edu.buffalo.cse.irf14.analysis.TokenizerException;
 import edu.buffalo.cse.irf14.document.Document;
 import edu.buffalo.cse.irf14.document.FieldNames;
 import edu.buffalo.cse.irf14.document.Parser;
@@ -32,14 +33,19 @@ public class Runner {
 	/**
 	 * @param args
 	 * @throws IOException 
+	 * @throws IndexerException 
+	 * @throws TokenizerException 
 	 */
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws IOException, IndexerException, TokenizerException {
 //		String ipDir = args[0];
 //		String indexDir = args[1];
+		
+		String indexDir="C:/Users/Festy/Desktop/IR Slides/sample";
 		//more? idk!
 		long startTime = System.currentTimeMillis();
-		String ipDir="C:/Users/Festy/Desktop/IR Slides/training";
-		PrintWriter writer = new  PrintWriter("C:/Users/Festy/Desktop/IR Slides/result2.txt");
+//		String ipDir="C:/Users/Festy/Desktop/IR Slides/training";
+		String ipDir="C:/Users/Festy/Desktop/IR Slides/sample";
+//		PrintWriter writer = new  PrintWriter("C:/Users/Festy/Desktop/IR Slides/result2.txt");
 		int count=0;
 		File ipDirectory = new File(ipDir);
 		String[] catDirectories = ipDirectory.list();
@@ -48,7 +54,7 @@ public class Runner {
 		File dir;
 		
 		Document d = null;
-//		IndexWriter writer = new IndexWriter(indexDir);
+		IndexWriter writer = new IndexWriter(indexDir);
 		
 		for (String cat : catDirectories) {
 			dir = new File(ipDir+ File.separator+ cat);
@@ -59,17 +65,17 @@ public class Runner {
 			
 			for (String f : files) {
 				d = Parser.parse(dir.getAbsolutePath() + File.separator +f);
-				writer.print(Arrays.toString(d.getField(FieldNames.FILEID)));
-				writer.print(Arrays.toString(d.getField(FieldNames.CATEGORY)));
+//				writer.print(d.getField(FieldNames.FILEID)[0]);
+//				writer.print(Arrays.toString(d.getField(FieldNames.CATEGORY)));
 //				writer.print(Arrays.toString(d.getField(FieldNames.TITLE)));
 //				writer.print(Arrays.toString(d.getField(FieldNames.PLACE)));
 //				writer.print(Arrays.toString(d.getField(FieldNames.NEWSDATE)));
 //				writer.print(Arrays.toString(d.getField(FieldNames.AUTHOR)));
 //				writer.print(Arrays.toString(d.getField(FieldNames.AUTHORORG)));
-				writer.print(Arrays.toString(d.getField(FieldNames.CONTENT)));
-				writer.println();
+//				writer.print(Arrays.toString(d.getField(FieldNames.CONTENT)));
+//				writer.println();
 				count++;
-//						writer.addDocument(d); 
+						writer.addDocument(d); 
 				
 			}
 			
