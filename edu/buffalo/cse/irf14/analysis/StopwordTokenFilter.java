@@ -8,6 +8,7 @@ import java.util.ArrayList;
 public class StopwordTokenFilter extends TokenFilter{
 	public StopwordTokenFilter(TokenStream s) {
 		super(s);
+		stream=s;
 		// TODO Auto-generated constructor stub
 	}
 		ArrayList<String> stopwordList;
@@ -18,12 +19,13 @@ public class StopwordTokenFilter extends TokenFilter{
 	TokenFilter nextFilter;
 	TokenStream stream;
 	
-	public void filter(){
+	public TokenStream filter(){
 		stream.reset();
 		
 		try {
-			if(increment()==true){
+			while(increment()==true){
 				Token t=stream.next();
+				
 				if(stopwordList.contains(t.getTermText())){
 					stream.remove();
 				}
@@ -32,6 +34,7 @@ public class StopwordTokenFilter extends TokenFilter{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		return stream;
 	}
 	
 	@Override
