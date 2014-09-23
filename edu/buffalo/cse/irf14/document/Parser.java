@@ -10,6 +10,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -37,48 +38,49 @@ public class Parser {
 	static int		titleEndIndex,dateStartIndex,titleLineIndex=0,dateEndIndex=0,lineCount=0;
 	static File 	f;
 
-	public static Document parse(String filename)  {
+	public static Document parse(String filename) throws ParserException  {
 		Document d = new Document();
 		cleaner();
+		if(filename==null){
+			throw new ParserException("Error!");
+		}
 		fName=filename;
-		
 		f=new File(fName);
+		if(!f.exists()) throw new ParserException("The file does not exist!");
 		setFileID();
 		setFileCategory();
-		try {
-			setFileTitle();
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		setFileTitle();
 		setAuthorOrg();
-		try {
-			setDateAndMonthAndPlace();
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		setDateAndMonthAndPlace();
 		try {
 			setContent();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			throw new ParserException(e);
 		}
-		d.setField(FieldNames.TITLE, title);
-		d.setField(FieldNames.CATEGORY, category);
-		d.setField(FieldNames.FILEID,fileID);
-		d.setField(FieldNames.AUTHOR,author);
-		d.setField(FieldNames.AUTHORORG,org);
-		d.setField(FieldNames.NEWSDATE,month+" "+date);
-		d.setField(FieldNames.PLACE,place);
-		d.setField(FieldNames.CONTENT,content);
+		
+		if(!(title==null))		d.setField(FieldNames.TITLE, title);
+		if(!(category==null))	d.setField(FieldNames.CATEGORY, category);
+		if(!(fileID==null))		d.setField(FieldNames.FILEID,fileID);
+		if(!(author==null))		d.setField(FieldNames.AUTHOR,author);
+		if(!(org==null))		d.setField(FieldNames.AUTHORORG,org);
+		if(!(month==null))		d.setField(FieldNames.NEWSDATE,month+" "+date);
+		if(!(place==null))		d.setField(FieldNames.PLACE,place);
+		if(!(content==null))	d.setField(FieldNames.CONTENT,content);
 		return d;
 	}
-	public static void setDateAndMonthAndPlace() throws FileNotFoundException{
+	public static void setDateAndMonthAndPlace() throws ParserException{
 		String sample,tempPlace,content;
 
 		BufferedReader reader;
-		reader = new BufferedReader(new FileReader(f));
+		try {
+			reader = new BufferedReader(new FileReader(f));
+		} catch (FileNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			throw new ParserException(e1);
+		}
 		try {
 		    sample=reader.readLine().trim();
 		    lineCount++;
@@ -145,48 +147,85 @@ public class Parser {
 //		System.out.println(date+" "+month);
 		
 	}
-	private static void setFileID(){
+	private static void setFileID() throws ParserException{
 		fileID=f.getName();
+		if(fileID==null) throw new ParserException("The file does not exist!");
 	}
 
-	private static void setFileCategory(){
+	private static void setFileCategory() throws ParserException{
 		category=f.getParentFile().getName().trim();
+		if(category==null) throw new ParserException("The file does not exist!");
 	}
 
-	public static void setFileTitle() throws FileNotFoundException{
+	@SuppressWarnings("resource")
+	public static void setFileTitle() throws ParserException{
 		BufferedReader reader;
-		reader = new BufferedReader(new FileReader(f));
 		try {
-			String s;
+			reader = new BufferedReader(new FileReader(f));
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			throw new ParserException(e);
+		}
+		String s;
+		try {
 			s=reader.readLine();
-		    while(s.equals("\n") || s.equals("\r") ||s.equals("") ||s.equals(null))
-		    {
-		    	s=reader.readLine();
-		    	titleLineIndex++;
-		    }
-		    title=s.trim();
-		    reader.close();
-
 		} catch (IOException e) {
-		    e.printStackTrace();
-		} finally {
-		    try {
-		        reader.close();
-		    } catch (IOException e) {
-		        e.printStackTrace();
-		    }
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			throw new ParserException(e);
+		}
+		while(s.equals("\n") || s.equals("\r") ||s.equals("") ||s.equals(null))
+		{
+		   try {
+			s=reader.readLine();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			throw new ParserException(e);
+		}
+		   titleLineIndex++;
+		}
+		title=s.trim();
+		try {
+			reader.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			throw new ParserException(e);
 		}
 	}
 
 
-	public static void setAuthorOrg(){
-		Pattern p =Pattern.compile("(<AUTHOR>)(.*)(</AUTHOR>)",Pattern.CASE_INSENSITIVE); // TODO implement for <author>
-		try {
-			FileInputStream fi= new FileInputStream(f);
+	public static void setAuthorOrg() throws ParserException{
+			Pattern p =Pattern.compile("(<AUTHOR>)(.*)(</AUTHOR>)",Pattern.CASE_INSENSITIVE); // TODO implement for <author>
+			FileInputStream fi = null;
+			try {
+				fi = new FileInputStream(f);
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				throw new ParserException(e);
+					
+				}
+			
 			byte[] data = new byte[(int)(f).length()];
-		    try {
-				fi.read(data);
-				String s = new String(data, "UTF-8");
+
+				try {
+					fi.read(data);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					throw new ParserException(e);
+				}
+				String s;
+				try {
+					s = new String(data, "UTF-8");
+				} catch (UnsupportedEncodingException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					throw new ParserException(e);
+				}
 				Matcher m=p.matcher(s);
 				if(m.find()){
 					String s2[];
@@ -196,38 +235,60 @@ public class Parser {
 					author=s3[s3.length-1].trim();
 					if(s2.length>=2)
 						org=s2[s2.length-1].trim();
-					
+//					System.out.println(org+"l");
+				try {
+					fi.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					throw new ParserException(e);
 				}
-				fi.close();
-			} catch (IOException e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-	}
+				}
+				else{
+					org=null;
+					author=null;
+				}
+				}
 	public static void setContent() throws IOException{
 		int count=lineCount;
 		String str="",line="";
+		String str2[] = null;
 		BufferedReader reader;
 		reader = new BufferedReader(new FileReader(f));
 		while(count!=0){
 			str=reader.readLine();
 			count--;
 		}
-		Pattern p3=  Pattern.compile(".*-(.*)");
-		Matcher m3= p3.matcher(str);
-		if(m3.matches()) str=m3.group(1)+" ";
-				
+//		Pattern p3=  Pattern.compile(".*-(.*)");
+//		Matcher m3= p3.matcher(str);
+//		if(m3.matches()) str=m3.group(1)+" ";
+		if(str.contains("-")){
+			str2=str.split("-");
+		}
+
+		if(str2.length==2)	
+		{
+			str=str2[1]+" ";
+		}
+		if(str2.length==3)	
+		{
+			str=str2[1]+"-"+str2[2]+" ";
+		}
+		if(str2.length==4)	
+		{
+			str=str2[1]+"-"+str2[2]+"-"+str2[3]+" ";
+		}
+		if(str2.length==5)	
+		{
+			str=str2[1]+"-"+str2[2]+"-"+str2[3]+"-"+str2[4]+" ";
+		}
 		while((line=reader.readLine())!=null){
 			
 			str=str+line;
 		}
 		content=str;
+		if(content.trim().equals("")) content=null;
 		reader.close();
 	}
 	
