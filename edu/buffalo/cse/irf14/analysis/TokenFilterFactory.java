@@ -21,9 +21,17 @@ public class TokenFilterFactory {
 	 * during instantiation
 	 * @return An instance of the factory
 	 */
+	static TokenFilterFactory localClass;
 	public static TokenFilterFactory getInstance() {
 		//TODO : YOU MUST IMPLEMENT THIS METHOD
-		return null;
+		{
+			if(localClass==null) {
+				localClass=new TokenFilterFactory();
+				return localClass;
+			}
+			else return localClass;
+		}
+
 	}
 	
 	/**
@@ -36,6 +44,53 @@ public class TokenFilterFactory {
 	 */
 	public TokenFilter getFilterByType(TokenFilterType type, TokenStream stream) {
 		//TODO : YOU MUST IMPLEMENT THIS METHOD
-		return null;
+		TokenFilter filter = null;
+		switch(type) {
+		case STOPWORD: 
+				{
+					filter= new StopwordTokenFilter(stream);
+					break;
+				}
+		case ACCENT:
+				{
+					filter= new AccentTokenFilter(stream);
+					break;
+				}
+		case CAPITALIZATION:
+				{
+					filter= new CapitalizationTokenFilter(stream);
+					break;
+				}
+			
+		case DATE:
+				{
+					filter= new DateTokenFilter(stream);
+					break;
+				}
+		case NUMERIC:
+				{
+					filter= new NumericTokenFilter(stream);
+					break;
+				}
+		case SPECIALCHARS:
+				{
+					filter= new SpecialCharsTokenFilter(stream);
+					break;
+				}
+		case STEMMER:
+				{
+					filter= new StemmerTokenFilter(stream);
+					break;
+				}
+		case SYMBOL:
+				{
+					filter= new SymbolTokenFilter(stream);
+					break;
+				}
+		default:
+			break;
+		
+		}
+		return filter;
 	}
 }

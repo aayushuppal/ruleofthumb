@@ -10,11 +10,12 @@ public class SpecialCharsTokenFilter extends TokenFilter{
 	public SpecialCharsTokenFilter(TokenStream stream) {
 		super(stream);
 		localstream=stream;
+		filter();
 		// TODO Auto-generated constructor stub
 	}
 
 	@Override
-	public TokenStream filter() {
+	public void filter() {
 		Token token;
 		String text;
 		TokenStream ts;
@@ -24,7 +25,7 @@ public class SpecialCharsTokenFilter extends TokenFilter{
 			while(increment()){
 				token=localstream.next();
 				text=token.getTermText();
-				text=text.replaceAll("[^A-Za-z0-9.-@]","");
+				text=text.replaceAll("[^A-Za-z0-9.-]","");
 				text=text.replace(":", "");
 				text=text.replace(";", "");
 				text=text.replace("/", "");
@@ -34,11 +35,6 @@ public class SpecialCharsTokenFilter extends TokenFilter{
 //					else 
 					text=text.replace("-", "");
 				}
-				if(text.contains("@")){
-					list.add(text.split("@")[0]);
-					list.add(text.split("@")[1]);
-				}
-				else
 					list.add(text);
 			}
 				for(String s:list){
@@ -59,7 +55,7 @@ public class SpecialCharsTokenFilter extends TokenFilter{
 				e.printStackTrace();
 			}		
 		// TODO Auto-generated method stub
-		return localstream;
+		
 	}
 
 	@Override

@@ -44,16 +44,35 @@ public class AnalyzerFactory {
 	 */
 	public Analyzer getAnalyzerForField(FieldNames name, TokenStream stream) {
 		//TODO : YOU NEED TO IMPLEMENT THIS METHOD
-		TokenFilter myFilterChain = null;
+		TokenFilter filter = null;
+		TokenFilterFactory factory = TokenFilterFactory.getInstance();
 		switch(name) {
-		case TITLE: {
-			TokenFilterFactory myFilterFactory = TokenFilterFactory.getInstance();
-			myFilterChain = 	myFilterFactory.getFilterByType(TokenFilterType.STOPWORD, stream);
-//			TokenFilter temp = 	myFilterFactory.getFilterByType(TokenFilterType.STEMMER, stream);
-//			temp.setNextFilter(myFilterFactory.getFilterByType(TokenFilterType.CAPITALIZATION, stream));
+		case TITLE:
+			break;
+		case AUTHOR:
+			break;
+		case AUTHORORG:
+			break;
+		case CATEGORY:
+			break;
+		case CONTENT:{
+			filter = factory.getFilterByType(TokenFilterType.DATE, stream);
+			break;
 		}
+		case FILEID:
+			break;
+		case NEWSDATE:
+		{
+			filter = factory.getFilterByType(TokenFilterType.DATE, stream);
+			break;
+		}
+		case PLACE:
+			break;
+		default:
+			break;
+		
 		}
 		
-		return myFilterChain;
+		return filter;
 	}
 }

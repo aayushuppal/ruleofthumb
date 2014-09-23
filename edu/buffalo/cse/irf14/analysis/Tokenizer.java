@@ -15,6 +15,7 @@ public class Tokenizer {
 	 */
 	String delim;
 	public Tokenizer() {
+		this.delim=" ";
 		//TODO : YOU MUST IMPLEMENT THIS METHOD
 	}
 	
@@ -46,7 +47,9 @@ public class Tokenizer {
 		Token tok ;
 		TokenStream ts;
 		ArrayList<Token> arrListTok =new ArrayList<Token>();
-		
+		if(str==null) throw new TokenizerException();
+		if(str.trim().equals("")) throw new TokenizerException();
+		if(str.trim().equals(delim)) throw new TokenizerException();
 		String tokArr[]=str.split(delim);
 		for(String s:tokArr){
 			tok=new Token();

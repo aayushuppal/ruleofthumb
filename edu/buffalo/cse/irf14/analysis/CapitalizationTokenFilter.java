@@ -6,8 +6,11 @@ package edu.buffalo.cse.irf14.analysis;
  *  If adjacent tokens satisfy the above rule, they should be combined into a single token (San Francisco, Brad Pitt, etc.)
  *  */
 public class CapitalizationTokenFilter extends TokenFilter{
+	TokenStream localstream;
 	public CapitalizationTokenFilter(TokenStream stream) {
 		super(stream);
+		localstream=stream;
+		filter();
 		// TODO Auto-generated constructor stub
 	}
 

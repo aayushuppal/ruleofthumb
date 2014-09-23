@@ -16,10 +16,10 @@ public class TFRuleBaseTest {
 		TokenStream tstream = tkizer.consume(str);
 		TokenFilterFactory factory = TokenFilterFactory.getInstance();
 		TokenFilter filter = factory.getFilterByType(type, tstream);
-		
-		while (filter.increment()) {
-			//Do nothing :/
-		}
+//		filter.filter();
+//		while (filter.increment()) {
+//			//Do nothing :/
+//		}
 		
 		tstream = filter.getStream();
 		tstream.reset();

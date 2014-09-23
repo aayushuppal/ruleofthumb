@@ -104,6 +104,7 @@ public class TokenStream implements Iterator<Token>{
 			return token;
 		else return null;
 	}
+	
 	public Token previous(){
 		Token token=listItToken.previous();
 		if(token!=null)

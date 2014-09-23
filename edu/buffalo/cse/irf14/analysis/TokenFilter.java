@@ -18,24 +18,24 @@ public abstract class TokenFilter implements Analyzer {
 	 * @param stream : The given TokenStream instance
 	 */
 	
-	TokenStream tokenStream;
+	TokenStream tokenstream;
 	public TokenFilter(TokenStream stream) {
 		//TODO : YOU MUST IMPLEMENT THIS METHOD
-		tokenStream=stream;
+		tokenstream=stream;
 	}
 	
-	public abstract TokenStream filter();
+	public abstract void filter();
 	
 	public abstract void setNextFilter(TokenFilter filter);
 	
 	public abstract TokenFilter getNextFilter();
 	
 	public TokenStream getStream() {
-		return tokenStream;
+		return tokenstream;
 	}
 	
 	public boolean increment() throws TokenizerException {
-		if(tokenStream!=null && tokenStream.hasNext()) {
+		if(tokenstream!=null && tokenstream.hasNext()) {
 			return true;
 		}
 			return false;

@@ -42,14 +42,18 @@ public class IndexWriter {
 		TokenFilter filter;
 		TokenStream stream;
 		AnalyzerFactory aFactory=AnalyzerFactory.getInstance();
-		s=d.getField(FieldNames.TITLE)[0];
-		stream=tokenizer.consume(s);
-//		System.out.println(stream.next().getTermText());
-		DateTokenFilter stf = new DateTokenFilter(stream);
-		stream=stf.filter();
-		stream.reset();
-		while(stream.hasNext()){
-			System.out.println(stream.next().getTermText());
+		try {
+			stream = tokenizer.consume(d.getField(FieldNames.CONTENT)[0]);
+			filter = (TokenFilter)aFactory.getAnalyzerForField(FieldNames.CONTENT, stream);
+//			filter.filter();
+			stream=filter.getStream();
+			while(stream.hasNext()){
+				token=stream.next();
+				System.out.println(token.getTermText());
+			}
+//			IndexerFactory.getInstance().getClassForIndex(IndexType.TERM).write(myStream, d.getField(FieldNames.FILEID)[0]);//hardcoded 0
+		} catch (TokenizerException e) {
+			throw new IndexerException();
 		}
 		//TODO : YOU MUST IMPLEMENT THIS
 	}

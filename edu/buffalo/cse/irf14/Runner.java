@@ -35,8 +35,9 @@ public class Runner {
 	 * @throws IOException 
 	 * @throws IndexerException 
 	 * @throws TokenizerException 
+	 * @throws ParserException 
 	 */
-	public static void main(String[] args) throws IOException, IndexerException, TokenizerException {
+	public static void main(String[] args) throws IOException, IndexerException, TokenizerException, ParserException {
 //		String ipDir = args[0];
 //		String indexDir = args[1];
 		
