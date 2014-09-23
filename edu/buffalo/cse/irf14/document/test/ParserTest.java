@@ -3,7 +3,6 @@ package edu.buffalo.cse.irf14.document.test;
 import static org.junit.Assert.*;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 
 import org.junit.Test;
 
@@ -17,7 +16,8 @@ public class ParserTest {
 	/* For testing purposes we are assuming that the corpus data is in the project directory. 
 	 * If you are going to be using these tests locally and your corpus data is not in your project
 	 * directory then feel free to change this. */
-	private static final String BASE_USER_DIR = "C:/Users/Festy/Dropbox/Code Repository/IR_final/training" ;
+	private static final String BASE_USER_DIR = 
+			System.getProperty("user.dir") + File.separatorChar + "training" ;
 	
 	private static final String[] titles = {"COMPUTER TERMINAL SYSTEMS <CPML> COMPLETES SALE",
 		"DUTCH PLANNING AGENCY FORECASTS LOWER GROWTH", "WESTMIN TO RAISE MYRA FALLS CAPACITY BY 33 PCT",
@@ -38,35 +38,56 @@ public class ParserTest {
 	// Document object to test with
 	private Document d = null;
 	
-//	@Test
-//	public void testParseNullFile() throws FileNotFoundException{
-//		d = Parser.parse(null);
-//		fail("ParserException not thrown.");
-//	}
-//	
-//	@Test
-//	public void testParseBlankFile() throws FileNotFoundException{
-//		d = Parser.parse("");
-//		fail("ParserException not thrown.");
-//	}
-//	
-//	@Test
-//	public void testParseInvalidFile() throws FileNotFoundException{
-//		d = Parser.parse("$%^thisFileNameWillNeverExist.txt");
-//		fail("ParserException not thrown.");
-//	}
+	@Test
+	public void testParseNullFile(){
+		// Null file name (Test that the method will throw an exception)
+		try {
+			 d = Parser.parse(null);
+			fail("ParserException not thrown.");
+		} catch (ParserException e) {
+			assertNotNull(e);
+		}
+	}
 	
 	@Test
-	public void testParseValidFileName() throws FileNotFoundException {		
-		for(int i = 0; i < filenames.length; i++){
-			d = Parser.parse(filenames[i]);
-			validateTitle(d, i);
-			validateFileId(d, i);
-			validateCategory(d, i);
-			validateAuthorOrg(d, i);
-			validatePlace(d, i);
-			validateNewsDate(d, i);
-			validateAuthor(d, i);
+	public void testParseBlankFile(){
+		// Blank file name (Test that the method will throw an exception)
+		try {
+			 d = Parser.parse("");
+			fail("ParserException not thrown.");
+		} catch (ParserException e) {
+			assertNotNull(e);
+		}
+	}
+	
+	@Test
+	public void testParseInvalidFile(){
+		// Invalid file name (Test that the method will throw an exception)
+		try {
+			 d = Parser.parse("$%^thisFileNameWillNeverExist.txt");
+			fail("ParserException not thrown.");
+		} catch (ParserException e) {
+			assertNotNull(e);
+		}
+	}
+	
+	@Test
+	public void testParseValidFileName() {		
+		// Valid file name with document testing
+		try {
+			for(int i = 0; i < filenames.length; i++){
+				d = Parser.parse(filenames[i]);
+				validateTitle(d, i);
+				validateFileId(d, i);
+				validateCategory(d, i);
+				validateAuthorOrg(d, i);
+				validatePlace(d, i);
+				validateNewsDate(d, i);
+				validateAuthor(d, i);
+			}
+		} catch (ParserException e) {
+			e.printStackTrace(); // So that debugging may be a bit easier.
+			fail("A ParserException was thrown when it should not have been thrown.");
 		}
 	}
 	
@@ -88,10 +109,12 @@ public class ParserTest {
 	private void validateAuthorOrg(Document d, int count){
 		String authorOrg = authororgs[count];
 
-
+		if (authorOrg == null) {
+			assertNull(d.getField(FieldNames.AUTHORORG));
+		} else {
 			assertEquals(authorOrg,
 				d.getField(FieldNames.AUTHORORG)[0]);	
-		 
+		} 
 	}
 	
 	private void validatePlace(Document d, int count){
@@ -107,10 +130,12 @@ public class ParserTest {
 	private void validateAuthor(Document d, int count){
 		String author = authors[count];
 
-		
+		if (author == null) {
+			assertNull(d.getField(FieldNames.AUTHOR));
+		} else {
 			assertEquals(author,
 				d.getField(FieldNames.AUTHOR)[0]);	
-		
+		}
 		
 	}
 }
