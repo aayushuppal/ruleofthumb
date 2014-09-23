@@ -1,4 +1,7 @@
 package edu.buffalo.cse.irf14.analysis;
+
+import java.util.HashMap;
+
 /*
  * Any number that is not a date should be removed.
  */
@@ -8,16 +11,26 @@ public class NumericTokenFilter extends TokenFilter{
 	public NumericTokenFilter(TokenStream stream) {
 		super(stream);
 		localstream=stream;
+		filter();
 		// TODO Auto-generated constructor stub
 	}
 
 	@Override
-	public TokenStream filter() {
+	public void filter() {
 		Token token;
 		String text;
+		HashMap<Integer,String> punctMap = new HashMap<Integer, String>();
+		int tokenCounter=0;
 		try {
 			while(increment()){
+				tokenCounter++;
 				token=localstream.next();
+				if(token.getTermText().endsWith(".")){
+					punctMap.put(tokenCounter, ".");
+				}
+				if(token.getTermText().endsWith(",")){
+					punctMap.put(tokenCounter, ",");
+				}
 				text=token.getTermText().replaceAll("[,.]", "");
 				if(text.matches(".*[0-9]+.*")){
 //					System.out.println("lol");
@@ -30,15 +43,29 @@ public class NumericTokenFilter extends TokenFilter{
 						
 					}
 				}
-				if(text.equals(""))	localstream.remove();
-				else token.setTermText(text);
+					token.setTermText(text);
+				
 			}
 		} catch (TokenizerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		localstream.reset();
+		Token t1;
+		for(int i=0;i<tokenCounter;i++){
+			t1=localstream.next();
+			if(!t1.getTermText().equals("")){
+				if(punctMap.containsKey(i+1)){
+					if(!t1.getTermText().endsWith(punctMap.get(i+1))){
+						t1.setTermText(t1.getTermText()+punctMap.get(i+1));
+					}
+				}
+			}
+			else{
+				localstream.remove();
+			}
+		}
 		// TODO Auto-generated method stub
-		return localstream;
 	}
 
 	@Override

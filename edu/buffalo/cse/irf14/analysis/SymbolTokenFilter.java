@@ -12,11 +12,12 @@ public class SymbolTokenFilter extends TokenFilter{
 	public SymbolTokenFilter(TokenStream stream) {
 		super(stream);
 		localstream=stream;
+		filter();
 		// TODO Auto-generated constructor stub
 	}
 
 	@Override
-	public TokenStream filter() {
+	public void filter() {
 		Token token;
 		try {
 			while(increment()){
@@ -84,7 +85,6 @@ public class SymbolTokenFilter extends TokenFilter{
 			e.printStackTrace();
 		}
 		// TODO Auto-generated method stub
-		return localstream;
 	}
 
 	@Override
