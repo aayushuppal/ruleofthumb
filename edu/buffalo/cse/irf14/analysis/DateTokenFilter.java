@@ -17,7 +17,7 @@ import java.util.regex.Pattern;
 	*	Hour, minute or second should be 00.
 */
 public class DateTokenFilter extends TokenFilter{
-	/*(ONLY won't work if sentence has two/more keywords matching for month)*/
+	/**Some bug, wrongly prints the middle symbol of two merging token, at the end of merged token*/
 	TokenStream localstream;
 	TokenStream ts;
 	

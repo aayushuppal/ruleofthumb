@@ -23,7 +23,7 @@ public class Token {
 	 * to suit your class definition and data structure needs.
 	 * @param text
 	 */
-	protected void setTermText(String text) {
+	public void setTermText(String text) {
 		termText = text;
 		termBuffer = (termText != null) ? termText.toCharArray() : null;
 	}
@@ -64,8 +64,17 @@ public class Token {
 	 * below must return whitespace separated value for all tokens combined
 	 * Also the token order must be maintained.
 	 * @param tokens The token array to be merged
+	 * @throws Exception 
 	 */
-	protected void merge(Token...tokens) {
+	protected void merge(Token...tokens) throws Exception {
+		String s=getTermText();
+		if(tokens!=null)
+		for(int i=0;i<tokens.length;i++){
+			if(!tokens[i].getTermText().trim().equals(null) && !tokens[i].getTermText().trim().equals("") && tokens!=null)
+			s=s+" "+tokens[i].getTermText().trim();
+		}
+		
+		setTermText(s);
 		//TODO : YOU MUST IMPLEMENT THIS METHOD
 	}
 	

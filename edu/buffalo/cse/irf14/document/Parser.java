@@ -39,6 +39,7 @@ public class Parser {
 	static File 	f;
 
 	public static Document parse(String filename) throws ParserException  {
+		/*(ONLY won't work if sentence has two/more keywords matching for month)*/
 		Document d = new Document();
 		cleaner();
 		if(filename==null){

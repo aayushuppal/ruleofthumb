@@ -17,6 +17,8 @@ public class TokenStream implements Iterator<Token>{
 	
 	public ArrayList<Token> arrListToken;
 	public ListIterator<Token> listItToken;
+	Token currentToken=null;
+	private int i;
 	/**
 	 * Method that checks if there is any Token left in the stream
 	 * with regards to the current pointer.
@@ -45,7 +47,15 @@ public class TokenStream implements Iterator<Token>{
 	@Override
 	public Token next() {
 		// TODO YOU MUST IMPLEMENT THIS
-		return listItToken.next();
+		if(listItToken.hasNext()){
+			currentToken=listItToken.next();
+		i =listItToken.nextIndex();
+		return currentToken;
+		}
+		else{
+			currentToken=null;
+			return null;
+		}
 	}
 	
 	/**
@@ -57,7 +67,11 @@ public class TokenStream implements Iterator<Token>{
 	@Override
 	public void remove() {
 		// TODO YOU MUST IMPLEMENT THIS
+		
+		if(currentToken!=null){
 		listItToken.remove();
+		}
+		currentToken=null;
 	}
 	
 	/**
@@ -82,10 +96,20 @@ public class TokenStream implements Iterator<Token>{
 	 */
 	public void append(TokenStream stream) {
 		//TODO : YOU MUST IMPLEMENT THIS
-		TokenStream str = stream;
-		for(Token t:str.arrListToken){
-			arrListToken.add(t);
+		if(stream!=null){
+		ArrayList<Token> temp= new ArrayList<Token>();
+		for(Token t:arrListToken){
+			temp.add(t);
 		}
+		for(Token t:stream.arrListToken){
+			temp.add(t);
+		}
+		arrListToken=temp;
+		reset();
+		for(int j=0;j<i;j++){
+			listItToken.next();
+		}
+	}
 	}
 	
 	/**
@@ -98,18 +122,11 @@ public class TokenStream implements Iterator<Token>{
 	 */
 	public Token getCurrent() {
 		//TODO: YOU MUST IMPLEMENT THIS
-		listItToken.next();
-		Token token = listItToken.previous();
-		if (token != null)
-			return token;
-		else return null;
+			return currentToken;
 	}
 	
 	public Token previous(){
-		Token token=listItToken.previous();
-		if(token!=null)
-			return token;
-		else return null;
+		return listItToken.previous();
 	}
 	
 }

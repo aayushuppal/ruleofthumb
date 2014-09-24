@@ -25,15 +25,18 @@ public class SpecialCharsTokenFilter extends TokenFilter{
 			while(increment()){
 				token=localstream.next();
 				text=token.getTermText();
-				text=text.replaceAll("[^A-Za-z0-9.-]","");
-				text=text.replace(":", "");
-				text=text.replace(";", "");
-				text=text.replace("/", "");
-				if(text.matches("-")) {
-//					if(text.contains("+")) text=text.replaceAll("[+-/*%()]", "");
-//					else if(text.matches("-[a-zA-Z]+")){ }//ignore
-//					else 
-					text=text.replace("-", "");
+				text=text.replaceAll("[^A-Za-z0-9 .-]","");
+//				text=text.replaceAll("\\P{Alnum}","");
+//				text=text.replaceAll(":", "");
+//				text=text.replaceAll(";", "");
+//				text=text.replaceAll("/", "");
+				if(text.contains("-")) {
+					
+					if(text.matches("[0-9]+-[0-9]+")) {}
+//					else if(text.matches("^[^A-Za-z0-9]+[A-Za-z]+")) {}
+					else if(text.startsWith("-")){}
+					else {text=text.replaceAll("[^A-Za-z0-9]+", "");}
+					
 				}
 					list.add(text);
 			}
@@ -47,7 +50,7 @@ public class SpecialCharsTokenFilter extends TokenFilter{
 					
 				}
 				localstream= new TokenStream(list2);
-			
+				super.tokenstream=localstream;
 		
 		}
 		catch (TokenizerException e) {
