@@ -254,7 +254,7 @@ public class Parser {
 	public static void setContent() throws IOException{
 		int count=lineCount;
 		String str="",line="";
-		String str2[] = null;
+		String str2[]={""};
 		BufferedReader reader;
 		reader = new BufferedReader(new FileReader(f));
 		while(count!=0){
@@ -267,7 +267,9 @@ public class Parser {
 		if(str.contains("-")){
 			str2=str.split("-");
 		}
-
+		else{
+			str2[0]=str;
+		}
 		if(str2.length==2)	
 		{
 			str=str2[1]+" ";
