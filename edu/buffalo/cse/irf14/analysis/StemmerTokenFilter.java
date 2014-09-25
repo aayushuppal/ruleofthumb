@@ -23,16 +23,18 @@ public class StemmerTokenFilter extends TokenFilter{
 			token=localstream.next();
 			
 			char tokenchar[] = token.getTermBuffer();
+			if(Character.isLetter(tokenchar[0])){
 			psobj.add(tokenchar, tokenchar.length);
 			psobj.stem();
 			String text = psobj.toString();
 			token.setTermText(text);
 			}
+			}
 		}
 		catch (TokenizerException e) {
 			e.printStackTrace();
 		}
-		
+		localstream.reset();
 	}
 
 	@Override
