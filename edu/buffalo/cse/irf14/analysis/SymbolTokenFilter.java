@@ -84,6 +84,7 @@ public class SymbolTokenFilter extends TokenFilter{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		localstream.reset();
 		// TODO Auto-generated method stub
 	}
 

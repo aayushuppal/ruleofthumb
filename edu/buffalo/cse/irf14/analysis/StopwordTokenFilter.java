@@ -39,7 +39,7 @@ public class StopwordTokenFilter extends TokenFilter{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
+		localstream.reset();
 	}
 	
 	@Override

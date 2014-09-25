@@ -293,9 +293,10 @@ yearMapCopy1.putAll(yearMapCopy);
 					finalMap.put(i, s);
 				}
 			}
-			int[] remove = new int[50];
+			int[] remove = new int[1000]; // DO SOMETHING ABOUT THIS HUGE ARRAY!!
 			for(int i:finalMap.keySet()){
-				if((finalMap.get(i).toLowerCase().contains("am")) && finalMap.get(i-1).matches("\\d{1,8}(:\\d{0,2})?")){
+				if(finalMap.get(i).toLowerCase().contains("am") && finalMap.containsKey(i-1)){
+					if(finalMap.get(i-1).matches("\\d{1,8}(:\\d{0,2})?"))
 				if(finalMap.get(i-1).contains(":")){
 					String adbc=finalMap.get(i-1);
 					String h=adbc.split(":")[0];
@@ -316,7 +317,8 @@ yearMapCopy1.putAll(yearMapCopy);
 					remove[i]=i;
 				}
 			}
-				else if((finalMap.get(i).toLowerCase().contains("pm")) && finalMap.get(i-1).matches("\\d{1,8}(:\\d{0,2})?")){
+				else if((finalMap.get(i).toLowerCase().contains("pm")) && finalMap.containsKey(i-1)){
+					if(finalMap.get(i-1).matches("\\d{1,8}(:\\d{0,2})?")){
 				if(finalMap.get(i-1).contains(":")){
 					String adbc=finalMap.get(i-1);
 					String h=adbc.split(":")[0];
@@ -337,6 +339,7 @@ yearMapCopy1.putAll(yearMapCopy);
 					remove[i]=i;
 				}
 			}
+				}
 			}
 			for(int j:remove){
 //				System.out.println(j);

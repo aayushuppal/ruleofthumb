@@ -25,6 +25,7 @@ public class NumericTokenFilter extends TokenFilter{
 			while(increment()){
 				tokenCounter++;
 				token=localstream.next();
+//				System.out.println(token.getTermText());
 				if(token.getTermText().endsWith(".")){
 					punctMap.put(tokenCounter, ".");
 				}
@@ -32,7 +33,7 @@ public class NumericTokenFilter extends TokenFilter{
 					punctMap.put(tokenCounter, ",");
 				}
 				text=token.getTermText().replaceAll("[,.]", "");
-				if(text.matches(".*[0-9]+.*")){
+				if(text.matches("^\\d+$")){
 //					System.out.println("lol");
 					if(text.length()==8 && Integer.parseInt(text.substring(4,6))<13 &&Integer.parseInt(text.substring(6,8))<32){
 						//ignore, because this is our filtered date from prev filter
@@ -58,14 +59,19 @@ public class NumericTokenFilter extends TokenFilter{
 				if(punctMap.containsKey(i+1)){
 					if(!t1.getTermText().endsWith(punctMap.get(i+1))){
 						t1.setTermText(t1.getTermText()+punctMap.get(i+1));
+//						System.out.println(t1.getTermText());
 					}
 				}
+				
 			}
 			else{
 				localstream.remove();
+				
 			}
 		}
+		localstream.reset();
 		// TODO Auto-generated method stub
+		super.tokenstream=localstream;
 	}
 
 	@Override
