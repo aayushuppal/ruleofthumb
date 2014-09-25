@@ -9,6 +9,10 @@ package edu.buffalo.cse.irf14.index;
  */
 public class IndexerException extends Exception {
 
+	public IndexerException() {super();}
+	public IndexerException(String s){super(s);}
+	public IndexerException(String s, Throwable c) {super(s,c);}
+	public IndexerException(Throwable c) {super(c);}
 	/**
 	 * 
 	 */
