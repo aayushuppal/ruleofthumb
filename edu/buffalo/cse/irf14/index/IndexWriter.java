@@ -19,39 +19,50 @@ import edu.buffalo.cse.irf14.document.FieldNames;
 public class IndexWriter {
 	
 	String indexDir;
-	static HashMap<String,Integer> docMap = new HashMap<String,Integer>();
-	static HashMap<Integer,String> revDocMap = new HashMap<Integer,String>();
-	static HashMap<String,ArrayList<Integer>> indexMap=null;
-	static HashMap<String,ArrayList<Integer>> aa_an = new HashMap<String,ArrayList<Integer>>();
-	static HashMap<String,ArrayList<Integer>> ao_az = new HashMap<String,ArrayList<Integer>>();
-	static HashMap<String,ArrayList<Integer>> ca_cj = new HashMap<String,ArrayList<Integer>>();
-	static HashMap<String,ArrayList<Integer>> ck_cz = new HashMap<String,ArrayList<Integer>>();
-	static HashMap<String,ArrayList<Integer>> sa_si = new HashMap<String,ArrayList<Integer>>();
-	static HashMap<String,ArrayList<Integer>> sj_sz = new HashMap<String,ArrayList<Integer>>();
-	static HashMap<String,ArrayList<Integer>> b = new HashMap<String,ArrayList<Integer>>();
-	static HashMap<String,ArrayList<Integer>> d = new HashMap<String,ArrayList<Integer>>();
-	static HashMap<String,ArrayList<Integer>> e = new HashMap<String,ArrayList<Integer>>();
-	static HashMap<String,ArrayList<Integer>> f = new HashMap<String,ArrayList<Integer>>();
-	static HashMap<String,ArrayList<Integer>> g = new HashMap<String,ArrayList<Integer>>();
-	static HashMap<String,ArrayList<Integer>> h = new HashMap<String,ArrayList<Integer>>();
-	static HashMap<String,ArrayList<Integer>> i = new HashMap<String,ArrayList<Integer>>();
-	static HashMap<String,ArrayList<Integer>> j = new HashMap<String,ArrayList<Integer>>();
-	static HashMap<String,ArrayList<Integer>> k = new HashMap<String,ArrayList<Integer>>();
-	static HashMap<String,ArrayList<Integer>> l = new HashMap<String,ArrayList<Integer>>();
-	static HashMap<String,ArrayList<Integer>> m = new HashMap<String,ArrayList<Integer>>();
-	static HashMap<String,ArrayList<Integer>> n = new HashMap<String,ArrayList<Integer>>();
-	static HashMap<String,ArrayList<Integer>> o = new HashMap<String,ArrayList<Integer>>();
-	static HashMap<String,ArrayList<Integer>> p = new HashMap<String,ArrayList<Integer>>();
-	static HashMap<String,ArrayList<Integer>> q = new HashMap<String,ArrayList<Integer>>();
-	static HashMap<String,ArrayList<Integer>> r = new HashMap<String,ArrayList<Integer>>();
-	static HashMap<String,ArrayList<Integer>> t = new HashMap<String,ArrayList<Integer>>();
-	static HashMap<String,ArrayList<Integer>> u = new HashMap<String,ArrayList<Integer>>();
-	static HashMap<String,ArrayList<Integer>> vwxyz = new HashMap<String,ArrayList<Integer>>();
-	static HashMap<String,ArrayList<Integer>> symbol = new HashMap<String,ArrayList<Integer>>();
-	static HashMap<String,String> list = new HashMap<String,String>();
-	static int docCounter=0;
+	public static HashMap<String,Integer> docMap = new HashMap<String,Integer>();
+	public static HashMap<Integer,String> revDocMap = new HashMap<Integer,String>();
+	public static HashMap<String,ArrayList<Integer>> indexMap=null;
+	public static HashMap<String,ArrayList<Integer>> aa_an = new HashMap<String,ArrayList<Integer>>();
+	public static HashMap<String,ArrayList<Integer>> ao_az = new HashMap<String,ArrayList<Integer>>();
+	public static HashMap<String,ArrayList<Integer>> ca_cj = new HashMap<String,ArrayList<Integer>>();
+	public static HashMap<String,ArrayList<Integer>> ck_cz = new HashMap<String,ArrayList<Integer>>();
+	public static HashMap<String,ArrayList<Integer>> sa_si = new HashMap<String,ArrayList<Integer>>();
+	public static HashMap<String,ArrayList<Integer>> sj_sz = new HashMap<String,ArrayList<Integer>>();
+	public static HashMap<String,ArrayList<Integer>> b = new HashMap<String,ArrayList<Integer>>();
+	public static HashMap<String,ArrayList<Integer>> d = new HashMap<String,ArrayList<Integer>>();
+	public static HashMap<String,ArrayList<Integer>> e = new HashMap<String,ArrayList<Integer>>();
+	public static HashMap<String,ArrayList<Integer>> f = new HashMap<String,ArrayList<Integer>>();
+	public static HashMap<String,ArrayList<Integer>> g = new HashMap<String,ArrayList<Integer>>();
+	public static HashMap<String,ArrayList<Integer>> h = new HashMap<String,ArrayList<Integer>>();
+	public static HashMap<String,ArrayList<Integer>> i = new HashMap<String,ArrayList<Integer>>();
+	public static HashMap<String,ArrayList<Integer>> j = new HashMap<String,ArrayList<Integer>>();
+	public static HashMap<String,ArrayList<Integer>> k = new HashMap<String,ArrayList<Integer>>();
+	public static HashMap<String,ArrayList<Integer>> l = new HashMap<String,ArrayList<Integer>>();
+	public static HashMap<String,ArrayList<Integer>> m = new HashMap<String,ArrayList<Integer>>();
+	public static HashMap<String,ArrayList<Integer>> n = new HashMap<String,ArrayList<Integer>>();
+	public static HashMap<String,ArrayList<Integer>> o = new HashMap<String,ArrayList<Integer>>();
+	public static HashMap<String,ArrayList<Integer>> p = new HashMap<String,ArrayList<Integer>>();
+	public static HashMap<String,ArrayList<Integer>> q = new HashMap<String,ArrayList<Integer>>();
+	public static HashMap<String,ArrayList<Integer>> r = new HashMap<String,ArrayList<Integer>>();
+	public static HashMap<String,ArrayList<Integer>> t = new HashMap<String,ArrayList<Integer>>();
+	public static HashMap<String,ArrayList<Integer>> u = new HashMap<String,ArrayList<Integer>>();
+	public static HashMap<String,ArrayList<Integer>> vwxyz = new HashMap<String,ArrayList<Integer>>();
+	public static HashMap<String,ArrayList<Integer>> authM = new HashMap<String,ArrayList<Integer>>();
+	public static HashMap<String,ArrayList<Integer>> catM = new HashMap<String,ArrayList<Integer>>();
+	public static HashMap<String,ArrayList<Integer>> placeM = new HashMap<String,ArrayList<Integer>>();
+//	static HashMap<String,ArrayList<Integer>> newsM = new HashMap<String,ArrayList<Integer>>();
+	public static HashMap<String,ArrayList<Integer>> symbol = new HashMap<String,ArrayList<Integer>>();
+	public static HashMap<String,String> list = new HashMap<String,String>();
+	public static int docCounter;
+	public static int termdocCounter;
+	public static int authdocCounter;
+	public static int catdocCounter;
+	public static int placedocCounter;
 	static String docNameKey;
 	public static int termCounter;
+	public static int authCounter;
+	public static int catCounter;
+	public static int placeCounter;
 	/**
 	 * Default constructor
 	 * @param indexDir : The root directory to be sued for indexing
@@ -78,31 +89,80 @@ public class IndexWriter {
 		TokenStream stream,stream2;
 		
 		AnalyzerFactory aFactory=AnalyzerFactory.getInstance();
+		addDocID(d);
 		try {
-			
+			if(d.getField(FieldNames.CONTENT)!=null){
 			stream = tokenizer.consume(d.getField(FieldNames.CONTENT)[0]);
 			filter = (TokenFilter)aFactory.getAnalyzerForField(FieldNames.CONTENT, stream);
 			while(filter.increment()){
 			}
 			stream=filter.getStream();
+			index(stream,FieldNames.CONTENT);
+			}
 			
-			addDocID(d);
+			if(d.getField(FieldNames.AUTHOR)!=null){
+				authdocCounter++;
+				String author=d.getField(FieldNames.AUTHOR)[0];
+				ArrayList<Token >  a2=new ArrayList<Token >();
+				Token t3;
+				if(author.toLowerCase().contains(" and "))
+				{// * Multiple Authors * //
+					t3=new Token();
+					t3.setTermText(author.split("(?i)and")[0]);
+					t3=new Token();
+					t3.setTermText(author.split("(?i)and")[1]);
+					a2.add(t3);
+//					System.out.println(author);
+				}
+				else{
+					t3=new Token();
+					t3.setTermText(author);
+					a2.add(t3);
+					
+				}
+				TokenStream authStream=new TokenStream(a2);				
+				index(authStream,FieldNames.AUTHOR);
+				}
 			
-			index(stream);			
-//			printIndex();
-//			System.out.println(stream.next().getTermText());
-
-//			
-//			filter=new StopwordTokenFilter(stream);
-//			stream=filter.getStream();
-//			filter=new SymbolTokenFilter(stream);
-//			stream=filter.getStream();
-
-
-
-
+			if(d.getField(FieldNames.CATEGORY)!=null){
+				catdocCounter++;
+				ArrayList<Token >  a2=new ArrayList<Token >();
+				Token t3 = new Token();
+				t3.setTermText(d.getField(FieldNames.CATEGORY)[0]);
+				a2.add(t3);
+				index(new TokenStream(a2),FieldNames.CATEGORY);
+				}
+			if(d.getField(FieldNames.NEWSDATE)!=null){
 				
-		} catch (TokenizerException e) {
+				stream = tokenizer.consume(d.getField(FieldNames.NEWSDATE)[0]);
+				filter = (TokenFilter)aFactory.getAnalyzerForField(FieldNames.NEWSDATE, stream);
+				while(filter.increment()){
+				}
+				stream=filter.getStream();				
+				index(stream,FieldNames.NEWSDATE);
+				}
+			if(d.getField(FieldNames.PLACE)!=null){
+				placedocCounter++;
+				stream = tokenizer.consume(d.getField(FieldNames.PLACE)[0]);
+				filter = (TokenFilter)aFactory.getAnalyzerForField(FieldNames.PLACE, stream);
+				while(filter.increment()){
+				}
+				stream=filter.getStream();		
+				index(stream,FieldNames.PLACE);
+				}
+			if(d.getField(FieldNames.TITLE)!=null){
+				
+				stream = tokenizer.consume(d.getField(FieldNames.TITLE)[0]);
+				filter = (TokenFilter)aFactory.getAnalyzerForField(FieldNames.TITLE, stream);
+				
+				while(filter.increment()){
+					
+				}
+				stream=filter.getStream();			
+				index(stream,FieldNames.TITLE);
+				}
+			
+		} catch (Exception e) {
 			throw new IndexerException();
 		}
 		//TODO : YOU MUST IMPLEMENT THIS
@@ -128,12 +188,14 @@ public class IndexWriter {
 		else return docMap.get(docNameKey);
 	}
 	
-	public void index(TokenStream s){
+	public void index(TokenStream s, FieldNames fieldname){
 		String text;
 		String textLowerCase;
+		s.reset();
 		while(s.hasNext()){
 			text=s.next().getTermText();
 			textLowerCase=text.toLowerCase();
+	if(fieldname==FieldNames.CONTENT||fieldname==FieldNames.TITLE||fieldname==FieldNames.NEWSDATE){
 			if(textLowerCase.equals("a")) indexMap=aa_an;
 			else if(textLowerCase.charAt(0)=='a'){
 				if((textLowerCase.charAt(1)>='a' && textLowerCase.charAt(1)<='n'))
@@ -225,8 +287,6 @@ public class IndexWriter {
 			else{
 				indexMap=symbol;
 			}
-			
-			
 			if(!indexMap.containsKey(text)){
 				ArrayList<Integer> postingList=new ArrayList<Integer>();
 				postingList.add(docCounter);
@@ -248,6 +308,81 @@ public class IndexWriter {
 				indexMap.put(text, postingList);
 			
 			}
+	}
+	else if(fieldname==FieldNames.AUTHOR){
+		indexMap=authM;
+		if(!indexMap.containsKey(text)){
+			ArrayList<Integer> postingList=new ArrayList<Integer>();
+			postingList.add(docCounter);
+			postingList.add(1);
+			indexMap.put(text, postingList);
+			authCounter++;
+		}
+		else{
+			ArrayList<Integer> postingList=indexMap.get(text);
+			if(!postingList.contains(docCounter))
+				{
+				postingList.add(docCounter);
+				postingList.add(1);
+				}
+			else{
+				int freq=postingList.get((postingList.indexOf(docCounter)+1))+1;
+				postingList.add(postingList.indexOf(docCounter)+1,freq);
+			}
+			indexMap.put(text, postingList);
+		
+		}
+	}
+	else if(fieldname==FieldNames.CATEGORY){
+		indexMap=catM;
+		if(!indexMap.containsKey(text)){
+			ArrayList<Integer> postingList=new ArrayList<Integer>();
+			postingList.add(docCounter);
+			postingList.add(1);
+			indexMap.put(text, postingList);
+			catCounter++;
+		}
+		else{
+			ArrayList<Integer> postingList=indexMap.get(text);
+			if(!postingList.contains(docCounter))
+				{
+				postingList.add(docCounter);
+				postingList.add(1);
+				}
+			else{
+				int freq=postingList.get((postingList.indexOf(docCounter)+1))+1;
+				postingList.add(postingList.indexOf(docCounter)+1,freq);
+			}
+			indexMap.put(text, postingList);
+		
+		}
+	}
+	else if(fieldname==FieldNames.PLACE){
+		indexMap=placeM;
+		if(!indexMap.containsKey(text)){
+			ArrayList<Integer> postingList=new ArrayList<Integer>();
+			postingList.add(docCounter);
+			postingList.add(1);
+			indexMap.put(text, postingList);
+			placeCounter++;
+		}
+		else{
+			ArrayList<Integer> postingList=indexMap.get(text);
+			if(!postingList.contains(docCounter))
+				{
+				postingList.add(docCounter);
+				postingList.add(1);
+				}
+			else{
+				int freq=postingList.get((postingList.indexOf(docCounter)+1))+1;
+				postingList.add(postingList.indexOf(docCounter)+1,freq);
+			}
+			indexMap.put(text, postingList);
+		
+		}
+	}
+
+
 //			System.out.println(text);
 		}
 	}

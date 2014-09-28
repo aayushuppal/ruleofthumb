@@ -35,7 +35,7 @@ public class TFRuleBaseTest {
 				
 				if (s!= null && !s.isEmpty())
 					list.add(s);
-				System.out.println(s);
+//				System.out.println(s);
 			}
 		}
 		

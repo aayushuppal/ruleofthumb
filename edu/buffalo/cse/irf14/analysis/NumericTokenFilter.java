@@ -42,12 +42,12 @@ public class NumericTokenFilter extends TokenFilter{
 				punctMap.put(tokenCounter, "!");
 			}
 //			System.out.println(s);
-			text=s.replaceAll("[,.)(/-]", "");
+			text=s.replaceAll("[^0-9a-zA-Z/%$&]", "");
 //			System.out.println(text);
 			if(text.matches("[^A-Za-z]+")){
 //				System.out.println(text);
 //					System.out.println("lol");
-				if(text.length()==8 && Integer.parseInt(text.substring(4,6))<13 &&Integer.parseInt(text.substring(6,8))<32){
+				if(!text.contains("/")&&!text.matches("[^0-9]")&&text.length()==8 && Integer.parseInt(text.substring(4,6))<13 &&Integer.parseInt(text.substring(6,8))<32){
 					//ignore, because this is our filtered date from prev filter
 				}
 				else

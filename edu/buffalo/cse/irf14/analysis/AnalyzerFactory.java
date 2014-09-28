@@ -48,23 +48,22 @@ public class AnalyzerFactory {
 		TokenFilterFactory factory = TokenFilterFactory.getInstance();
 		switch(name) {
 		case TITLE:{
-			
-			filter=factory.getFilterByType(TokenFilterType.DATE, stream);
+			filter=factory.getFilterByType(TokenFilterType.SYMBOL, stream);
 			filter.nextFilter=factory.getFilterByType(TokenFilterType.ACCENT, stream);
 			filter.nextFilter.nextFilter = factory.getFilterByType(TokenFilterType.STOPWORD, stream);
 			filter.nextFilter.nextFilter.nextFilter=factory.getFilterByType(TokenFilterType.SPECIALCHARS, stream);
 			filter.nextFilter.nextFilter.nextFilter.nextFilter=factory.getFilterByType(TokenFilterType.DATE, stream);
-			filter.nextFilter.nextFilter.nextFilter.nextFilter.nextFilter=factory.getFilterByType(TokenFilterType.CAPITALIZATION, stream);
-			filter.nextFilter.nextFilter.nextFilter.nextFilter.nextFilter.nextFilter=factory.getFilterByType(TokenFilterType.NUMERIC, stream);
-			filter.nextFilter.nextFilter.nextFilter.nextFilter.nextFilter.nextFilter.nextFilter=factory.getFilterByType(TokenFilterType.STEMMER, stream);
+//			filter.nextFilter.nextFilter.nextFilter.nextFilter.nextFilter=factory.getFilterByType(TokenFilterType.CAPITALIZATION, stream);
+			filter.nextFilter.nextFilter.nextFilter.nextFilter.nextFilter=factory.getFilterByType(TokenFilterType.NUMERIC, stream);
+			filter.nextFilter.nextFilter.nextFilter.nextFilter.nextFilter.nextFilter=factory.getFilterByType(TokenFilterType.STEMMER, stream);
 			break;
 		}
 			
 		case AUTHOR:{
-//			filter=factory.getFilterByType(TokenFilterType.SYMBOL, stream);
-			filter=factory.getFilterByType(TokenFilterType.ACCENT, stream);
+			filter=new EmptyFilter(stream);
+//			filter=factory.getFilterByType(TokenFilterType.ACCENT, stream);
 //			filter.nextFilter.nextFilter = factory.getFilterByType(TokenFilterType.STOPWORD, stream);
-			filter.nextFilter=factory.getFilterByType(TokenFilterType.SPECIALCHARS, stream);
+//			filter.nextFilter=factory.getFilterByType(TokenFilterType.SPECIALCHARS, stream);
 //			filter.nextFilter.nextFilter.nextFilter.nextFilter=factory.getFilterByType(TokenFilterType.DATE, stream);
 //			filter.nextFilter.nextFilter.nextFilter.nextFilter.nextFilter=factory.getFilterByType(TokenFilterType.CAPITALIZATION, stream);
 //			filter.nextFilter.nextFilter.nextFilter.nextFilter.nextFilter.nextFilter=factory.getFilterByType(TokenFilterType.NUMERIC, stream);
@@ -72,12 +71,13 @@ public class AnalyzerFactory {
 		}
 			break;
 		case AUTHORORG:{
-			filter=factory.getFilterByType(TokenFilterType.ACCENT, stream);
-			filter.nextFilter=factory.getFilterByType(TokenFilterType.SPECIALCHARS, stream);
+			filter=new EmptyFilter(stream);
+//			filter=factory.getFilterByType(TokenFilterType.ACCENT, stream);
+//			filter.nextFilter=factory.getFilterByType(TokenFilterType.SPECIALCHARS, stream);
 		}
 			break;
 		case CATEGORY:{
-			
+			filter=new EmptyFilter(stream);
 		}
 			break;
 		case CONTENT:{
@@ -99,6 +99,7 @@ public class AnalyzerFactory {
 			break;
 		}
 		case FILEID:
+			filter=new EmptyFilter(stream);
 			break;
 		case NEWSDATE:
 		{
@@ -107,10 +108,11 @@ public class AnalyzerFactory {
 			break;
 		}
 		case PLACE:{
-			filter=factory.getFilterByType(TokenFilterType.SPECIALCHARS, stream);
+			filter=new EmptyFilter(stream);
 		}
 			break;
 		default:
+			filter=new EmptyFilter(stream);
 			break;
 		
 		}

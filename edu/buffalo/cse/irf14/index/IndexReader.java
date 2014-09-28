@@ -13,12 +13,18 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
+import edu.buffalo.cse.irf14.document.FieldNames;
+
 /**
  * @author nikhillo
  * Class that emulates reading data back from a written index
  */
 public class IndexReader {
 	TreeMap<String,Integer> sorted_map;
+	String iDir;
+	IndexType iType;
+	
+	
 	/**
 	 * Default constructor
 	 * @param indexDir : The root directory from which the index is to be read.
@@ -27,7 +33,8 @@ public class IndexReader {
 	 * @param type The {@link IndexType} to read from
 	 */
 	public IndexReader(String indexDir, IndexType type) {
-		
+		this.iDir=indexDir;
+		this.iType=type;
 		//TODO
 	}
 	
@@ -38,7 +45,15 @@ public class IndexReader {
 	 */
 	public int getTotalKeyTerms() {
 		//TODO : YOU MUST IMPLEMENT THIS
+		if(iType==IndexType.AUTHOR)
+		return IndexWriter.authCounter;
+		if(iType==IndexType.CATEGORY)
+		return IndexWriter.catCounter;
+		if(iType==IndexType.PLACE)
+		return IndexWriter.placeCounter;
+		if(iType==IndexType.TERM)
 		return IndexWriter.termCounter;
+		else return 0;
 	}
 	
 	/**
@@ -48,7 +63,15 @@ public class IndexReader {
 	 */
 	public int getTotalValueTerms() {
 		//TODO: YOU MUST IMPLEMENT THIS
-		return IndexWriter.docCounter;
+		if(iType==IndexType.AUTHOR)
+			return IndexWriter.authdocCounter;
+			if(iType==IndexType.CATEGORY)
+			return IndexWriter.catdocCounter;
+			if(iType==IndexType.PLACE)
+			return IndexWriter.placedocCounter;
+			if(iType==IndexType.TERM)
+			return IndexWriter.docCounter;
+			else return 0;
 	}
 	
 	/**
@@ -61,11 +84,10 @@ public class IndexReader {
 	 */
 	public Map<String, Integer> getPostings(String term) {
 		//TODO:YOU MUST IMPLEMENT THIS
-		int freq;
 		String textLowerCase=term.toLowerCase();
 		HashMap<String,ArrayList<Integer>> map = null;
 		textLowerCase=term.toLowerCase();
-		
+		if(iType==IndexType.TERM){
 		if(textLowerCase.equals("a")) map=IndexWriter.aa_an;
 		else if(textLowerCase.charAt(0)=='a'){
 			if((textLowerCase.charAt(1)>='a' && textLowerCase.charAt(1)<='n'))
@@ -157,6 +179,17 @@ public class IndexReader {
 		else{
 			map=IndexWriter.symbol;
 		}
+		}
+		
+		if(iType==IndexType.AUTHOR){
+			map=IndexWriter.authM;
+		}
+		if(iType==IndexType.CATEGORY){
+			map=IndexWriter.catM;
+		}
+		if(iType==IndexType.PLACE){
+			map=IndexWriter.placeM;
+		}
 		
 		ArrayList<Integer> postList = new ArrayList<Integer>();
 		HashMap<String, Integer> map2=new HashMap<String,Integer>();
@@ -165,7 +198,6 @@ public class IndexReader {
 			postList=map.get(term);
 		for(int i=0;i+2<=postList.size();i=i+2){
 			String docID= IndexWriter.revDocMap.get(postList.get(i));
-//			System.out.println(i);
 			int freq1 = postList.get(i+1);
 			map2.put(docID, freq1);
 		}
@@ -190,14 +222,25 @@ public class IndexReader {
 		Map<String,Integer> sortMap = new HashMap<String,Integer>();
 		ValueComparator bvc =  new ValueComparator(sortMap);
 		sorted_map = new TreeMap<String,Integer>(bvc);
-		HashMap[] list={IndexWriter.aa_an, IndexWriter.ao_az,IndexWriter.ca_cj,IndexWriter.ck_cz,IndexWriter.sa_si,IndexWriter.sj_sz,IndexWriter.b,IndexWriter.d,IndexWriter.e,IndexWriter.f,IndexWriter.g,IndexWriter.h,IndexWriter.i,IndexWriter.j,IndexWriter.k,IndexWriter.l,IndexWriter.m,IndexWriter.n,IndexWriter.o,IndexWriter.p,IndexWriter.q,IndexWriter.r,IndexWriter.t,IndexWriter.u,IndexWriter.vwxyz,IndexWriter.symbol};
+		HashMap[] list = {};
+		if(iType==IndexType.AUTHOR){
+			list[0]=IndexWriter.authM;
+		}
+		else if(iType==IndexType.CATEGORY){
+			list[0]=IndexWriter.catM;
+		}
+		else if(iType==IndexType.PLACE){
+			list[0]=IndexWriter.placeM;
+		}
+		else{
+			list=new HashMap[] {IndexWriter.aa_an, IndexWriter.ao_az,IndexWriter.ca_cj,IndexWriter.ck_cz,IndexWriter.sa_si,IndexWriter.sj_sz,IndexWriter.b,IndexWriter.d,IndexWriter.e,IndexWriter.f,IndexWriter.g,IndexWriter.h,IndexWriter.i,IndexWriter.j,IndexWriter.k,IndexWriter.l,IndexWriter.m,IndexWriter.n,IndexWriter.o,IndexWriter.p,IndexWriter.q,IndexWriter.r,IndexWriter.t,IndexWriter.u,IndexWriter.vwxyz,IndexWriter.symbol};
+		}
 		for(HashMap<String,ArrayList<Integer>> map:list){
 			for(String ls:map.keySet()){
 				int sum=0;
 				for(int i=0;i+1<map.get(ls).size();i=i+2){
 					sum=sum+map.get(ls).get(i+1);
 				}
-//				System.out.println("lol");
 				sortMap.put(ls, sum);
 			}
 		}

@@ -159,7 +159,7 @@ public class IndexerTest {
 	/**
 	 * Test method for {@link edu.buffalo.cse.irf14.index.IndexReader#query(java.lang.String[])}.
 	 */
-	@Test
+	
 	public final void testQuery() {
 		String[] queryTerms = {"sales", "home", "forecasts", "increase","july"};
 		int len = queryTerms.length;

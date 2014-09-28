@@ -133,12 +133,12 @@ public class Parser {
 	public static void setFileTitle() throws ParserException, IOException{
 		String s;
 		reader = new BufferedReader(new FileReader(f));
-		s=reader.readLine();
+		s=reader.readLine().trim();
 		lineCount++;
 			 {
 				while(s.equals("\n") || s.equals("\r") ||s.equals(""))
 			 		{
-				 		s=reader.readLine();
+				 		s=reader.readLine().trim();
 				 		titleLineIndex++;
 				 		lineCount++;
 			 		}
@@ -150,11 +150,11 @@ public class Parser {
 
 	public static void setAuthorOrg() throws IOException{
 			Pattern p =Pattern.compile("(<AUTHOR>)(.*)(</AUTHOR>)",Pattern.CASE_INSENSITIVE); // TODO implement for <author>
-			String  s =reader.readLine();
+			String  s =reader.readLine().trim();
 			lineCount++;
 			while(s.equals("\n") || s.equals("\r") ||s.equals(""))
 			 	{
-					s=reader.readLine();
+					s=reader.readLine().trim();
 					lineCount++;
 			 	}
 				contentString=s;
@@ -191,7 +191,7 @@ public class Parser {
 		String str2[]={""};
 		reader = new BufferedReader(new FileReader(f));
 		while(count!=1){
-			str=reader.readLine();
+			str=reader.readLine().trim();
 			count--;
 		}
 		str=reader.readLine().trim();
