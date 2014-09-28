@@ -10,7 +10,6 @@ public class CapitalizationTokenFilter extends TokenFilter{
 	public CapitalizationTokenFilter(TokenStream stream) {
 		super(stream);
 		localstream=stream;
-		filter();
 		// TODO Auto-generated constructor stub
 	}
 
@@ -20,105 +19,68 @@ public class CapitalizationTokenFilter extends TokenFilter{
 		// TODO Auto-generated method stub
 		localstream.reset();
 		Token token;
-		
 		int counter = 0;
-		try{
-			while(increment()){
+		
+			while(localstream.hasNext()){
 				token = localstream.next();
-				String tokeninput = token.toString();
-				String token1 = tokeninput;
-				if (counter == 0){
-					if (tokeninput.toUpperCase() == tokeninput){
-						// do nothing to token and return as all caps	
-						counter++;
+				String text = null;
+				String tokenAsString = token.getTermText();
+				String tokenStringUpperCase = tokenAsString.toUpperCase();
+				char tokenAsCharArr[] = token.getTermBuffer();
+				char lowercasefirstchar = Character.toLowerCase(tokenAsCharArr[0]);
+				char uppercasefirstchar = Character.toUpperCase(tokenAsCharArr[0]);
+				
+				token = localstream.next();
+				int index1 =localstream.arrListToken.indexOf(token);
+				
+				String nexttokenAsString = token.getTermText();
+				String nexttokenStringUpperCase = nexttokenAsString.toUpperCase();
+				char nexttokenAsCharArr[] = token.getTermBuffer();
+				char nextTlowercasefirstchar = Character.toLowerCase(tokenAsCharArr[0]);
+				char nextTuppercasefirstchar = Character.toUpperCase(tokenAsCharArr[0]);
+				
+				localstream.reset();
+				for (int k=0; k<index1; k++){
+					token = localstream.next();
+				}
+				System.out.printf("inbound data counter: %d - token: %s", counter, token);			
+				System.out.println();
+
+				if (counter == 0){ 
+					if(tokenAsString == tokenStringUpperCase){
+						text = tokenAsString;
 					}
-					else {
-						token = localstream.next();
-						String token2 = token.toString();
-						char nexttokenchar[] = token.getTermBuffer();
-						char a = Character.toUpperCase(nexttokenchar[0]);
-						
-						if (a == nexttokenchar[0]){
-							tokeninput = token1 + token2;
-							counter++;
+					else {	
+						if(checkCamelCase(nexttokenAsString)){
+							text = tokenAsString + " "+ nexttokenAsString;
+							System.out.println(text);
+							token = localstream.next();
 							counter++;
 						}
-						else tokeninput = token1.toLowerCase();					
-						token = localstream.previous();
-						counter++;
-					}
+						else { text = tokenAsString.toLowerCase(); 
+						 }
+					} 
 				}
 				
-				else {
-					token = localstream.previous();
-					char prevtokenchar[] = token.getTermBuffer();
-					int length = prevtokenchar.length;
-					
-					token = localstream.next();
-					tokeninput = token.toString();
-					token1 = tokeninput;
-					
-					if(prevtokenchar[length-1] == '.'){  //case where word is a sentence starter
-						if(tokeninput.toUpperCase() == tokeninput){
-						//do nothing to token and return as all caps
-							counter++;
-						}
-						else { //implement camel case scenario for first word of sentence case
+				else { 
+					if(tokenAsString == tokenStringUpperCase){
+						text = tokenAsString;
+					}
+					else if(checkCamelCase(tokenAsString)){ 
+						if(checkCamelCase(nexttokenAsString)){ 
+							text = tokenAsString + " "+ nexttokenAsString;
 							token = localstream.next();
-							String token2 = token.toString();
-							char nexttokenchar[] = token.getTermBuffer();
-							char a = Character.toUpperCase(nexttokenchar[0]);
-							
-							if (a == nexttokenchar[0]){
-								tokeninput = token1 + token2;
-								counter++;
-								counter++;
-							}
-							else tokeninput = token1.toLowerCase();					
-							token = localstream.previous();
 							counter++;
 						}
+						else { text = tokenAsString; }
 					}
-					
-					else { //not a sentence starter
-						char token1char[] = token.getTermBuffer();
-						char b = Character.toUpperCase(token1char[0]);
-						
-							if(token1.toUpperCase() == token1){
-								//do nothing to token and return as all caps
-								counter++;
-							}
-							else if (b == token1char[0]) {
-								token = localstream.next();
-								String token2 = token.toString();
-								char nexttokenchar[] = token.getTermBuffer();
-								char a = Character.toUpperCase(nexttokenchar[0]);
-								
-								if (a == nexttokenchar[0]){
-									tokeninput = token1 + token2;
-									counter++;
-									counter++;
-								}
-								else tokeninput = token1.toLowerCase();					
-								token = localstream.previous();
-								counter++;
-							}
-							
-							else tokeninput = token1.toLowerCase();					
-							token = localstream.previous();
-							counter++;
-							
-					}
+
+					else {  text = tokenAsString.toLowerCase();}
 					
 				}
-				token.setTermText(tokeninput);
+				counter++;
+				token.setTermText(text);
 			}
-		}
-
-		catch (TokenizerException e) {
-			e.printStackTrace();
-		}
-		localstream.reset();
 	}
 
 	@Override
@@ -132,4 +94,17 @@ public class CapitalizationTokenFilter extends TokenFilter{
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	public boolean checkCamelCase(String abc){
+		char[] strToArray = abc.toCharArray();
+
+		for(int i = 0; i<strToArray.length; i++){
+		char u = Character.toUpperCase(strToArray[i]);
+		
+		if(strToArray[i] == u){return true;}
+			
+		}
+		return false;
+	}
+	
 }
