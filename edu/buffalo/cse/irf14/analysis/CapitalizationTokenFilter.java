@@ -79,6 +79,7 @@ public class CapitalizationTokenFilter extends TokenFilter{
 					
 				}
 				counter++;
+				System.out.println(text);
 				token.setTermText(text);
 			}
 	}
