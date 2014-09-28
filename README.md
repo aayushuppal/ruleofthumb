@@ -1,17 +1,15 @@
 newsindexer
 ===========
-
-This is the starter code and tests for CSE 535 Fall 2014 Project 1
 <u>TODO</u>:
-1.	Parser.java
-	<ul><li>Implement <b>getContent()</b>
-		<li>Keep all methods static or change it?
-		<li>Check all methods' functionality
-		<li>Implement Exceptions Handling
-		<li>Check if multiple authors are detected correctly
-		<li>Improve the performance of parsing
-		test
-	</ul>
-2.	IndexWriter.java
-	<ul><li>Q: Why do we need to sue the directory to IndexWriter, while we are directly passing document objects in addDocument method?
-		<li>
+1.	Implement all type of exception handling or do error proofing
+2.	Parser: Multiple Authors are detected? (Yeah, but how to sore them?)
+3.	DateTokenFilter	: Solve Comma Bug
+					: write handlers for dd/mm/yyyy or dd-mm-yyyy type
+					: change code of 0 "padding" in days and hours, so that if it is already padded, it doesnt pad again.
+4.	Replace all string concatenationwith StringBuilder.append
+5.	Storing Index, commiting to Disk, indexDir
+6.	increment() method rewrite
+7.	Write more JUnit test classes
+8.	AnalyzerFactory: Decide filters for all Field.Types and chain them
+9.	Test Capital Fiters
+9.	Code optimization, commenting

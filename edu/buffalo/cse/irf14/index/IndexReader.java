@@ -190,7 +190,7 @@ public class IndexReader {
 		Map<String,Integer> sortMap = new HashMap<String,Integer>();
 		ValueComparator bvc =  new ValueComparator(sortMap);
 		sorted_map = new TreeMap<String,Integer>(bvc);
-		HashMap[] list={IndexWriter.aa_an, IndexWriter.ao_az,IndexWriter.ca_cj,IndexWriter.ck_cz,IndexWriter.sa_si,IndexWriter.sj_sz,IndexWriter.b,IndexWriter.d,IndexWriter.e,IndexWriter.f,IndexWriter.g,IndexWriter.h,IndexWriter.i,IndexWriter.j,IndexWriter.k,IndexWriter.l,IndexWriter.m,IndexWriter.n,IndexWriter.o,IndexWriter.p,IndexWriter.q,IndexWriter.r,IndexWriter.t,IndexWriter.u,IndexWriter.vwxyz};
+		HashMap[] list={IndexWriter.aa_an, IndexWriter.ao_az,IndexWriter.ca_cj,IndexWriter.ck_cz,IndexWriter.sa_si,IndexWriter.sj_sz,IndexWriter.b,IndexWriter.d,IndexWriter.e,IndexWriter.f,IndexWriter.g,IndexWriter.h,IndexWriter.i,IndexWriter.j,IndexWriter.k,IndexWriter.l,IndexWriter.m,IndexWriter.n,IndexWriter.o,IndexWriter.p,IndexWriter.q,IndexWriter.r,IndexWriter.t,IndexWriter.u,IndexWriter.vwxyz,IndexWriter.symbol};
 		for(HashMap<String,ArrayList<Integer>> map:list){
 			for(String ls:map.keySet()){
 				int sum=0;

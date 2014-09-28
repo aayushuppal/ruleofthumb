@@ -47,26 +47,68 @@ public class AnalyzerFactory {
 		TokenFilter filter = null;
 		TokenFilterFactory factory = TokenFilterFactory.getInstance();
 		switch(name) {
-		case TITLE:
+		case TITLE:{
+			
+			filter=factory.getFilterByType(TokenFilterType.DATE, stream);
+			filter.nextFilter=factory.getFilterByType(TokenFilterType.ACCENT, stream);
+			filter.nextFilter.nextFilter = factory.getFilterByType(TokenFilterType.STOPWORD, stream);
+			filter.nextFilter.nextFilter.nextFilter=factory.getFilterByType(TokenFilterType.SPECIALCHARS, stream);
+			filter.nextFilter.nextFilter.nextFilter.nextFilter=factory.getFilterByType(TokenFilterType.DATE, stream);
+			filter.nextFilter.nextFilter.nextFilter.nextFilter.nextFilter=factory.getFilterByType(TokenFilterType.CAPITALIZATION, stream);
+			filter.nextFilter.nextFilter.nextFilter.nextFilter.nextFilter.nextFilter=factory.getFilterByType(TokenFilterType.NUMERIC, stream);
+			filter.nextFilter.nextFilter.nextFilter.nextFilter.nextFilter.nextFilter.nextFilter=factory.getFilterByType(TokenFilterType.STEMMER, stream);
 			break;
-		case AUTHOR:
+		}
+			
+		case AUTHOR:{
+//			filter=factory.getFilterByType(TokenFilterType.SYMBOL, stream);
+			filter=factory.getFilterByType(TokenFilterType.ACCENT, stream);
+//			filter.nextFilter.nextFilter = factory.getFilterByType(TokenFilterType.STOPWORD, stream);
+			filter.nextFilter=factory.getFilterByType(TokenFilterType.SPECIALCHARS, stream);
+//			filter.nextFilter.nextFilter.nextFilter.nextFilter=factory.getFilterByType(TokenFilterType.DATE, stream);
+//			filter.nextFilter.nextFilter.nextFilter.nextFilter.nextFilter=factory.getFilterByType(TokenFilterType.CAPITALIZATION, stream);
+//			filter.nextFilter.nextFilter.nextFilter.nextFilter.nextFilter.nextFilter=factory.getFilterByType(TokenFilterType.NUMERIC, stream);
+//			filter.nextFilter.nextFilter.nextFilter.nextFilter.nextFilter.nextFilter.nextFilter=factory.getFilterByType(TokenFilterType.STEMMER, stream);
+		}
 			break;
-		case AUTHORORG:
+		case AUTHORORG:{
+			filter=factory.getFilterByType(TokenFilterType.ACCENT, stream);
+			filter.nextFilter=factory.getFilterByType(TokenFilterType.SPECIALCHARS, stream);
+		}
 			break;
-		case CATEGORY:
+		case CATEGORY:{
+			
+		}
 			break;
 		case CONTENT:{
-			filter = factory.getFilterByType(TokenFilterType.DATE, stream);
+			//System.out.println("lol1");
+//			filter=factory.getFilterByType(TokenFilterType.STEMMER, stream);
+//			filter.nextFilter=factory.getFilterByType(TokenFilterType.NUMERIC, stream);
+//			filter.nextFilter.nextFilter=factory.getFilterByType(TokenFilterType.DATE, stream);
+//			filter.nextFilter.nextFilter.nextFilter=factory.getFilterByType(TokenFilterType.SPECIALCHARS, stream);
+//			filter.nextFilter.nextFilter.nextFilter.nextFilter = factory.getFilterByType(TokenFilterType.STOPWORD, stream);
+//			filter.nextFilter.nextFilter.nextFilter.nextFilter.nextFilter=factory.getFilterByType(TokenFilterType.ACCENT, stream);
+			filter=factory.getFilterByType(TokenFilterType.SYMBOL, stream); //System.out.println("lol2");
+			filter.nextFilter=factory.getFilterByType(TokenFilterType.ACCENT, stream);//System.out.println("lol3");
+			filter.nextFilter.nextFilter = factory.getFilterByType(TokenFilterType.STOPWORD, stream);//System.out.println("lol4");
+			filter.nextFilter.nextFilter.nextFilter=factory.getFilterByType(TokenFilterType.SPECIALCHARS, stream);//System.out.println("lol6");
+			filter.nextFilter.nextFilter.nextFilter.nextFilter=factory.getFilterByType(TokenFilterType.DATE, stream);//System.out.println("lol7");
+////		filter.nextFilter.nextFilter.nextFilter.nextFilter.nextFilter=factory.getFilterByType(TokenFilterType.CAPITALIZATION, stream);System.out.println("lo8");
+			filter.nextFilter.nextFilter.nextFilter.nextFilter.nextFilter=factory.getFilterByType(TokenFilterType.NUMERIC, stream);//System.out.println("lol9");
+			filter.nextFilter.nextFilter.nextFilter.nextFilter.nextFilter.nextFilter=factory.getFilterByType(TokenFilterType.STEMMER, stream);//System.out.println("lol10");
 			break;
 		}
 		case FILEID:
 			break;
 		case NEWSDATE:
 		{
-			filter = factory.getFilterByType(TokenFilterType.DATE, stream);
+			filter=factory.getFilterByType(TokenFilterType.SPECIALCHARS, stream);
+			filter.nextFilter = factory.getFilterByType(TokenFilterType.DATE, stream);
 			break;
 		}
-		case PLACE:
+		case PLACE:{
+			filter=factory.getFilterByType(TokenFilterType.SPECIALCHARS, stream);
+		}
 			break;
 		default:
 			break;

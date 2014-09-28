@@ -19,6 +19,7 @@ public abstract class TokenFilter implements Analyzer {
 	 */
 	
 	TokenStream tokenstream;
+	TokenFilter nextFilter;
 	public TokenFilter(TokenStream stream) {
 		//TODO : YOU MUST IMPLEMENT THIS METHOD
 		tokenstream=stream;
@@ -26,18 +27,25 @@ public abstract class TokenFilter implements Analyzer {
 	
 	public abstract void filter();
 	
-	public abstract void setNextFilter(TokenFilter filter);
+	public void setNextFilter(TokenFilter filter){
+		nextFilter=filter;
+	}
 	
-	public abstract TokenFilter getNextFilter();
+	public TokenFilter getNextFilter(){
+		return nextFilter;
+	}
 	
 	public TokenStream getStream() {
 		return tokenstream;
 	}
 	
 	public boolean increment() throws TokenizerException {
-		if(tokenstream!=null && tokenstream.hasNext()) {
-			return true;
+		filter();
+		if(this.nextFilter!=null){
+			
+			return this.nextFilter.increment();
 		}
+		else 
 			return false;
 	}
 	

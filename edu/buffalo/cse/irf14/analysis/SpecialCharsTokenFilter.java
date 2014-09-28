@@ -10,7 +10,6 @@ public class SpecialCharsTokenFilter extends TokenFilter{
 	public SpecialCharsTokenFilter(TokenStream stream) {
 		super(stream);
 		localstream=stream;
-		filter();
 		// TODO Auto-generated constructor stub
 	}
 
@@ -21,56 +20,33 @@ public class SpecialCharsTokenFilter extends TokenFilter{
 		TokenStream ts;
 		ArrayList<String> list = new ArrayList();
 		ArrayList<Token> list2=new ArrayList();
-		try {
-			while(increment()){
-				token=localstream.next();
-				text=token.getTermText();
-				text=text.replaceAll("[^A-Za-z0-9 .-]","");
-//				text=text.replaceAll("\\P{Alnum}","");
-//				text=text.replaceAll(":", "");
-//				text=text.replaceAll(";", "");
-//				text=text.replaceAll("/", "");
-				if(text.contains("-")) {
-					
-					if(text.matches("[0-9]+-[0-9]+")) {}
-//					else if(text.matches("^[^A-Za-z0-9]+[A-Za-z]+")) {}
-					else if(text.startsWith("-")){}
-					else {text=text.replaceAll("[^A-Za-z0-9]+", "");}
-					
-				}
-					list.add(text);
+		while(localstream.hasNext()){
+			token=localstream.next();
+			text=token.getTermText();
+			text=text.replaceAll("[^A-Za-z0-9 .-]","");
+			if(text.contains("-")) {
+				
+				if(text.matches("[0-9]+-[0-9]+")) {}
+				else if(text.startsWith("-")){}
+				else {text=text.replaceAll("[^A-Za-z0-9]+", "");}
+				
 			}
-				for(String s:list){
-					Token t=new Token();
-					if(!s.trim().equals(""))
-						{
-						t.setTermText(s);
-						list2.add(t);
-						}
-					
-				}
-				localstream= new TokenStream(list2);
-				super.tokenstream=localstream;
-		
+				list.add(text);
 		}
-		catch (TokenizerException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}		
-		// TODO Auto-generated method stub
+			for(String s:list){
+				Token t=new Token();
+				if(!s.trim().equals(""))
+					{
+					t.setTermText(s);
+					list2.add(t);
+					}
+				
+			}
+			localstream= new TokenStream(list2);
+			super.tokenstream=localstream;
 		
 	}
 
-	@Override
-	public void setNextFilter(TokenFilter filter) {
-		// TODO Auto-generated method stub
-		
-	}
 
-	@Override
-	public TokenFilter getNextFilter() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 }

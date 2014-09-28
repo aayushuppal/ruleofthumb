@@ -4,14 +4,8 @@
 package edu.buffalo.cse.irf14;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.Arrays;
 
-import edu.buffalo.cse.irf14.analysis.TokenizerException;
 import edu.buffalo.cse.irf14.document.Document;
-import edu.buffalo.cse.irf14.document.FieldNames;
 import edu.buffalo.cse.irf14.document.Parser;
 import edu.buffalo.cse.irf14.document.ParserException;
 import edu.buffalo.cse.irf14.index.IndexWriter;
@@ -32,22 +26,12 @@ public class Runner {
 
 	/**
 	 * @param args
-	 * @throws IOException 
-	 * @throws IndexerException 
-	 * @throws TokenizerException 
-	 * @throws ParserException 
 	 */
-	public static void main(String[] args) throws IOException, IndexerException, TokenizerException, ParserException {
-//		String ipDir = args[0];
-//		String indexDir = args[1];
-		
-		String indexDir="C:/Users/Festy/Desktop/IR Slides/sample";
-		//more? idk!
-		long startTime = System.currentTimeMillis();
-//		String ipDir="C:/Users/Festy/Desktop/IR Slides/training";
-		String ipDir="C:/Users/Festy/Desktop/IR Slides/sample";
-//		PrintWriter writer = new  PrintWriter("C:/Users/Festy/Desktop/IR Slides/result2.txt");
-		int count=0;
+	public static void main(String[] args) {
+		String ipDir = "C:/Users/Festy/Desktop/IR Slides/training";								// My Added Line
+		String indexDir = "C:/Users/Festy/Desktop/IR Slides/sample";							// My Added Line
+		long startTime = System.currentTimeMillis();											// My Added Line
+		int count=0;																			// My Added Line
 		File ipDirectory = new File(ipDir);
 		String[] catDirectories = ipDirectory.list();
 		
@@ -57,36 +41,47 @@ public class Runner {
 		Document d = null;
 		IndexWriter writer = new IndexWriter(indexDir);
 		
-		for (String cat : catDirectories) {
-			dir = new File(ipDir+ File.separator+ cat);
-			files = dir.list();
-			
-			if (files == null)
-				continue;
-			
-			for (String f : files) {
-				d = Parser.parse(dir.getAbsolutePath() + File.separator +f);
-//				writer.print(d.getField(FieldNames.FILEID)[0]);
-//				writer.print(Arrays.toString(d.getField(FieldNames.CATEGORY)));
-//				writer.print(Arrays.toString(d.getField(FieldNames.TITLE)));
-//				writer.print(Arrays.toString(d.getField(FieldNames.PLACE)));
-//				writer.print(Arrays.toString(d.getField(FieldNames.NEWSDATE)));
-//				writer.print(Arrays.toString(d.getField(FieldNames.AUTHOR)));
-//				writer.print(Arrays.toString(d.getField(FieldNames.AUTHORORG)));
-//				writer.print(Arrays.toString(d.getField(FieldNames.CONTENT)));
-//				writer.println();
-				count++;
-						writer.addDocument(d); 
+		try {
+			for (String cat : catDirectories) {
+				dir = new File(ipDir+ File.separator+ cat);
+				files = dir.list();
+				
+				if (files == null)
+					continue;
+				
+				for (String f : files) {
+					try {
+						d = Parser.parse(dir.getAbsolutePath() + File.separator +f);
+						if(count%500==0) System.out.println(count+" files scanned..");			// My Added Line
+						count++;																// My Added Line
+						System.out.println("File:"+f);
+						writer.addDocument(d);
+					} catch (ParserException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} 
+					
+				}
 				
 			}
 			
+			writer.close();
+			System.out.println("Total Terms: "+IndexWriter.termCounter);						// My Added Line
+			System.out.println("Files scanned: "+count);										// My Added Line
+			long stopTime = System.currentTimeMillis();											// My Added Line
+			long elapsedTime = stopTime - startTime;											// My Added Line
+			System.out.println("Execution time:"+(double)elapsedTime/1000+"s");					// My Added Line
+			Runtime runtime = Runtime.getRuntime();												// My Added Line
+		    // Run the garbage collector														// My Added Line
+		    runtime.gc();																		// My Added Line
+		    // Calculate the used memory														// My Added Line
+		    long memory = runtime.totalMemory() - runtime.freeMemory();							// My Added Line
+		    System.out.println("Used memory is bytes: " + memory);								// My Added Line
+		    System.out.println("Used memory is megabytes: "+ (long)memory/1024L * 1024L);		// My Added Line
+		} catch (IndexerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		
-		writer.close();
-		System.out.println("Files scanned: "+count);
-		long stopTime = System.currentTimeMillis();
-		long elapsedTime = stopTime - startTime;
-		System.out.println("Execution time:"+(double)elapsedTime/1000+"s");
 	}
 
 }

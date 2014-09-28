@@ -60,6 +60,7 @@ public class TokenTest {
 		assertNotNull(t2);
 		invokeMerge(t1, t2);
 		String str = t1.toString();
+		System.out.println(str);
 		assertNotNull(str);
 		assertEquals("test string", str);
 	}

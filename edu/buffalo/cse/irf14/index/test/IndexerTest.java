@@ -137,6 +137,7 @@ public class IndexerTest {
 		
 		for (int i = 0; i < 3; i++) {
 			vals[i] = getAnalyzedTerm(vals[i]);
+//			System.out.println(vals[i]);
 		}
 		
 		for (int i = 0; i < 3; i++) {
@@ -146,6 +147,7 @@ public class IndexerTest {
 			
 			for (int j = 0; j <=i; j++) {
 				assertEquals(vals[j], topK.get(j));
+//				System.out.println(topK.get(j));
 			}
 		}
 		
@@ -159,12 +161,13 @@ public class IndexerTest {
 	 */
 	@Test
 	public final void testQuery() {
-		String[] queryTerms = {"sales", "home", "july", "forecasts", "increase"};
+		String[] queryTerms = {"sales", "home", "forecasts", "increase","july"};
 		int len = queryTerms.length;
 		
 		
 		for (int i = 0; i <len; i++) {
 			queryTerms[i] = getAnalyzedTerm(queryTerms[i]);
+//			System.out.println(queryTerms[i]);
 		}
 		
 		/*
@@ -244,7 +247,7 @@ public class IndexerTest {
 			retlist.add(temp);
 		}
 		
-		return (HashMap<String, Integer>[]) retlist.toArray();
+		return (HashMap<String, Integer>[]) retlist.toArray(new HashMap [retlist.size ()]);
 	}
 
 }

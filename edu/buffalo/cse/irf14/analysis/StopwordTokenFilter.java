@@ -17,7 +17,6 @@ public class StopwordTokenFilter extends TokenFilter{
 	public StopwordTokenFilter(TokenStream stream) {
 		super(stream);
 		localstream=stream;
-		filter();
 		// TODO Auto-generated constructor stub
 	}
 		
@@ -27,31 +26,14 @@ public class StopwordTokenFilter extends TokenFilter{
 	public void filter(){
 		localstream.reset();
 		
-		try {
-			while(increment()==true){
-				Token t=localstream.next();
-				
-				if(stopwordList.contains(t.getTermText())){
-					localstream.remove();
-				}
+		while(localstream.hasNext()){
+			Token t=localstream.next();
+			
+			if(stopwordList.contains(t.getTermText())){
+				localstream.remove();
 			}
-		} catch (TokenizerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 		localstream.reset();
-	}
-	
-	@Override
-	public void setNextFilter(TokenFilter filter) {
-		// TODO Auto-generated method stub
-		this.nextFilter=filter;
-	}
-	
-	@Override
-	public TokenFilter getNextFilter() {
-		// TODO Auto-generated method stub
-		return this.nextFilter;
 	}
 
 }

@@ -70,7 +70,7 @@ public class IndexWriter {
 	 * @throws IndexerException : In case any error occurs
 	 * @throws TokenizerException 
 	 */
-	public void addDocument(Document d) throws IndexerException, TokenizerException {
+	public void addDocument(Document d) throws IndexerException {
 		String s;
 		Token token;
 		Tokenizer tokenizer = new Tokenizer(" ");
@@ -79,14 +79,15 @@ public class IndexWriter {
 		
 		AnalyzerFactory aFactory=AnalyzerFactory.getInstance();
 		try {
+			
 			stream = tokenizer.consume(d.getField(FieldNames.CONTENT)[0]);
-			filter = (TokenFilter)aFactory.getAnalyzerForField(FieldNames.CONTENT, stream); // Default: Date Filter
+			filter = (TokenFilter)aFactory.getAnalyzerForField(FieldNames.CONTENT, stream);
+			while(filter.increment()){
+			}
 			stream=filter.getStream();
-			filter= new NumericTokenFilter(stream);
-			stream=filter.getStream();
-			filter= new SpecialCharsTokenFilter(stream);
-			stream=filter.getStream();
+			
 			addDocID(d);
+			
 			index(stream);			
 //			printIndex();
 //			System.out.println(stream.next().getTermText());

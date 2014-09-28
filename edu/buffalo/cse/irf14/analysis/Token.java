@@ -70,7 +70,8 @@ public class Token {
 		String s=getTermText();
 		if(tokens!=null)
 		for(int i=0;i<tokens.length;i++){
-			if(!tokens[i].getTermText().trim().equals(null) && !tokens[i].getTermText().trim().equals("") && tokens!=null)
+			String s2= tokens[i].getTermText().trim();
+			if(s2!=null && !s2.equals(""))
 			s=s+" "+tokens[i].getTermText().trim();
 		}
 		

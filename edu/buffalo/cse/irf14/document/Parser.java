@@ -34,33 +34,25 @@ public class Parser {
 					month=null,
 					date=null,
 					place=null,
-					content=null;
+					content=null,
+					contentString=null;
 	static int		titleEndIndex,dateStartIndex,titleLineIndex=0,dateEndIndex=0,lineCount=0;
 	static File 	f;
-
+	static BufferedReader reader;
+	static boolean authorLine=false;
 	public static Document parse(String filename) throws ParserException  {
-		/*(ONLY won't work if sentence has two/more keywords matching for month)*/
 		Document d = new Document();
 		cleaner();
-		if(filename==null){
-			throw new ParserException("Error!");
-		}
-		fName=filename;
-		f=new File(fName);
-		if(!f.exists()) throw new ParserException("The file does not exist!");
-		setFileID();
-		setFileCategory();
-		setFileTitle();
-		setAuthorOrg();
-		setDateAndMonthAndPlace();
 		try {
+			fName=filename;
+			f=new File(fName);
+			setFileID();
+			setFileCategory();
+			setFileTitle();
+			setAuthorOrg();
+			setDateAndMonthAndPlace();
 			setContent();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			throw new ParserException(e);
-		}
-		
+			reader.close();
 		if(!(title==null))		d.setField(FieldNames.TITLE, title);
 		if(!(category==null))	d.setField(FieldNames.CATEGORY, category);
 		if(!(fileID==null))		d.setField(FieldNames.FILEID,fileID);
@@ -69,40 +61,34 @@ public class Parser {
 		if(!(month==null))		d.setField(FieldNames.NEWSDATE,month+" "+date);
 		if(!(place==null))		d.setField(FieldNames.PLACE,place);
 		if(!(content==null))	d.setField(FieldNames.CONTENT,content);
-		return d;
-	}
-	public static void setDateAndMonthAndPlace() throws ParserException{
-		String sample,tempPlace,content;
-
-		BufferedReader reader;
-		try {
-			reader = new BufferedReader(new FileReader(f));
-		} catch (FileNotFoundException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-			throw new ParserException(e1);
 		}
-		try {
-		    sample=reader.readLine().trim();
-		    lineCount++;
-		    while((sample.equals("\n") || sample.equals("\r") ||sample.equals("") ||sample.equals(null))){
+		catch(Exception e){
+			throw new ParserException();
+		}
+		return d;
+		
+	}
+	
+	
+	public static void setDateAndMonthAndPlace() throws IOException{
+		String sample,tempPlace,content;
+		if(authorLine==true)
+		{
+			sample=reader.readLine().trim();
+			while((sample.equals("\n") || sample.equals("\r") ||sample.equals("") ||sample.equals(null)))
+				{
 		    	sample=reader.readLine().trim();
-		    	lineCount++;
-		    }
-		    sample=reader.readLine().trim();
-		    lineCount++;
-		    while((sample.equals("\n") || sample.equals("\r") ||sample.equals("") ||sample.equals(null))){
-		    	sample=reader.readLine().trim();
-		    	lineCount++;
-		    }
-		    if(sample.toLowerCase().contains("author"))	{ sample=reader.readLine().trim(); lineCount++; }// Skips a line if it has an author tag 
-		    																							// Assuming <author> is not in the same line as date line
-		    
-		    sample=sample.replaceAll("[()]","");
-		    Pattern p1 =Pattern.compile(".*(jan.*|feb.*|mar.*|apr.*|may.*|jun.*|jul.*|aug.*|sep.*|oct.*|nov.*|dec.*)",Pattern.CASE_INSENSITIVE);//		    Pattern p1 =Pattern.compile("\b(?:Jan(?:uary)?|Feb(?:ruary)?|...|Dec(?:ember)?)",Pattern.CASE_INSENSITIVE);
-			Matcher m1 =p1.matcher(sample);
+		    	}
+		}
+		else{
+			sample=contentString;
+		}
+		
+		sample=sample.replaceAll("[()]","").split("-")[0];
+		Pattern p1 =Pattern.compile(".*(jan.*|feb.*|mar.*|apr.*|may.*|jun.*|jul.*|aug.*|sep.*|oct.*|nov.*|dec.*)",Pattern.CASE_INSENSITIVE);//		    Pattern p1 =Pattern.compile("\b(?:Jan(?:uary)?|Feb(?:ruary)?|...|Dec(?:ember)?)",Pattern.CASE_INSENSITIVE);
+		Matcher m1 =p1.matcher(sample);
 			
-			if(m1.matches())
+		if(m1.matches())
 			{	
 				month=m1.group(1).split(" ")[0].trim();
 				Pattern p2= Pattern.compile((".*"+month+"\\s(\\d{1,2})(\\D*)(.*)"),Pattern.CASE_INSENSITIVE);
@@ -123,174 +109,99 @@ public class Parser {
 					}
 				}
 			
-			else if(sample.contains(",")){				
-						place=sample.split(",")[0].trim();
-						if(place.contains("-")){
-							place=place.split("-")[0].trim();
-						}
+		else if(sample.contains(",")){				
+				place=sample.split(",")[0].trim();
+				if(place.contains("-")){
+						place=place.split("-")[0].trim();
+				}
 						
 			}
-//			else if(sample.split(" ")[0].matches("[A-Z]")){
-//				place=sample.split(" ")[0];
-//				System.out.println(fileID);
-//			}
-		} catch (IOException e) {
-		    e.printStackTrace();
-		} finally {
-		    try {
-		        reader.close();
-		    } catch (IOException e) {
-		        e.printStackTrace();
-		    }
+			reader.close();
+//			System.out.println(month+" "+date+" "+place);
 		}
 		
 		
-//		System.out.println(date+" "+month);
-		
-	}
+
 	private static void setFileID() throws ParserException{
 		fileID=f.getName();
-		if(fileID==null) throw new ParserException("The file does not exist!");
 	}
 
 	private static void setFileCategory() throws ParserException{
 		category=f.getParentFile().getName().trim();
-		if(category==null) throw new ParserException("The file does not exist!");
 	}
 
-	@SuppressWarnings("resource")
-	public static void setFileTitle() throws ParserException{
-		BufferedReader reader;
-		try {
-			reader = new BufferedReader(new FileReader(f));
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			throw new ParserException(e);
-		}
+	public static void setFileTitle() throws ParserException, IOException{
 		String s;
-		try {
-			s=reader.readLine();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			throw new ParserException(e);
+		reader = new BufferedReader(new FileReader(f));
+		s=reader.readLine();
+		lineCount++;
+			 {
+				while(s.equals("\n") || s.equals("\r") ||s.equals(""))
+			 		{
+				 		s=reader.readLine();
+				 		titleLineIndex++;
+				 		lineCount++;
+			 		}
+			 		title=s.trim();
+			 }
 		}
-		while(s.equals("\n") || s.equals("\r") ||s.equals("") ||s.equals(null))
-		{
-		   try {
-			s=reader.readLine();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			throw new ParserException(e);
-		}
-		   titleLineIndex++;
-		}
-		title=s.trim();
-		try {
-			reader.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			throw new ParserException(e);
-		}
-	}
+		
 
 
-	public static void setAuthorOrg() throws ParserException{
+	public static void setAuthorOrg() throws IOException{
 			Pattern p =Pattern.compile("(<AUTHOR>)(.*)(</AUTHOR>)",Pattern.CASE_INSENSITIVE); // TODO implement for <author>
-			FileInputStream fi = null;
-			try {
-				fi = new FileInputStream(f);
-			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				throw new ParserException(e);
-					
-				}
-			
-			byte[] data = new byte[(int)(f).length()];
-
-				try {
-					fi.read(data);
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-					throw new ParserException(e);
-				}
-				String s;
-				try {
-					s = new String(data, "UTF-8");
-				} catch (UnsupportedEncodingException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-					throw new ParserException(e);
-				}
-				Matcher m=p.matcher(s);
-				if(m.find()){
-					String s2[];
-					String s3[];
-					s2=m.group(2).split(",");
-					s3=s2[0].split("(?i)by");
-					author=s3[s3.length-1].trim();
-					if(s2.length>=2)
-						org=s2[s2.length-1].trim();
-//					System.out.println(org+"l");
-				try {
-					fi.close();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-					throw new ParserException(e);
-				}
-				// TODO Auto-generated catch block
+			String  s =reader.readLine();
+			lineCount++;
+			while(s.equals("\n") || s.equals("\r") ||s.equals(""))
+			 	{
+					s=reader.readLine();
+					lineCount++;
+			 	}
+				contentString=s;
+			 	s=s.trim();
+			Matcher m=p.matcher(s);
+			if(m.find()){
+				authorLine=true;
+				lineCount++;
+				String s2[];
+				String s3[];
+				s2=m.group(2).split(",");
+				s3=s2[0].split("(?i)by");
+				author=s3[s3.length-1].trim();
+				
+// * Multiple Authors * //
+				
+//				if(author.toLowerCase().contains(" and "))
+//				{
+//					author=author.split("(?i)and")[0]+"*"+author.split("(?i)and")[1];
+//					System.out.println(author);
+//				}
+				if(s2.length>=2)
+					org=s2[s2.length-1].trim();
 				}
 				else{
 					org=null;
 					author=null;
 				}
 				}
+	
 	public static void setContent() throws IOException{
 		int count=lineCount;
 		String str="",line="";
 		String str2[]={""};
-		BufferedReader reader;
 		reader = new BufferedReader(new FileReader(f));
-		while(count!=0){
+		while(count!=1){
 			str=reader.readLine();
 			count--;
 		}
-//		Pattern p3=  Pattern.compile(".*-(.*)");
-//		Matcher m3= p3.matcher(str);
-//		if(m3.matches()) str=m3.group(1)+" ";
-		if(str.contains("-")){
-			str2=str.split("-");
-		}
-		else{
-			str2[0]=str;
-		}
-		if(str2.length==2)	
-		{
-			str=str2[1]+" ";
-		}
-		if(str2.length==3)	
-		{
-			str=str2[1]+"-"+str2[2]+" ";
-		}
-		if(str2.length==4)	
-		{
-			str=str2[1]+"-"+str2[2]+"-"+str2[3]+" ";
-		}
-		if(str2.length==5)	
-		{
-			str=str2[1]+"-"+str2[2]+"-"+str2[3]+"-"+str2[4]+" ";
-		}
+		str=reader.readLine().trim();
+		str=str.split("-")[str.split("-").length-1].trim();
 		while((line=reader.readLine())!=null){
 			
-			str=str+line;
+			str=str.trim()+" "+line;
 		}
 		content=str;
+//		System.out.println(str.trim().split(" ")[0]);
 		if(content.trim().equals("")) content=null;
 		reader.close();
 	}
@@ -306,11 +217,13 @@ public class Parser {
 				date=null;
 				place=null;
 				content=null;
+				authorLine=false;
 				titleEndIndex=0;
 				dateStartIndex=0;
 				titleLineIndex=0;
 				dateEndIndex=0;
 				lineCount=0;
+				contentString=null;
 				f=null;
 	}
 }

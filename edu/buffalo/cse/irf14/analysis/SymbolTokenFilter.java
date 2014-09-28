@@ -12,92 +12,74 @@ public class SymbolTokenFilter extends TokenFilter{
 	public SymbolTokenFilter(TokenStream stream) {
 		super(stream);
 		localstream=stream;
-		filter();
 		// TODO Auto-generated constructor stub
 	}
 
 	@Override
 	public void filter() {
 		Token token;
-		try {
-			while(increment()){
-				token=localstream.next();
-				String text=token.getTermText();
-				
-				//Remove sentence ending period "."
-				while((text.endsWith(".") ||text.endsWith("!")||text.endsWith("?")) && text.length()>1){
-					text=text.substring(0, text.length()-1);
-				}
-				
-				// Convert Standard Contractions
-				for(int i=0;i<contractionList.size();i++){
-					if(text.endsWith(contractionList.get(i))){
-						if(i==0) text=text.substring(0,text.length()-2)+" "+"am";
-						if(i==1) text=text.substring(0,text.length()-3)+" "+"will";
-						if(i==2) text=text.substring(0,text.length()-2)+" "+"would"; 
-						if(i==3) text=text.substring(0,text.length()-3)+" "+"are"; 	
-						if(i==5) {
-							text=text.substring(0,text.length()-3);
-							if (text.equalsIgnoreCase("wo")) text="will not";
-							else if (text.equalsIgnoreCase("sha")) text="shall not";
-							else if (text.equalsIgnoreCase("ai")) text="am not";
-							else text=text+" "+"not";
-							}
-						if(i==6) text=text.substring(0,text.length()-3)+" "+"have";
-						if(i==4) {
-							if(text.split("'s")[0].equalsIgnoreCase("it")| text.split("'s")[0].equalsIgnoreCase("He")| text.split("'s")[0].equalsIgnoreCase("she")|text.split("'s")[0].equalsIgnoreCase("Where")|text.split("'s")[0].equalsIgnoreCase("when")|text.split("'s")[0].equalsIgnoreCase("where")|text.split("'s")[0].equalsIgnoreCase("who")|text.split("'s")[0].equalsIgnoreCase("why")|text.split("'s")[0].equalsIgnoreCase("how"))
-								text=text.substring(0,text.length()-2)+" "+"is";
-						}
-					}
-				}
-				
-				//Removes other "'"
-				if(text.contains("'s")) text=text.replace("'s", "");
-				
-//				if(text.endsWith("s'")) text=text.replace("'s", "");
-				if(text.equals("'em")) text="them";
-				if(text.contains("'")) text=text.replace("'", "");
-				
-				
-				Pattern p = Pattern.compile(".*\\d.*");
-				Matcher m=p.matcher(text);
-				
-				// Hyphen related rules
-				if(text.contains("-")&&!text.contains("+")&&!text.contains("@")&&!text.contains("=")){
-					{
-					if(m.matches()){
-						//do nothing
-					}
-					else if(text.matches("(\\s-)|(-\\s)")){
-						text=text.replaceAll("-", "");
-					}
-					else{
-						text=text.replaceAll("-", " ");
-					}
-				}
-				}
-				if  (text.trim().equals("")) localstream.remove();
-				else token.setTermText(text.trim());
-				
+		while(localstream.hasNext()){
+			token=localstream.next();
+			String text=token.getTermText();
+			
+			//Remove sentence ending period "."
+			while((text.endsWith(".") ||text.endsWith("!")||text.endsWith("?")) && text.length()>1){
+				text=text.substring(0, text.length()-1);
 			}
-		} catch (TokenizerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			
+			// Convert Standard Contractions
+			for(int i=0;i<contractionList.size();i++){
+				if(text.endsWith(contractionList.get(i))){
+					if(i==0) text=text.substring(0,text.length()-2)+" "+"am";
+					if(i==1) text=text.substring(0,text.length()-3)+" "+"will";
+					if(i==2) text=text.substring(0,text.length()-2)+" "+"would"; 
+					if(i==3) text=text.substring(0,text.length()-3)+" "+"are"; 	
+					if(i==5) {
+						text=text.substring(0,text.length()-3);
+						if (text.equalsIgnoreCase("wo")) text="will not";
+						else if (text.equalsIgnoreCase("sha")) text="shall not";
+						else if (text.equalsIgnoreCase("ai")) text="am not";
+						else text=text+" "+"not";
+						}
+					if(i==6) text=text.substring(0,text.length()-3)+" "+"have";
+					if(i==4) {
+						if(text.split("'s")[0].equalsIgnoreCase("it")| text.split("'s")[0].equalsIgnoreCase("He")| text.split("'s")[0].equalsIgnoreCase("she")|text.split("'s")[0].equalsIgnoreCase("Where")|text.split("'s")[0].equalsIgnoreCase("when")|text.split("'s")[0].equalsIgnoreCase("where")|text.split("'s")[0].equalsIgnoreCase("who")|text.split("'s")[0].equalsIgnoreCase("why")|text.split("'s")[0].equalsIgnoreCase("how"))
+							text=text.substring(0,text.length()-2)+" "+"is";
+					}
+				}
+			}
+			
+			//Removes other "'"
+			if(text.contains("'s")) text=text.replace("'s", "");
+			
+//				if(text.endsWith("s'")) text=text.replace("'s", "");
+			if(text.equals("'em")) text="them";
+			if(text.contains("'")) text=text.replace("'", "");
+			
+			
+			Pattern p = Pattern.compile(".*\\d.*");
+			Matcher m=p.matcher(text);
+			
+			// Hyphen related rules
+			if(text.contains("-")&&!text.contains("+")&&!text.contains("@")&&!text.contains("=")){
+				{
+				if(m.matches()){
+					//do nothing
+				}
+				else if(text.matches("(\\s-)|(-\\s)")){
+					text=text.replaceAll("-", "");
+				}
+				else{
+					text=text.replaceAll("-", " ");
+				}
+			}
+			}
+			if  (text.trim().equals("")) localstream.remove();
+			else token.setTermText(text.trim());
+			
 		}
 		localstream.reset();
 		// TODO Auto-generated method stub
-	}
-
-	@Override
-	public void setNextFilter(TokenFilter filter) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public TokenFilter getNextFilter() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 /* 	It should act on the following symbols with actions as 
 	described:
