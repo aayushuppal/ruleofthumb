@@ -45,9 +45,6 @@ public class CapitalizationTokenFilter extends TokenFilter{
 					token = localstream.next();
 				}
 				
-//				token = localstream.previous();
-				System.out.printf("inbound data counter: %d - token: %s", counter, token);			
-				System.out.println();
 
 				if (counter == 0){ 
 					if(tokenAsString == tokenStringUpperCase){
@@ -91,9 +88,6 @@ public class CapitalizationTokenFilter extends TokenFilter{
 				}
 			}
 				else{
-					System.out.printf("inbound data counter: %d - token: %s", counter, token);			
-					System.out.println();
-					
 					if(tokenAsString == tokenStringUpperCase){
 						text = tokenAsString;
 						token.setTermText(text);
@@ -110,7 +104,6 @@ public class CapitalizationTokenFilter extends TokenFilter{
 				}
 
 				counter++;
-				System.out.println(text);
 			}
 	}
 
