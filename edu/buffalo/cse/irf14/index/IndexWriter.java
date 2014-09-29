@@ -3,6 +3,12 @@
  */
 package edu.buffalo.cse.irf14.index;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -19,50 +25,50 @@ import edu.buffalo.cse.irf14.document.FieldNames;
 public class IndexWriter {
 	
 	String indexDir;
-	public static HashMap<String,Integer> docMap = new HashMap<String,Integer>();
-	public static HashMap<Integer,String> revDocMap = new HashMap<Integer,String>();
-	public static HashMap<String,ArrayList<Integer>> indexMap=null;
-	public static HashMap<String,ArrayList<Integer>> aa_an = new HashMap<String,ArrayList<Integer>>();
-	public static HashMap<String,ArrayList<Integer>> ao_az = new HashMap<String,ArrayList<Integer>>();
-	public static HashMap<String,ArrayList<Integer>> ca_cj = new HashMap<String,ArrayList<Integer>>();
-	public static HashMap<String,ArrayList<Integer>> ck_cz = new HashMap<String,ArrayList<Integer>>();
-	public static HashMap<String,ArrayList<Integer>> sa_si = new HashMap<String,ArrayList<Integer>>();
-	public static HashMap<String,ArrayList<Integer>> sj_sz = new HashMap<String,ArrayList<Integer>>();
-	public static HashMap<String,ArrayList<Integer>> b = new HashMap<String,ArrayList<Integer>>();
-	public static HashMap<String,ArrayList<Integer>> d = new HashMap<String,ArrayList<Integer>>();
-	public static HashMap<String,ArrayList<Integer>> e = new HashMap<String,ArrayList<Integer>>();
-	public static HashMap<String,ArrayList<Integer>> f = new HashMap<String,ArrayList<Integer>>();
-	public static HashMap<String,ArrayList<Integer>> g = new HashMap<String,ArrayList<Integer>>();
-	public static HashMap<String,ArrayList<Integer>> h = new HashMap<String,ArrayList<Integer>>();
-	public static HashMap<String,ArrayList<Integer>> i = new HashMap<String,ArrayList<Integer>>();
-	public static HashMap<String,ArrayList<Integer>> j = new HashMap<String,ArrayList<Integer>>();
-	public static HashMap<String,ArrayList<Integer>> k = new HashMap<String,ArrayList<Integer>>();
-	public static HashMap<String,ArrayList<Integer>> l = new HashMap<String,ArrayList<Integer>>();
-	public static HashMap<String,ArrayList<Integer>> m = new HashMap<String,ArrayList<Integer>>();
-	public static HashMap<String,ArrayList<Integer>> n = new HashMap<String,ArrayList<Integer>>();
-	public static HashMap<String,ArrayList<Integer>> o = new HashMap<String,ArrayList<Integer>>();
-	public static HashMap<String,ArrayList<Integer>> p = new HashMap<String,ArrayList<Integer>>();
-	public static HashMap<String,ArrayList<Integer>> q = new HashMap<String,ArrayList<Integer>>();
-	public static HashMap<String,ArrayList<Integer>> r = new HashMap<String,ArrayList<Integer>>();
-	public static HashMap<String,ArrayList<Integer>> t = new HashMap<String,ArrayList<Integer>>();
-	public static HashMap<String,ArrayList<Integer>> u = new HashMap<String,ArrayList<Integer>>();
-	public static HashMap<String,ArrayList<Integer>> vwxyz = new HashMap<String,ArrayList<Integer>>();
-	public static HashMap<String,ArrayList<Integer>> authM = new HashMap<String,ArrayList<Integer>>();
-	public static HashMap<String,ArrayList<Integer>> catM = new HashMap<String,ArrayList<Integer>>();
-	public static HashMap<String,ArrayList<Integer>> placeM = new HashMap<String,ArrayList<Integer>>();
+	public  HashMap<String,Integer> docMap = new HashMap<String,Integer>();
+	public  HashMap<Integer,String> revDocMap = new HashMap<Integer,String>();
+	public  HashMap<String,ArrayList<Integer>> indexMap=null;
+	public  HashMap<String,ArrayList<Integer>> aa_an = new HashMap<String,ArrayList<Integer>>();
+	public  HashMap<String,ArrayList<Integer>> ao_az = new HashMap<String,ArrayList<Integer>>();
+	public  HashMap<String,ArrayList<Integer>> ca_cj = new HashMap<String,ArrayList<Integer>>();
+	public  HashMap<String,ArrayList<Integer>> ck_cz = new HashMap<String,ArrayList<Integer>>();
+	public  HashMap<String,ArrayList<Integer>> sa_si = new HashMap<String,ArrayList<Integer>>();
+	public  HashMap<String,ArrayList<Integer>> sj_sz = new HashMap<String,ArrayList<Integer>>();
+	public  HashMap<String,ArrayList<Integer>> b = new HashMap<String,ArrayList<Integer>>();
+	public  HashMap<String,ArrayList<Integer>> d = new HashMap<String,ArrayList<Integer>>();
+	public  HashMap<String,ArrayList<Integer>> e = new HashMap<String,ArrayList<Integer>>();
+	public  HashMap<String,ArrayList<Integer>> f = new HashMap<String,ArrayList<Integer>>();
+	public  HashMap<String,ArrayList<Integer>> g = new HashMap<String,ArrayList<Integer>>();
+	public  HashMap<String,ArrayList<Integer>> h = new HashMap<String,ArrayList<Integer>>();
+	public  HashMap<String,ArrayList<Integer>> i = new HashMap<String,ArrayList<Integer>>();
+	public  HashMap<String,ArrayList<Integer>> j = new HashMap<String,ArrayList<Integer>>();
+	public  HashMap<String,ArrayList<Integer>> k = new HashMap<String,ArrayList<Integer>>();
+	public  HashMap<String,ArrayList<Integer>> l = new HashMap<String,ArrayList<Integer>>();
+	public  HashMap<String,ArrayList<Integer>> m = new HashMap<String,ArrayList<Integer>>();
+	public  HashMap<String,ArrayList<Integer>> n = new HashMap<String,ArrayList<Integer>>();
+	public  HashMap<String,ArrayList<Integer>> o = new HashMap<String,ArrayList<Integer>>();
+	public  HashMap<String,ArrayList<Integer>> p = new HashMap<String,ArrayList<Integer>>();
+	public  HashMap<String,ArrayList<Integer>> q = new HashMap<String,ArrayList<Integer>>();
+	public  HashMap<String,ArrayList<Integer>> r = new HashMap<String,ArrayList<Integer>>();
+	public  HashMap<String,ArrayList<Integer>> t = new HashMap<String,ArrayList<Integer>>();
+	public  HashMap<String,ArrayList<Integer>> u = new HashMap<String,ArrayList<Integer>>();
+	public  HashMap<String,ArrayList<Integer>> vwxyz = new HashMap<String,ArrayList<Integer>>();
+	public  HashMap<String,ArrayList<Integer>> authM = new HashMap<String,ArrayList<Integer>>();
+	public  HashMap<String,ArrayList<Integer>> catM = new HashMap<String,ArrayList<Integer>>();
+	public  HashMap<String,ArrayList<Integer>> placeM = new HashMap<String,ArrayList<Integer>>();
 //	static HashMap<String,ArrayList<Integer>> newsM = new HashMap<String,ArrayList<Integer>>();
-	public static HashMap<String,ArrayList<Integer>> symbol = new HashMap<String,ArrayList<Integer>>();
-	public static HashMap<String,String> list = new HashMap<String,String>();
-	public static int docCounter;
-	public static int termdocCounter;
-	public static int authdocCounter;
-	public static int catdocCounter;
-	public static int placedocCounter;
-	static String docNameKey;
-	public static int termCounter;
-	public static int authCounter;
-	public static int catCounter;
-	public static int placeCounter;
+	public  HashMap<String,ArrayList<Integer>> symbol = new HashMap<String,ArrayList<Integer>>();
+	public  HashMap<String,String> list = new HashMap<String,String>();
+	public  int docCounter;
+	public  int termdocCounter;
+	public  int authdocCounter;
+	public  int catdocCounter;
+	public  int placedocCounter;
+	 String docNameKey;
+	public  int termCounter;
+	public  int authCounter;
+	public  int catCounter;
+	public  int placeCounter;
 	/**
 	 * Default constructor
 	 * @param indexDir : The root directory to be sued for indexing
@@ -408,5 +414,38 @@ public class IndexWriter {
 	}
 	public void close() throws IndexerException {
 		//TODO
+		
+		HashMap[] listTerm={this.aa_an, this.ao_az,this.ca_cj,this.ck_cz,this.sa_si,this.sj_sz,this.b,this.d,this.e,this.f,this.g,this.h,this.i,this.j,this.k,this.l,this.m,this.n,this.o,this.p,this.q,this.r,this.t,this.u,this.vwxyz,this.symbol};
+		HashMap[] listOther={this.placeM, this.authM,this.catM};
+		HashMap[] listDoc={this.docMap,this.revDocMap};
+		int[] listVar={this.authCounter,this.authdocCounter,this.catCounter,this.catdocCounter,this.docCounter,this.placeCounter,this.placedocCounter,this.termCounter,this.termdocCounter};
+		File Term=new File ("Term.ser");
+		File Other=new File ("Other.ser");
+		File Var=new File ("Var.ser");
+		File Doc=new File ("Doc.ser");
+//		System.out.println(IndexWriter.docCounter);
+		try{
+		FileOutputStream f1 = new FileOutputStream(Term);  
+		FileOutputStream f2 = new FileOutputStream(Other);
+		FileOutputStream f3 = new FileOutputStream(Var);
+		FileOutputStream f4 = new FileOutputStream(Doc);
+		ObjectOutputStream s1 = new ObjectOutputStream(f1);
+		ObjectOutputStream s2 = new ObjectOutputStream(f2);
+		ObjectOutputStream s3 = new ObjectOutputStream(f3);
+		ObjectOutputStream s4 = new ObjectOutputStream(f4);
+		s1.writeObject(listTerm);
+        s1.close();
+        s2.writeObject(listOther);
+        s2.close();
+        s3.writeObject(listVar);
+        s3.close();
+        s4.writeObject(listDoc);
+        s4.close();
+
+		}
+		catch(Exception e) {
+			throw new IndexerException(e);
+		}
+		
 	}
 }
