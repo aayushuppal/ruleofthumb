@@ -43,7 +43,7 @@ public class IndexReader {
 		this.iType=type;
 		try
 	      {
-	         FileInputStream fis = new FileInputStream(new File("Var.ser"));
+	         FileInputStream fis = new FileInputStream(new File(iDir+File.separator+"Var.ser"));
 //	         System.out.println(fis);
 	         ObjectInputStream ois = new ObjectInputStream(fis);
 //	         System.out.println(ois);
@@ -62,14 +62,14 @@ public class IndexReader {
 	         termdocCounter=list[8];
 	         ois.close();
 	         fis.close();
-	         FileInputStream fis2 = new FileInputStream(new File("Doc.ser"));
+	         FileInputStream fis2 = new FileInputStream(new File(iDir+File.separator+"Doc.ser"));
 	         ObjectInputStream ois2 = new ObjectInputStream(fis2);
 	         HashMap[] list2 = (HashMap[]) ois2.readObject();
 	         docMap=list2[0];
 	         revDocMap=list2[1];
 	         ois2.close();
 	         fis2.close();
-	         FileInputStream fis21 = new FileInputStream(new File("Term.ser"));
+	         FileInputStream fis21 = new FileInputStream(new File(iDir+File.separator+"Term.ser"));
 	         ObjectInputStream ois21 = new ObjectInputStream(fis21);
 	         HashMap[] list21 = (HashMap[]) ois21.readObject();
 	         aa_an=list21[0];
@@ -119,21 +119,21 @@ public class IndexReader {
 		try{
 		switch(it){
 		case AUTHOR:
-			 FileInputStream fis2 = new FileInputStream(new File("Other.ser"));
+			 FileInputStream fis2 = new FileInputStream(new File(iDir+File.separator+"Other.ser"));
 	         ObjectInputStream ois2 = new ObjectInputStream(fis2);
 	         HashMap[] list2 = (HashMap[]) ois2.readObject();
 	         ois2.close();
 	         fis2.close();
 	         return list2[1];
 		case CATEGORY:
-			 FileInputStream fis21 = new FileInputStream(new File("Other.ser"));
+			 FileInputStream fis21 = new FileInputStream(new File(iDir+File.separator+"Other.ser"));
 	         ObjectInputStream ois21 = new ObjectInputStream(fis21);
 	         HashMap[] list21 = (HashMap[]) ois21.readObject();
 	         ois21.close();
 	         fis21.close();
 	         return list21[2];
 		case PLACE:
-			 FileInputStream fis211 = new FileInputStream(new File("Other.ser"));
+			 FileInputStream fis211 = new FileInputStream(new File(iDir+File.separator+"Other.ser"));
 	         ObjectInputStream ois211 = new ObjectInputStream(fis211);
 	         HashMap[] list211 = (HashMap[]) ois211.readObject();
 	         ois211.close();

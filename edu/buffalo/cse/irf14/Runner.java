@@ -31,7 +31,9 @@ public class Runner {
 		String ipDir = "C:/Users/Festy/Desktop/IR Slides/training";								// My Added Line
 		String indexDir = "C:/Users/Festy/Desktop/IR Slides/sample";							// My Added Line
 		long startTime = System.currentTimeMillis();											// My Added Line
-		int count=0;																			// My Added Line
+		int count=0;
+		long maxBytes = Runtime.getRuntime().maxMemory();
+		System.out.println("Max memory: " + maxBytes / 1024 / 1024 + "M");// My Added Line
 		File ipDirectory = new File(ipDir);
 		String[] catDirectories = ipDirectory.list();
 		
@@ -66,7 +68,7 @@ public class Runner {
 			}
 			
 			writer.close();
-			System.out.println("Total Terms: "+IndexWriter.termCounter);						// My Added Line
+			System.out.println("Total Terms: "+writer.termCounter);						// My Added Line
 			System.out.println("Files scanned: "+count);										// My Added Line
 			long stopTime = System.currentTimeMillis();											// My Added Line
 			long elapsedTime = stopTime - startTime;											// My Added Line
@@ -77,16 +79,16 @@ public class Runner {
 		    // Calculate the used memory														// My Added Line
 		    long memory = runtime.totalMemory() - runtime.freeMemory();							// My Added Line
 		    System.out.println("Used memory is bytes: " + memory);								// My Added Line
-		    System.out.println("Used memory is megabytes: "+ (long)memory/(long)1024L * 1024L);	// My Added Line
-		    System.out.println(IndexWriter.catM);
-		    System.out.println(IndexWriter.catCounter);
-		    System.out.println(IndexWriter.catdocCounter);
-		    System.out.println(IndexWriter.authCounter);
-		    System.out.println(IndexWriter.authdocCounter);
-		    System.out.println(IndexWriter.placeCounter);
-		    System.out.println(IndexWriter.placedocCounter);
-		    System.out.println(IndexWriter.termCounter);
-		    System.out.println(IndexWriter.docCounter);
+		    System.out.println("Used memory is megabytes: "+ (long)memory/(1024 * 1024));	// My Added Line
+//		    System.out.println(IndexWriter.catM);
+//		    System.out.println(IndexWriter.catCounter);
+//		    System.out.println(IndexWriter.catdocCounter);
+//		    System.out.println(IndexWriter.authCounter);
+//		    System.out.println(IndexWriter.authdocCounter);
+//		    System.out.println(IndexWriter.placeCounter);
+//		    System.out.println(IndexWriter.placedocCounter);
+//		    System.out.println(IndexWriter.termCounter);
+//		    System.out.println(IndexWriter.docCounter);
 		    
 		    } catch (IndexerException e) {
 			// TODO Auto-generated catch block

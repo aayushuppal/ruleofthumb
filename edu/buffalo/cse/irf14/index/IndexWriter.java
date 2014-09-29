@@ -74,7 +74,7 @@ public class IndexWriter {
 	 * @param indexDir : The root directory to be sued for indexing
 	 */
 	public IndexWriter(String indexDir) {
-		indexDir=this.indexDir;
+		this.indexDir=indexDir;
 		//TODO : YOU MUST IMPLEMENT THIS
 	}
 	
@@ -419,10 +419,10 @@ public class IndexWriter {
 		HashMap[] listOther={this.placeM, this.authM,this.catM};
 		HashMap[] listDoc={this.docMap,this.revDocMap};
 		int[] listVar={this.authCounter,this.authdocCounter,this.catCounter,this.catdocCounter,this.docCounter,this.placeCounter,this.placedocCounter,this.termCounter,this.termdocCounter};
-		File Term=new File ("Term.ser");
-		File Other=new File ("Other.ser");
-		File Var=new File ("Var.ser");
-		File Doc=new File ("Doc.ser");
+		File Term=new File (indexDir+File.separator+"Term.ser");
+		File Other=new File (indexDir+File.separator+"Other.ser");
+		File Var=new File (indexDir+File.separator+"Var.ser");
+		File Doc=new File (indexDir+File.separator+"Doc.ser");
 //		System.out.println(IndexWriter.docCounter);
 		try{
 		FileOutputStream f1 = new FileOutputStream(Term);  
