@@ -3,6 +3,9 @@
  */
 package edu.buffalo.cse.irf14.index;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -23,8 +26,11 @@ public class IndexReader {
 	TreeMap<String,Integer> sorted_map;
 	String iDir;
 	IndexType iType;
-	
-	
+	HashMap<String,Integer> docMap;
+	HashMap<Integer,String> revDocMap;
+	int authCounter,authdocCounter,catCounter,catdocCounter,docCounter,placeCounter,placedocCounter,termCounter,termdocCounter;
+	HashMap<String,ArrayList<Integer>> aa_an,ao_az,ca_cj,ck_cz,sa_si,sj_sz,b,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,t,u,vwxyz;
+	HashMap<String,ArrayList<Integer>> symbol;
 	/**
 	 * Default constructor
 	 * @param indexDir : The root directory from which the index is to be read.
@@ -35,6 +41,69 @@ public class IndexReader {
 	public IndexReader(String indexDir, IndexType type) {
 		this.iDir=indexDir;
 		this.iType=type;
+		try
+	      {
+	         FileInputStream fis = new FileInputStream(new File("Var.ser"));
+//	         System.out.println(fis);
+	         ObjectInputStream ois = new ObjectInputStream(fis);
+//	         System.out.println(ois);
+	         int[] list = (int[]) ois.readObject();
+//	         System.out.println();
+	         authCounter=list[0];
+	         authdocCounter=list[1];
+	         catCounter=list[2];
+	         catdocCounter=list[3];
+	         docCounter=list[4];
+//	         System.out.println(list[4]);        
+	         placeCounter=list[5];
+	         placedocCounter=list[6];
+	         termCounter=list[7];
+//	         System.out.println(termCounter);
+	         termdocCounter=list[8];
+	         ois.close();
+	         fis.close();
+	         FileInputStream fis2 = new FileInputStream(new File("Doc.ser"));
+	         ObjectInputStream ois2 = new ObjectInputStream(fis2);
+	         HashMap[] list2 = (HashMap[]) ois2.readObject();
+	         docMap=list2[0];
+	         revDocMap=list2[1];
+	         ois2.close();
+	         fis2.close();
+	         FileInputStream fis21 = new FileInputStream(new File("Term.ser"));
+	         ObjectInputStream ois21 = new ObjectInputStream(fis21);
+	         HashMap[] list21 = (HashMap[]) ois21.readObject();
+	         aa_an=list21[0];
+	         ao_az=list21[1];
+	         ca_cj=list21[2];
+	         ck_cz=list21[3];
+	         sa_si=list21[4];
+	         sj_sz=list21[5];
+	         b=list21[6];
+	         d=list21[7];
+	         e=list21[8];
+	         f=list21[9];
+	         g=list21[10];
+	         h=list21[11];
+	         i=list21[12];
+	         j=list21[13];
+	         k=list21[14];
+	         l=list21[15];
+	         m=list21[16];
+	         n=list21[17];
+	         o=list21[18];
+	         p=list21[19];
+	        q= list21[20];
+	         r=list21[21];
+	         t=list21[22];
+	         u=list21[23];
+	         vwxyz=list21[24];
+	         symbol=list21[25];
+	         ois21.close();
+	         fis21.close();
+	      }catch(Exception e){
+	    	  
+	      }
+		
 		//TODO
 	}
 	
@@ -42,17 +111,57 @@ public class IndexReader {
 	 * Get total number of terms from the "key" dictionary associated with this 
 	 * index. A postings list is always created against the "key" dictionary
 	 * @return The total number of terms
+	 * @throws IndexerException 
 	 */
+	public HashMap returnMap(IndexType it) throws IndexerException{
+		HashMap[] list1;
+		HashMap<String,ArrayList<Integer>> hashM;
+		try{
+		switch(it){
+		case AUTHOR:
+			 FileInputStream fis2 = new FileInputStream(new File("Other.ser"));
+	         ObjectInputStream ois2 = new ObjectInputStream(fis2);
+	         HashMap[] list2 = (HashMap[]) ois2.readObject();
+	         ois2.close();
+	         fis2.close();
+	         return list2[1];
+		case CATEGORY:
+			 FileInputStream fis21 = new FileInputStream(new File("Other.ser"));
+	         ObjectInputStream ois21 = new ObjectInputStream(fis21);
+	         HashMap[] list21 = (HashMap[]) ois21.readObject();
+	         ois21.close();
+	         fis21.close();
+	         return list21[2];
+		case PLACE:
+			 FileInputStream fis211 = new FileInputStream(new File("Other.ser"));
+	         ObjectInputStream ois211 = new ObjectInputStream(fis211);
+	         HashMap[] list211 = (HashMap[]) ois211.readObject();
+	         ois211.close();
+	         fis211.close();
+	         return list211[0];
+		case TERM:
+			// Already in Memory
+			break;
+		default:
+			break;
+		
+		}
+		}
+		catch(Exception e){
+			throw new IndexerException();
+		}
+		return null; 
+	}
 	public int getTotalKeyTerms() {
 		//TODO : YOU MUST IMPLEMENT THIS
 		if(iType==IndexType.AUTHOR)
-		return IndexWriter.authCounter;
+		return authCounter;
 		if(iType==IndexType.CATEGORY)
-		return IndexWriter.catCounter;
+		return catCounter;
 		if(iType==IndexType.PLACE)
-		return IndexWriter.placeCounter;
+		return placeCounter;
 		if(iType==IndexType.TERM)
-		return IndexWriter.termCounter;
+		return termCounter;
 		else return 0;
 	}
 	
@@ -64,13 +173,13 @@ public class IndexReader {
 	public int getTotalValueTerms() {
 		//TODO: YOU MUST IMPLEMENT THIS
 		if(iType==IndexType.AUTHOR)
-			return IndexWriter.authdocCounter;
+			return authdocCounter;
 			if(iType==IndexType.CATEGORY)
-			return IndexWriter.catdocCounter;
+			return catdocCounter;
 			if(iType==IndexType.PLACE)
-			return IndexWriter.placedocCounter;
+			return placedocCounter;
 			if(iType==IndexType.TERM)
-			return IndexWriter.docCounter;
+			return docCounter;
 			else return 0;
 	}
 	
@@ -86,109 +195,123 @@ public class IndexReader {
 		//TODO:YOU MUST IMPLEMENT THIS
 		String textLowerCase=term.toLowerCase();
 		HashMap<String,ArrayList<Integer>> map = null;
-		textLowerCase=term.toLowerCase();
 		if(iType==IndexType.TERM){
-		if(textLowerCase.equals("a")) map=IndexWriter.aa_an;
+		if(textLowerCase.equals("a")) map=aa_an;
 		else if(textLowerCase.charAt(0)=='a'){
 			if((textLowerCase.charAt(1)>='a' && textLowerCase.charAt(1)<='n'))
 			{
-				map=IndexWriter.aa_an;
+				map=aa_an;
 			}
 			else{
-				map=IndexWriter.ao_az;
+				map=ao_az;
 			}
 			
 		}
 	
-		if(textLowerCase.equals("c")) map=IndexWriter.ca_cj;
+		if(textLowerCase.equals("c")) map=ca_cj;
 		else if(textLowerCase.charAt(0)=='c'){
 			if(textLowerCase.charAt(1)>='a' && textLowerCase.charAt(1)<='j'){
-				map=IndexWriter.ca_cj;
+				map=ca_cj;
 			}
 			else{
-				map=IndexWriter.ck_cz;
+				map=ck_cz;
 			}
 		}
-		if(textLowerCase.equals("s")) map=IndexWriter.sa_si;
+		if(textLowerCase.equals("s")) map=sa_si;
 		else if(textLowerCase.charAt(0)=='s'){
 			if(textLowerCase.charAt(1)>='a' && textLowerCase.charAt(1)<='i'){
-				map=IndexWriter.sa_si;
+				map=sa_si;
 			}
 			else{
-				map=IndexWriter.sj_sz;
+				map=sj_sz;
 			}
 		}
 		
 		else if(textLowerCase.charAt(0)=='b'){
-			map=IndexWriter.b;
+			map=b;
 		}
 		else if(textLowerCase.charAt(0)=='d'){
-			map=IndexWriter.d;
+			map=d;
 		}
 		else if(textLowerCase.charAt(0)=='e'){
-			map=IndexWriter.e;
+			map=e;
 		}
 		else if(textLowerCase.charAt(0)=='f'){
-			map=IndexWriter.f;
+			map=f;
 		}
 		else if(textLowerCase.charAt(0)=='g'){
-			map=IndexWriter.g;
+			map=g;
 		}
 		else if(textLowerCase.charAt(0)=='h'){
-			map=IndexWriter.h;
+			map=h;
 		}
 		else if(textLowerCase.charAt(0)=='i'){
-			map=IndexWriter.i;
+			map=i;
 		}
 		else if(textLowerCase.charAt(0)=='j'){
-			map=IndexWriter.j;
+			map=j;
 		}
 		else if(textLowerCase.charAt(0)=='k'){
-			map=IndexWriter.k;
+			map=k;
 		}
 		else if(textLowerCase.charAt(0)=='l'){
-			map=IndexWriter.l;
+			map=l;
 		}
 		else if(textLowerCase.charAt(0)=='m'){
-			map=IndexWriter.m;
+			map=m;
 		}
 		else if(textLowerCase.charAt(0)=='n'){
-			map=IndexWriter.n;
+			map=n;
 		}
 		else if(textLowerCase.charAt(0)=='o'){
-			map=IndexWriter.o;
+			map=o;
 		}
 		else if(textLowerCase.charAt(0)=='p'){
-			map=IndexWriter.p;
+			map=p;
 		}
 		else if(textLowerCase.charAt(0)=='q'){
-			map=IndexWriter.q;
+			map=q;
 		}
 		else if(textLowerCase.charAt(0)=='r'){
-			map=IndexWriter.r;
+			map=r;
 		}
 		else if(textLowerCase.charAt(0)=='t'){
-			map=IndexWriter.t;
+			map=t;
 		}
 		else if(textLowerCase.charAt(0)=='u'){
-			map=IndexWriter.u;
+			map=u;
 		}
 		else if(textLowerCase.charAt(0)=='v' ||textLowerCase.charAt(0)=='w' ||textLowerCase.charAt(0)=='x' ||textLowerCase.charAt(0)=='y' ||textLowerCase.charAt(0)=='z'){
-			map=IndexWriter.vwxyz;
+			map=vwxyz;
 		}
 		else{
-			map=IndexWriter.symbol;
+			map=symbol;
 		}
 		}
 		
 		if(iType==IndexType.AUTHOR){
-			map=IndexWriter.authM;
+			try {
+				map=returnMap(IndexType.AUTHOR);
+			} catch (IndexerException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		if(iType==IndexType.CATEGORY){
-			map=IndexWriter.catM;
+			try {
+				map=returnMap(IndexType.CATEGORY);
+			} catch (IndexerException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		if(iType==IndexType.PLACE){
-			map=IndexWriter.placeM;
+			try {
+				map=returnMap(IndexType.PLACE);
+			} catch (IndexerException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		
 		ArrayList<Integer> postList = new ArrayList<Integer>();
@@ -197,7 +320,7 @@ public class IndexReader {
 		if(map.containsKey(term)){
 			postList=map.get(term);
 		for(int i=0;i+2<=postList.size();i=i+2){
-			String docID= IndexWriter.revDocMap.get(postList.get(i));
+			String docID= revDocMap.get(postList.get(i));
 			int freq1 = postList.get(i+1);
 			map2.put(docID, freq1);
 		}
@@ -224,16 +347,31 @@ public class IndexReader {
 		sorted_map = new TreeMap<String,Integer>(bvc);
 		HashMap[] list = {};
 		if(iType==IndexType.AUTHOR){
-			list[0]=IndexWriter.authM;
+			try {
+				list[0]=returnMap(IndexType.AUTHOR);
+			} catch (IndexerException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		else if(iType==IndexType.CATEGORY){
-			list[0]=IndexWriter.catM;
+			try {
+				list[0]=returnMap(IndexType.CATEGORY);
+			} catch (IndexerException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		else if(iType==IndexType.PLACE){
-			list[0]=IndexWriter.placeM;
+			try {
+				list[0]=returnMap(IndexType.PLACE);
+			} catch (IndexerException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		else{
-			list=new HashMap[] {IndexWriter.aa_an, IndexWriter.ao_az,IndexWriter.ca_cj,IndexWriter.ck_cz,IndexWriter.sa_si,IndexWriter.sj_sz,IndexWriter.b,IndexWriter.d,IndexWriter.e,IndexWriter.f,IndexWriter.g,IndexWriter.h,IndexWriter.i,IndexWriter.j,IndexWriter.k,IndexWriter.l,IndexWriter.m,IndexWriter.n,IndexWriter.o,IndexWriter.p,IndexWriter.q,IndexWriter.r,IndexWriter.t,IndexWriter.u,IndexWriter.vwxyz,IndexWriter.symbol};
+			list=new HashMap[] {aa_an, ao_az,ca_cj,ck_cz,sa_si,sj_sz,b,d,e,f,g,h,i,j,this.k,l,m,n,o,p,q,r,t,u,vwxyz,symbol};
 		}
 		for(HashMap<String,ArrayList<Integer>> map:list){
 			for(String ls:map.keySet()){
