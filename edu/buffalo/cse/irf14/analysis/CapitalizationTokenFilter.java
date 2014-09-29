@@ -30,9 +30,10 @@ public class CapitalizationTokenFilter extends TokenFilter{
 				char lowercasefirstchar = Character.toLowerCase(tokenAsCharArr[0]);
 				char uppercasefirstchar = Character.toUpperCase(tokenAsCharArr[0]);
 				
-				token = localstream.next();
-				int index1 =localstream.arrListToken.indexOf(token);
 				
+				if(localstream.hasNext()){
+					token = localstream.next();
+					int index1 =localstream.arrListToken.indexOf(token);
 				String nexttokenAsString = token.getTermText();
 				String nexttokenStringUpperCase = nexttokenAsString.toUpperCase();
 				char nexttokenAsCharArr[] = token.getTermBuffer();
@@ -43,21 +44,26 @@ public class CapitalizationTokenFilter extends TokenFilter{
 				for (int k=0; k<index1; k++){
 					token = localstream.next();
 				}
+				
+//				token = localstream.previous();
 				System.out.printf("inbound data counter: %d - token: %s", counter, token);			
 				System.out.println();
 
 				if (counter == 0){ 
 					if(tokenAsString == tokenStringUpperCase){
 						text = tokenAsString;
+						token.setTermText(text);
 					}
 					else {	
 						if(checkCamelCase(nexttokenAsString)){
 							text = tokenAsString + " "+ nexttokenAsString;
-							System.out.println(text);
+							token.setTermText(text);
 							token = localstream.next();
+							localstream.remove();
 							counter++;
 						}
 						else { text = tokenAsString.toLowerCase(); 
+						token.setTermText(text);
 						 }
 					} 
 				}
@@ -65,22 +71,46 @@ public class CapitalizationTokenFilter extends TokenFilter{
 				else { 
 					if(tokenAsString == tokenStringUpperCase){
 						text = tokenAsString;
+						token.setTermText(text);
 					}
 					else if(checkCamelCase(tokenAsString)){ 
 						if(checkCamelCase(nexttokenAsString)){ 
-							text = tokenAsString + " "+ nexttokenAsString;
+							text = tokenAsString + " " +nexttokenAsString;
+							token.setTermText(text);
 							token = localstream.next();
+							localstream.remove();
 							counter++;
 						}
-						else { text = tokenAsString; }
+						else { text = tokenAsString;
+						token.setTermText(text); }
 					}
 
-					else {  text = tokenAsString.toLowerCase();}
+					else {  text = tokenAsString.toLowerCase();
+					token.setTermText(text);}
 					
 				}
+			}
+				else{
+					System.out.printf("inbound data counter: %d - token: %s", counter, token);			
+					System.out.println();
+					
+					if(tokenAsString == tokenStringUpperCase){
+						text = tokenAsString;
+						token.setTermText(text);
+					}
+					else if(checkCamelCase(tokenAsString)){
+						text = tokenAsString; 
+						token.setTermText(text);
+					}
+
+					else {  text = tokenAsString.toLowerCase();
+					token.setTermText(text);}
+
+					
+				}
+
 				counter++;
 				System.out.println(text);
-				token.setTermText(text);
 			}
 	}
 
