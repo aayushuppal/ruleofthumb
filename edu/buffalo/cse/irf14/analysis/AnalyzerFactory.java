@@ -93,9 +93,9 @@ public class AnalyzerFactory {
 			filter.nextFilter.nextFilter = factory.getFilterByType(TokenFilterType.STOPWORD, stream);//System.out.println("lol4");
 			filter.nextFilter.nextFilter.nextFilter=factory.getFilterByType(TokenFilterType.SPECIALCHARS, stream);//System.out.println("lol6");
 			filter.nextFilter.nextFilter.nextFilter.nextFilter=factory.getFilterByType(TokenFilterType.DATE, stream);//System.out.println("lol7");
-////		filter.nextFilter.nextFilter.nextFilter.nextFilter.nextFilter=factory.getFilterByType(TokenFilterType.CAPITALIZATION, stream);System.out.println("lo8");
-			filter.nextFilter.nextFilter.nextFilter.nextFilter.nextFilter=factory.getFilterByType(TokenFilterType.NUMERIC, stream);//System.out.println("lol9");
-			filter.nextFilter.nextFilter.nextFilter.nextFilter.nextFilter.nextFilter=factory.getFilterByType(TokenFilterType.STEMMER, stream);//System.out.println("lol10");
+			filter.nextFilter.nextFilter.nextFilter.nextFilter.nextFilter=factory.getFilterByType(TokenFilterType.CAPITALIZATION, stream);
+			filter.nextFilter.nextFilter.nextFilter.nextFilter.nextFilter.nextFilter=factory.getFilterByType(TokenFilterType.NUMERIC, stream);//System.out.println("lol9");
+			filter.nextFilter.nextFilter.nextFilter.nextFilter.nextFilter.nextFilter.nextFilter=factory.getFilterByType(TokenFilterType.STEMMER, stream);//System.out.println("lol10");
 			break;
 		}
 		case FILEID:

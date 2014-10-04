@@ -5,7 +5,7 @@ import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith(Suite.class)
-@SuiteClasses({ //CapitalizationRuleTest.class,
+@SuiteClasses({ CapitalizationRuleTest.class,
 				AccentRuleTest.class,
 				DateRuleTest.class,
 				NumberRuleTest.class,

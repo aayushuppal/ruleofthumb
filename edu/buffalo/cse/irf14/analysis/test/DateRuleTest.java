@@ -82,10 +82,10 @@ public class DateRuleTest extends TFRuleBaseTest {
 						new String[] { "Apple", "is", "one", "of", "the",
 								"world's", "most", "valuable", "publicly",
 								"traded", "companies", "in",
-								"20110101-20120101." },
+								"20110101/20120101." },
 						runTest(TokenFilterType.DATE, "Apple is one of the "
 								+ "world's most valuable publicly "
-								+ "traded companies in 2011-12."));
+								+ "traded companies in 2011/12."));
 
 			} catch (TokenizerException e) {
 				fail("Exception thrown when not expected!");
