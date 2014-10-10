@@ -6,6 +6,8 @@ package edu.buffalo.cse.irf14.query;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Stack;
+import java.util.regex.Pattern;
 
 /**
  * @author nikhillo
@@ -26,24 +28,14 @@ public class QueryParser {
 		OPERATORS.add("AND");
 		OPERATORS.add("NOT");
 		
-		String queryTerms[]=userQuery.split(" ");
+		String queryTerms[]=userQuery.split(" "); // created a LinkedList by splitting the query with space
 		String preWord="",preWord2="";
-		LinkedList<String> queryList = new LinkedList<String>();
-		LinkedList<String> queryList2 = new LinkedList<String>();
-		LinkedList<String> newQueryList = new LinkedList<String>();
+		LinkedList<String> queryList = new LinkedList<String>(); 
+		LinkedList<String> queryList2 = new LinkedList<String>();// just a copy of querylist
+		LinkedList<String> newQueryList = new LinkedList<String>();//  another copy of querylist
 		for(String s:queryTerms) queryList.add(s);
 		String word="";
-/*-------------------
- * Strip All Brackets
- * -----------------*/
-		List<Integer> openBrackets= new ArrayList<Integer>();
-		List<Integer> closeBrackets= new ArrayList<Integer>();
-//		for(int i=0;i<queryList.size();i++){
-//			String s= queryList.get(i);
-//			while(s.startsWith("(")){
-//				break;
-//			}
-//		}
+
 /*-----------------------
  * Combining Quoted Terms
  * ---------------------*/		
@@ -71,11 +63,12 @@ public class QueryParser {
 /*--------------------------
 * Add "Term:" where required. 
 * -------------------------*/
-
+Pattern p1=Pattern.compile("");
 				for(int i=0; i<queryList.size();i++){
 					String s=queryList.get(i);
-					if(!(quoteFlag==true || s.startsWith("Terms:")|| s.startsWith("Author:") || s.startsWith("Place:")|| s.startsWith("Category:") || OPERATORS.contains(s))){
+					if(!(quoteFlag==true || s.contains("Terms:")|| s.contains("Author:") || s.contains("Place:")|| s.contains("Category:") || s.equals("OR")||s.equals("AND") || s.equals("NOT")||s.matches("(\\()?\\(NOT"))){
 						s="Term:"+s;
+//						System.out.println(s);
 						queryList.add(i, s);
 						queryList.remove(i+1);
 					}
@@ -115,9 +108,66 @@ public class QueryParser {
 			else newQueryList.add(word);
 
 		}
+/*-----------------------------------------*
+* Do the required refining due to Brackets *
+* -----------------------------------------*/
+				List<Integer> openBrackets= new ArrayList<Integer>();
+				List<Integer> closeBrackets= new ArrayList<Integer>();
+				for(int i=0;i<newQueryList.size();i++){
+					String s=newQueryList.get(i);
+					if(s.contains("(")){
+							openBrackets.add(i);
+							s="("+s.split("\\(")[0]+s.split("\\(")[1];
+							newQueryList.remove(i);
+							newQueryList.add(i, s);
+					}
+					if(s.contains(")") && s.contains("Term:")){
+						
+						String g=newQueryList.get(openBrackets.get(openBrackets.size()-1));
+						if(g.contains("(") && g.contains(":")){
+							s=g.split(":")[0].split("\\(")[1]+":"+s.split(":")[1];
+							newQueryList.remove(i);
+							newQueryList.add(i, s);
+						}
+						
+					}
+				}
+///* ------------------------------------------------------------------
+//* Add starting and Ending brackets in query for easiness of next task
+//* ------------------------------------------------------------------*/
+//				String s=newQueryList.get(0);
+//				System.out.println(s);
+//				if (!s.startsWith("(")) {
+//					newQueryList.remove(0);
+//					newQueryList.add(0, "("+s);
+//					s=newQueryList.getLast();
+//					s=s+")";
+//					newQueryList.removeLast();
+//					newQueryList.addLast(s);
+//					}
+				
+///* ----------------------------------------
+// * Creating Operation and Operator Stacks 
+// * ---------------------------------------*/
+//				String opr="";
+//				Stack<String> oprtrStack = new Stack<String>();
+//				Stack<String> oprndStack = new Stack<String>();
+//				for(int i=0; i<newQueryList.size();i++){
+//					String str= newQueryList.get(i);
+//					if(!str.endsWith("\\)")){
+//						if(OPERATORS.contains(str)) oprtrStack.push(str);
+//						else oprndStack.push(str);
+//					}
+//					else{
+//						do{
+//							opr=
+//						}
+//					}
+//				}
 
-		for(String s: newQueryList) System.out.print(s+" ");
-		System.out.println();
-		return null;
+//		for(String s1: newQueryList) System.out.print(s1+" ");
+		Query q= new Query();
+		q.setQueryString(newQueryList);
+		return q;
 	}
 }
