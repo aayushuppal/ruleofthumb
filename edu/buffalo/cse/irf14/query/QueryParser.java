@@ -60,18 +60,22 @@ public class QueryParser {
 		else queryList2.add(s);
 		}
 		queryList=queryList2;
-/*--------------------------
-* Add "Term:" where required. 
-* -------------------------*/
+		
+			
+/*---------------------------------------------------------------------------------------------------------
+* Add "Term:" where required. (Actually adding Ter##m: because we need these terms for cross index grouping)
+* ---------------------------------------------------------------------------------------------------------*/
+
 Pattern p1=Pattern.compile("");
-				for(int i=0; i<queryList.size();i++){
-					String s=queryList.get(i);
-					if(!(quoteFlag==true || s.contains("Terms:")|| s.contains("Author:") || s.contains("Place:")|| s.contains("Category:") || s.equals("OR")||s.equals("AND") || s.equals("NOT")||s.matches("(\\()?\\(NOT"))){
-						s="Term:"+s;
-//						System.out.println(s);
-						queryList.add(i, s);
-						queryList.remove(i+1);
+				for(int i1=0; i1<queryList.size();i1++){
+
+					String s1=queryList.get(i1);
+					if(!(quoteFlag==true || s1.contains("Term:")|| s1.contains("Author:") || s1.contains("Place:")|| s1.contains("Category:") || s1.equals("OR")||s1.equals("AND") || s1.equals("NOT")||s1.matches("(\\()?\\(NOT"))){
+						s1="Ter##m:"+s1;
+						queryList.add(i1, s1);
+						queryList.remove(i1+1);
 					}
+					
 				}
 /*------------------------------------
  * Add Default Operators where required. 
@@ -83,7 +87,7 @@ Pattern p1=Pattern.compile("");
 			//System.out.println(word);
 			if(!OPERATORS.contains(word)){  //  word = TERM
 				preWord=queryList.get(i-1);
-				if(preWord.equals(("NOT")) && i>1){ //prev word= NOT
+				if((preWord.equals(("NOT")) || preWord.equals(("(NOT"))) && i>1){ //prev word= NOT
 					preWord2=queryList.get(i-2);
 					if(OPERATORS.contains(preWord2)){ // prev of prev word is not any operator
 //						newQueryList.add(newQueryList.size()-1,defaultOperator);
@@ -113,15 +117,17 @@ Pattern p1=Pattern.compile("");
 * -----------------------------------------*/
 				List<Integer> openBrackets= new ArrayList<Integer>();
 				List<Integer> closeBrackets= new ArrayList<Integer>();
+				Boolean openFlag=false;
 				for(int i=0;i<newQueryList.size();i++){
 					String s=newQueryList.get(i);
 					if(s.contains("(")){
+							openFlag=true;
 							openBrackets.add(i);
 							s="("+s.split("\\(")[0]+s.split("\\(")[1];
 							newQueryList.remove(i);
 							newQueryList.add(i, s);
 					}
-					if(s.contains(")") && s.contains("Term:")){
+					if(s.contains(")") && (s.contains("Term:") || s.contains("Ter##m:"))){
 						
 						String g=newQueryList.get(openBrackets.get(openBrackets.size()-1));
 						if(g.contains("(") && g.contains(":")){
@@ -129,9 +135,92 @@ Pattern p1=Pattern.compile("");
 							newQueryList.remove(i);
 							newQueryList.add(i, s);
 						}
-						
+						openFlag=false;
 					}
+					if(openFlag==true){
+						if((s.contains("Term:") || s.contains("Ter##m:"))){
+							
+							String g=newQueryList.get(openBrackets.get(openBrackets.size()-1));
+							if(g.contains("(") && g.contains(":")){
+								if(s.contains("(((("))
+									s="(((("+g.split(":")[0].split("\\(")[1]+":"+s.split(":")[1];
+								else if(s.contains("((("))
+									s="((("+g.split(":")[0].split("\\(")[1]+":"+s.split(":")[1];
+								else if(s.contains("(("))
+								s="(("+g.split(":")[0].split("\\(")[1]+":"+s.split(":")[1];
+								else if(s.contains("("))
+									s="("+g.split(":")[0].split("\\(")[1]+":"+s.split(":")[1];
+								else
+									s=g.split(":")[0].split("\\(")[1]+":"+s.split(":")[1];
+								newQueryList.remove(i);
+								newQueryList.add(i, s);
+							}
+						}
+					}
+					
 				}
+				/*--------------------------------------------------
+				* Add brackets for cross index grouping 
+				* i.e. Author:lala Term:Utsav Term:Parth Term:Nana
+				* --> Author:lala (Term:Utsav Term:Parth Term:Nana)
+				* -------------------------------------------------*/
+						Boolean crossIndexFlag=false;
+						int crossIndexCount=0;
+						int startIndex = 0,endIndex;
+						String lastIndexType = null;
+						String nextIndexType = null;
+						for(int i=0; i<newQueryList.size();i++){
+							String s=newQueryList.get(i);
+
+						
+						if(i>0 && newQueryList.get(i-1).contains(":")) {
+							lastIndexType=newQueryList.get(i-1).replaceAll("\\(", "").split(":")[0];
+//							System.out.println(lastIndexType);
+
+						}
+						if(i!=newQueryList.size()-1 && newQueryList.get(i+1).contains(":")){
+							nextIndexType=newQueryList.get(i+1).replaceAll("\\(", "").split(":")[0];
+
+						}
+						if(i>0 && !lastIndexType.equals("Ter##m") && s.contains("Ter##m")){
+							crossIndexFlag=true;
+							startIndex=i;
+						}
+						if(i>0 && crossIndexFlag==true&& s.contains("Ter##m")){
+							crossIndexCount++;
+						}
+						if(crossIndexFlag==true && crossIndexCount>1 && (i==newQueryList.size()-1 || !nextIndexType.contains("Ter##m"))){
+							String s1;
+							s1=newQueryList.get(startIndex);
+							if(!s1.contains("(")){
+								if(newQueryList.get(startIndex-1).contains("(NOT")){
+									
+								}
+								else if(newQueryList.get(startIndex-1).contains("NOT")){
+									newQueryList.set(startIndex-1, "(NOT");
+								}
+								else
+									s1="("+s1;
+							}
+							newQueryList.set(startIndex, s1);
+							if(i==newQueryList.size()-1) {
+								s1=newQueryList.get(i);
+								if(!s1.endsWith(")")) s1=s1+")";
+								newQueryList.set(i, s1);
+							}
+							else  {
+								s1=newQueryList.get(i-1);
+								if(!s1.endsWith(")")) s1=s1+")";
+								newQueryList.set(i-1, s1);
+							}
+							
+							crossIndexFlag=false;
+						}
+						}
+						for(int i=0; i<newQueryList.size();i++){
+							if(newQueryList.get(i).contains("Ter##m"))
+								newQueryList.set(i, newQueryList.get(i).replace("Ter##m", "Term"));
+						}
 ///* ------------------------------------------------------------------
 //* Add starting and Ending brackets in query for easiness of next task
 //* ------------------------------------------------------------------*/

@@ -49,16 +49,21 @@ public class Query {
 				Matcher m1= p1.matcher(str.trim());
 				if(str.contains("NOT")){
 					String str2=queryString.get(i+1);
+					String temp=str2;
+					str2=str2.replace("[", "");
 					Pattern p= Pattern.compile("[^a-zA-Z0-9:]+");
 					Matcher m= p.matcher(str2);
 					if(m.find()){
-						System.out.println(str2);
+//						System.out.println(str2);
 						str2="<"+str2.substring(0, m.start())+">"+str2.substring(m.start(),str2.length());
 					}
 					else str2="<"+str2+">";
 					if(!str.equals("NOT"))
 					queryString.set(i+1, str.split("NOT")[0]+str2);
-					else queryString.set(i+1, str2);
+					else if(temp.contains("[")){
+						queryString.set(i+1, "["+str2);
+					}
+					else queryString.set(i+1,str2);
 					queryString.set(i, "");
 					
 				}

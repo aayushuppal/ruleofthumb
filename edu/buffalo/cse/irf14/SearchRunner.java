@@ -23,7 +23,7 @@ import edu.buffalo.cse.irf14.query.Scorer;
  */
 public class SearchRunner {
 	public enum ScoringModel {TFIDF, OKAPI};
-//	String indexdir="C:/Users/Festy/Dropbox/Code Repository/IR_final";
+//	String indexdir="C:/Users/Festy/Dropbox/Code Repository/IR_final"; 
 
 	String corpusDir,queryString;
 	char queryMode;
