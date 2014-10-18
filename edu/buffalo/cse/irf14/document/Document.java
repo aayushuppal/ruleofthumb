@@ -12,7 +12,7 @@ import java.util.HashMap;
 public class Document {
 	//Sample implementation - you can change this if you like
 	private HashMap<FieldNames, String[]> map;
-	
+	public double length=0;
 	/**
 	 * Default constructor
 	 */

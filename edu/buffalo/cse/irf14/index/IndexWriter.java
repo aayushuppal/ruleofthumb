@@ -13,6 +13,7 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.TreeMap;
 
 import edu.buffalo.cse.irf14.analysis.*;
 import edu.buffalo.cse.irf14.document.Document;
@@ -28,6 +29,7 @@ public class IndexWriter {
 	public  HashMap<String,Integer> docMap = new HashMap<String,Integer>();
 	public  HashMap<Integer,String> revDocMap = new HashMap<Integer,String>();
 	public  HashMap<String,ArrayList<Integer>> indexMap=null;
+	public  TreeMap<String,Double> doc_length = new TreeMap<String,Double>();
 	public  HashMap<String,ArrayList<Integer>> aa_an = new HashMap<String,ArrayList<Integer>>();
 	public  HashMap<String,ArrayList<Integer>> ao_az = new HashMap<String,ArrayList<Integer>>();
 	public  HashMap<String,ArrayList<Integer>> ca_cj = new HashMap<String,ArrayList<Integer>>();
@@ -103,6 +105,7 @@ public class IndexWriter {
 			while(filter.increment()){
 			}
 			stream=filter.getStream();
+			d.length=d.length+stream.arrListToken.size();
 			index(stream,FieldNames.CONTENT);
 			}
 			
@@ -126,7 +129,8 @@ public class IndexWriter {
 					a2.add(t3);
 					
 				}
-				TokenStream authStream=new TokenStream(a2);				
+				TokenStream authStream=new TokenStream(a2);
+				d.length=d.length+authStream.arrListToken.size();
 				index(authStream,FieldNames.AUTHOR);
 				}
 			
@@ -154,6 +158,7 @@ public class IndexWriter {
 				while(filter.increment()){
 				}
 				stream=filter.getStream();		
+				d.length=d.length+stream.arrListToken.size();
 				index(stream,FieldNames.PLACE);
 				}
 			if(d.getField(FieldNames.TITLE)!=null){
@@ -165,9 +170,11 @@ public class IndexWriter {
 					
 				}
 				stream=filter.getStream();			
+				d.length=d.length+stream.arrListToken.size();
 				index(stream,FieldNames.TITLE);
 				}
-			
+//			System.out.println(d.length);
+			addLengthIndex(d);
 		} catch (Exception e) {
 			throw new IndexerException();
 		}
@@ -392,7 +399,11 @@ public class IndexWriter {
 //			System.out.println(text);
 		}
 	}
-	
+	public void addLengthIndex(Document d){
+		if(!doc_length.containsKey(d.getField(FieldNames.FILEID)[0])){
+			doc_length.put(d.getField(FieldNames.FILEID)[0], d.length);
+		}
+	}
 	public void printIndex(){
 		ArrayList<Integer> l;
 		int counter=0;
@@ -423,16 +434,19 @@ public class IndexWriter {
 		File Other=new File (indexDir+File.separator+"Other.ser");
 		File Var=new File (indexDir+File.separator+"Var.ser");
 		File Doc=new File (indexDir+File.separator+"Doc.ser");
+		File Length= new File(indexDir+File.separator+"Length.ser");
 //		System.out.println(IndexWriter.docCounter);
 		try{
 		FileOutputStream f1 = new FileOutputStream(Term);  
 		FileOutputStream f2 = new FileOutputStream(Other);
 		FileOutputStream f3 = new FileOutputStream(Var);
 		FileOutputStream f4 = new FileOutputStream(Doc);
+		FileOutputStream f5 = new FileOutputStream(Length);
 		ObjectOutputStream s1 = new ObjectOutputStream(f1);
 		ObjectOutputStream s2 = new ObjectOutputStream(f2);
 		ObjectOutputStream s3 = new ObjectOutputStream(f3);
 		ObjectOutputStream s4 = new ObjectOutputStream(f4);
+		ObjectOutputStream s5 = new ObjectOutputStream(f5);
 		s1.writeObject(listTerm);
         s1.close();
         s2.writeObject(listOther);
@@ -441,7 +455,8 @@ public class IndexWriter {
         s3.close();
         s4.writeObject(listDoc);
         s4.close();
-
+        s5.writeObject(doc_length);
+        s5.close();
 		}
 		catch(Exception e) {
 			throw new IndexerException(e);

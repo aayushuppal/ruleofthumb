@@ -31,6 +31,7 @@ public class IndexReader {
 	int authCounter,authdocCounter,catCounter,catdocCounter,docCounter,placeCounter,placedocCounter,termCounter,termdocCounter;
 	HashMap<String,ArrayList<Integer>> aa_an,ao_az,ca_cj,ck_cz,sa_si,sj_sz,b,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,t,u,vwxyz;
 	HashMap<String,ArrayList<Integer>> symbol;
+	TreeMap doc_length;
 	/**
 	 * Default constructor
 	 * @param indexDir : The root directory from which the index is to be read.
@@ -44,10 +45,13 @@ public class IndexReader {
 		try
 	      {
 	         FileInputStream fis = new FileInputStream(new File(iDir+File.separator+"Var.ser"));
+	         FileInputStream fisD = new FileInputStream(new File(iDir+File.separator+"Length.ser"));
 //	         System.out.println(fis);
 	         ObjectInputStream ois = new ObjectInputStream(fis);
+	         ObjectInputStream oisD = new ObjectInputStream(fisD);
 //	         System.out.println(ois);
 	         int[] list = (int[]) ois.readObject();
+	         doc_length=(TreeMap) oisD.readObject();
 //	         System.out.println();
 	         authCounter=list[0];
 	         authdocCounter=list[1];
@@ -410,6 +414,18 @@ public class IndexReader {
 		//TODO : BONUS ONLY
 		
 		return null;
+	}
+	public double getLength(String docID){
+		if(doc_length.containsKey(docID)) return (Double) doc_length.get(docID);
+		else return 0;
+	}
+	public double averageLength(){
+		double sum = 0;
+		for(Object i:doc_length.keySet()){
+			sum=(Double) doc_length.get(i)+ sum;
+		}
+		double n=doc_length.size();
+		return sum/n;
 	}
 }
 class ValueComparator implements Comparator<String> {
