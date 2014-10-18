@@ -101,7 +101,7 @@ public class IndexReader {
 	         ois21.close();
 	         fis21.close();
 	      }catch(Exception e){
-	    	  
+	    	  e.printStackTrace();
 	      }
 		
 		//TODO
@@ -268,6 +268,7 @@ public class IndexReader {
 		}
 		else if(textLowerCase.charAt(0)=='p'){
 			map=p;
+			
 		}
 		else if(textLowerCase.charAt(0)=='q'){
 			map=q;
