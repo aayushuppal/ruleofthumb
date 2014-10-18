@@ -1,8 +1,8 @@
 package edu.buffalo.cse.irf14.query;
 
-public class Scorer {
+public class OKScorer {
 
-	public Scorer() {
+	public OKScorer() {
 		// TODO Auto-generated constructor stub
 	}
 
