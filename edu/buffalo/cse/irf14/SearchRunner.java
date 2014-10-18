@@ -13,7 +13,8 @@ import edu.buffalo.cse.irf14.index.IndexType;
 import edu.buffalo.cse.irf14.query.IndexSearcher;
 import edu.buffalo.cse.irf14.query.Query;
 import edu.buffalo.cse.irf14.query.QueryParser;
-import edu.buffalo.cse.irf14.query.Scorer;
+import edu.buffalo.cse.irf14.query.ResultFormat;
+import edu.buffalo.cse.irf14.query.TFScorer;
 
 /**
  * Main class to run the searcher.
@@ -31,7 +32,7 @@ public class SearchRunner {
 	IndexReader indexReader;
 	IndexSearcher indexSearcher;
 	QueryParser queryParser;
-	Scorer scorer;
+	TFScorer scorer;
 	Query query;
 	PrintStream printstream;
 	ResultFormat resultFormat;

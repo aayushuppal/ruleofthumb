@@ -1,4 +1,4 @@
-package edu.buffalo.cse.irf14;
+package edu.buffalo.cse.irf14.query;
 
 public class ResultFormat {
 	
