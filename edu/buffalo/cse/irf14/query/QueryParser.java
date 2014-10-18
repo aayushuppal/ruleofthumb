@@ -161,13 +161,13 @@ Pattern p1=Pattern.compile("");
 				}
 				/*--------------------------------------------------
 				* Add brackets for cross index grouping 
-				* i.e. Author:lala Term:Utsav Term:Parth Term:Nana
+				* i.e. Author:lala Utsav Parth Nana
 				* --> Author:lala (Term:Utsav Term:Parth Term:Nana)
 				* -------------------------------------------------*/
 						Boolean crossIndexFlag=false;
 						int crossIndexCount=0;
 						int startIndex = 0,endIndex;
-						String lastIndexType = null;
+						String lastIndexType = "";
 						String nextIndexType = null;
 						for(int i=0; i<newQueryList.size();i++){
 							String s=newQueryList.get(i);
@@ -178,6 +178,7 @@ Pattern p1=Pattern.compile("");
 //							System.out.println(lastIndexType);
 
 						}
+
 						if(i!=newQueryList.size()-1 && newQueryList.get(i+1).contains(":")){
 							nextIndexType=newQueryList.get(i+1).replaceAll("\\(", "").split(":")[0];
 

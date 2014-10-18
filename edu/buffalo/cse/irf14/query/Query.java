@@ -13,6 +13,7 @@ import java.util.regex.Pattern;
  */
 public class Query {
 	LinkedList<String> queryString;
+	private int size;
 	/**
 	 * Method to convert given parsed query into string
 	 */
@@ -21,8 +22,11 @@ public class Query {
 	}
 	public String toString() {
 		//TODO: YOU MUST IMPLEMENT THIS
-		if(queryString==null || queryString.equals(""))
-		return null;
+		if(queryString==null || queryString.equals("")){
+			this.size=0;
+			return null;
+		}
+		
 		else{
 			for(int i=0;i<queryString.size();i++){
 				String str= (String) queryString.get(i);
@@ -68,8 +72,16 @@ public class Query {
 					
 				}
 			}
-			
-			return queryString.toString();
+			this.size=queryString.size();
+			String s2 = "";
+			for(String s1: queryString) 
+				if(!s1.trim().equals("")) s2=s2+" "+s1;
+//			System.out.println(s2);
+//			System.out.println(queryString.toString());
+			return s2.trim();
 		}
+	}
+	public int size(){
+		return size;
 	}
 }
