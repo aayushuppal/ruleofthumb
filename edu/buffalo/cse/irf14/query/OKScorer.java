@@ -24,7 +24,7 @@ public class OKScorer {
 	
 	public OKScorer(TreeMap<String, String[]> result, Query query) {
 		// TODO Auto-generated constructor stub
-		indexer = new IndexReader("C:\\Users\\Festy\\Desktop\\IR Slides\\sample",IndexType.TERM);
+		indexer = IndexFactory.getIndexReader("C:\\Users\\Festy\\Desktop\\IR Slides\\sample");
 		L_ave=indexer.averageLength();
 		createQueryTerms(query);
 		createDocMap(result);
