@@ -1,5 +1,6 @@
 package edu.buffalo.cse.irf14.query;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -81,6 +82,31 @@ public class Query {
 			return s2.trim();
 		}
 	}
+	public ArrayList<String> getSplitQuery(){
+		toString();
+		ArrayList<String> result = new ArrayList<String>();
+		for(String s:queryString){
+			while(s.startsWith("{")){
+				result.add("{");
+				s=s.substring(1);
+			}
+			while(s.startsWith("[")){
+				result.add("[");
+				s=s.substring(1);
+			}
+			while(s.endsWith("}")){
+				result.add("}");
+				s=s.substring(1);
+			}
+			while(s.startsWith("]")){
+				result.add("]");
+				s=s.substring(1);
+			}
+			result.add(s);
+		}
+		return result;
+	}
+	
 	public int size(){
 		return size;
 	}
