@@ -21,12 +21,12 @@ public class TFScorer {
 	TreeMap<String, Double> idf_query = new TreeMap<String, Double>();
 	IndexReader index ;
 	public static int MAX_QUERY_LENGTH=30;
-	public TFScorer(HashMap<String, int[]> result, Query query) {
+	public TFScorer(TreeMap<String, String[]> result, Query query) {
 		index=new IndexReader("C:\\Users\\Festy\\Desktop\\IR Slides\\sample",IndexType.TERM);
 		// TODO Auto-generated constructor stub
 		ArrayList<String> termList = filterTerms(query);		// filters - operators, brackets, quotes
-		TreeMap<Integer,int[]> docMap = docToTermMap(result);	// create doc --> {<term freq>} and stores terms in query vector to store positions of terms in the map
-		TreeMap<Integer,double[]> docMap2= normalize(docMap); 	// Normalize the doc map with L2 norm of freq
+		TreeMap<String,int[]> docMap = docToTermMap(result);	// create doc --> {<term freq>} and stores terms in query vector to store positions of terms in the map
+		TreeMap<String,double[]> docMap2= normalize(docMap); 	// Normalize the doc map with L2 norm of freq
 		
 		for(String s:termList){									// add frequency of terms in query Vector
 			if(queryVector.containsKey(s)){
@@ -39,7 +39,7 @@ public class TFScorer {
 		docMap2=tf_idf(docMap2);								// Calculated tf-idf
 		docMap2=normalize(docMap2,0);
 		normalizeQuery();
-		LinkedHashMap< Integer, Double> rank=rank(docMap2);		// Ranked the documents
+		LinkedHashMap< String, Double> rank=rank(docMap2);		// Ranked the documents
 //		System.out.println(idf);
 ////-------Prints DocMap and Query Vector
 //		System.out.println(queryVector);
@@ -68,17 +68,17 @@ public class TFScorer {
 		return termList;
 		
 	}
-	public TreeMap<Integer, int[]> docToTermMap(HashMap<String, int[]> result){
-	TreeMap<Integer, int[]> docMap = new TreeMap<Integer,int[]>();
-	TreeMap<String, int[]> resultSorted = new TreeMap<String,int[]>(result);
+	public TreeMap<String, int[]> docToTermMap(TreeMap<String, String[]> result){
+	TreeMap<String, int[]> docMap = new TreeMap<String,int[]>();
+	TreeMap<String, String[]> resultSorted = new TreeMap<String,String[]>(result);
 		int index=0;
 		for(String s:resultSorted.keySet()){
-			int[] posting=result.get(s);
+			String[] posting=result.get(s);
 			for(int i=0;i<posting.length;i=i+2){
-				int docID=posting[i];
+				String docID=posting[i];
 				if(!docMap.containsKey(docID)) docMap.put(docID, new int[MAX_QUERY_LENGTH]);
 				int[] temp= docMap.get(docID);
-				temp[index]=posting[i+1];
+				temp[index]=Integer.parseInt(posting[i+1]);
 				docMap.put(docID, temp);
 			}
 			
@@ -89,10 +89,10 @@ public class TFScorer {
 		return docMap;
 		
 	}
-	public TreeMap<Integer, double[]> normalize(TreeMap<Integer, int[]> docMap){
-		Map<Integer, double[]> docMap2 = new TreeMap<Integer,double[]>();
-		for(int i:docMap.keySet()){
-			int[] temp=docMap.get(i);
+	public TreeMap<String, double[]> normalize(TreeMap<String, int[]> docMap){
+		Map<String, double[]> docMap2 = new TreeMap<String,double[]>();
+		for(String s2:docMap.keySet()){
+			int[] temp=docMap.get(s2);
 			double[] temp2 = new double[100];
 			double mod=0;
 				for(int i1=0;i1<temp.length;i1++){
@@ -102,13 +102,13 @@ public class TFScorer {
 			for(int i1=0;i1<temp.length;i1++){
 				temp2[i1]=temp[i1]/mod;
 			}
-			docMap2.put(i, temp2);
+			docMap2.put(s2, temp2);
 		}
-		return (TreeMap<Integer, double[]>) docMap2;
+		return (TreeMap<String, double[]>) docMap2;
 	}
-	public TreeMap<Integer, double[]> normalize(TreeMap<Integer, double[]> docMap, int j){ // j is just a dummy, ignore
-		Map<Integer, double[]> docMap2 = new TreeMap<Integer,double[]>();
-		for(int i:docMap.keySet()){
+	public TreeMap<String, double[]> normalize(TreeMap<String, double[]> docMap, int j){ // j is just a dummy, ignore
+		Map<String, double[]> docMap2 = new TreeMap<String,double[]>();
+		for(String i:docMap.keySet()){
 			double[] temp=docMap.get(i);
 			double[] temp2 = new double[100];
 			double mod=0;
@@ -121,7 +121,7 @@ public class TFScorer {
 			}
 			docMap2.put(i, temp2);
 		}
-		return (TreeMap<Integer, double[]>) docMap2;
+		return (TreeMap<String, double[]>) docMap2;
 	}
 	public void normalizeQuery(){
 		double mod=0;
@@ -140,11 +140,11 @@ public class TFScorer {
 			idf.put(i, Math.log(N/Nt));
 		}
 	}
-	public TreeMap<Integer, double[]> tf_idf(TreeMap<Integer, double[]> docMap2){
+	public TreeMap<String, double[]> tf_idf(TreeMap<String, double[]> docMap2){
 		 int count= 0;
 		for(String s: queryVector.keySet()){
 			double IDF =idf.get(s);
-			for(int i:docMap2.keySet()){
+			for(String i:docMap2.keySet()){
 				double[] temp=docMap2.get(i);
 				temp[count]=temp[count]*IDF;
 				docMap2.put(i, temp);
@@ -157,9 +157,9 @@ public class TFScorer {
 		return docMap2;
 	}
 	
-	public LinkedHashMap<Integer, Double> rank(TreeMap<Integer, double[]> docMap2){
-		HashMap<Integer, Double> rank=new HashMap<Integer,Double>();
-			for(Entry<Integer,double[]> e: docMap2.entrySet()){
+	public LinkedHashMap<String, Double> rank(TreeMap<String, double[]> docMap2){
+		HashMap<String, Double> rank=new HashMap<String,Double>();
+			for(Entry<String,double[]> e: docMap2.entrySet()){
 //				System.out.println(e.getKey());
 				double[] arr=e.getValue();
 				int index =0;
@@ -177,9 +177,9 @@ public class TFScorer {
 			temp.addAll(rank.values());
 			Collections.sort(temp);
 			Collections.reverse(temp);
-			LinkedHashMap<Integer, Double> sortedRank = new LinkedHashMap<Integer, Double>();
+			LinkedHashMap<String, Double> sortedRank = new LinkedHashMap<String, Double>();
 			for(double d:temp){
-				for(int i: rank.keySet()){
+				for(String i: rank.keySet()){
 					if(rank.get(i)==d){
 						sortedRank.put(i, d);
 						rank.put(i,-1.0);
