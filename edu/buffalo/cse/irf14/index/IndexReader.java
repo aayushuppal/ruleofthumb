@@ -25,9 +25,9 @@ import edu.buffalo.cse.irf14.document.FieldNames;
 public class IndexReader {
 	TreeMap<String,Integer> sorted_map;
 	String iDir;
-	IndexType iType;
-	HashMap<String,Integer> docMap;
-	HashMap<Integer,String> revDocMap;
+	public IndexType iType;
+	public HashMap<String,Integer> docMap;
+	public HashMap<Integer,String> revDocMap;
 	int authCounter,authdocCounter,catCounter,catdocCounter,docCounter,placeCounter,placedocCounter,termCounter,termdocCounter;
 	HashMap<String,ArrayList<Integer>> aa_an,ao_az,ca_cj,ck_cz,sa_si,sj_sz,b,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,t,u,vwxyz;
 	HashMap<String,ArrayList<Integer>> symbol;
