@@ -136,7 +136,7 @@ public class TFScorer {
 	public void idf(){
 		double N=(double)index.getTotalValueTerms();
 		for(String i:queryVector.keySet()){
-			double Nt=(double)index.getPostings(i).size()/2;
+			double Nt=(double)index.getPostings(i).size();
 			idf.put(i, Math.log(N/Nt));
 		}
 	}
