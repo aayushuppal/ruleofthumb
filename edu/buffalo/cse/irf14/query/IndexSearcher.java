@@ -85,7 +85,7 @@ public class IndexSearcher {
 
 	    }
 	    
-	    System.out.println(resNumMap.lastEntry().getValue());
+//	    System.out.println(resNumMap.lastEntry().getValue());
 	    
 	    
 	}
@@ -159,7 +159,12 @@ public class IndexSearcher {
 	public String SingleQueryProcessor(String a){
 		int flag = 0;
 		// define a linked list of full doc ids as a single linked list of strings. call it "FullDocidslist"
-		String[] arr1 = (String[]) IRdrObj.revDocMap.keySet().toArray();
+//		String[] arr1 = (String[]) IRdrObj.revDocMap.keySet().toArray();
+		String[] arr1 = new String[IRdrObj.revDocMap.keySet().size()];
+		int index =0;
+		for(int s:IRdrObj.revDocMap.keySet()){
+			arr1[index]=Integer.toString(s);
+		}
 		LinkedList<String> FullDocidslist = new LinkedList<String>(Arrays.asList(arr1));
 		LinkedList<String> Oprnd1List = new LinkedList<String>();
 		LinkedList<String> SingQuerList = new LinkedList<String>();
@@ -199,7 +204,11 @@ public class IndexSearcher {
 					Oprnd1List.addAll(FullDocidslist);
 				}
 				else {	
-					String[] arrtm = (String[]) TermMap.keySet().toArray();
+					String[] arrtm = new String[TermMap.keySet().size()];
+					int index1 =0;
+					for(int s:IRdrObj.revDocMap.keySet()){
+						arr1[index1]=Integer.toString(s);
+					}
 					Oprnd1List = new LinkedList<String>(Arrays.asList(arrtm));
 					FullDocidslistClone.removeAll(Oprnd1List);
 					Oprnd1List.addAll(FullDocidslistClone);
@@ -319,7 +328,11 @@ public class IndexSearcher {
 		int flag = 0;
 		resCounter++;
 		// define the FullDocidslist
-		String[] arr1 = (String[]) IRdrObj.revDocMap.keySet().toArray();
+		String[] arr1 = new String[IRdrObj.revDocMap.keySet().size()];
+		int index =0;
+		for(int s:IRdrObj.revDocMap.keySet()){
+			arr1[index]=Integer.toString(s);
+		}
 		LinkedList<String> FullDocidslist = new LinkedList<String>(Arrays.asList(arr1));
 		LinkedList<String> Oprnd1List = new LinkedList<String>();
 		LinkedList<String> Oprnd2List = new LinkedList<String>();
@@ -510,7 +523,11 @@ public class IndexSearcher {
 				}
 
 				else {	
-					String[] arrtm = (String[]) TermMap.keySet().toArray();
+					String[] arrtm = new String[TermMap.keySet().size()];
+					int index1 =0;
+					for(int s:IRdrObj.revDocMap.keySet()){
+						arr1[index1]=Integer.toString(s);
+					}
 					Oprnd2List = new LinkedList<String>(Arrays.asList(arrtm));
 					
 				}
@@ -614,7 +631,12 @@ public class IndexSearcher {
 		resCounter++;
 		int flag = 0;
 		// define a linked list of full doc ids as a single linked list of strings. call it "FullDocidslist"
-		String[] arr1 = (String[]) IRdrObj.revDocMap.keySet().toArray();
+		String[] arr1 = new String[IRdrObj.revDocMap.keySet().size()];
+		int index =0;
+		for(int s:IRdrObj.revDocMap.keySet()){
+			arr1[index]=Integer.toString(s);
+		}
+		
 		LinkedList<String> FullDocidslist = new LinkedList<String>(Arrays.asList(arr1));
 
 		LinkedList<String> Oprnd1List = new LinkedList<String>();

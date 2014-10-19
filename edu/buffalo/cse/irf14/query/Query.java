@@ -86,6 +86,7 @@ public class Query {
 		toString();
 		ArrayList<String> result = new ArrayList<String>();
 		for(String s:queryString){
+//			System.out.println(s);
 			while(s.startsWith("{")){
 				result.add("{");
 				s=s.substring(1);
@@ -94,16 +95,24 @@ public class Query {
 				result.add("[");
 				s=s.substring(1);
 			}
-			while(s.endsWith("}")){
-				result.add("}");
-				s=s.substring(1);
-			}
+			String t=s.replaceAll("[\\]\\}]", "");
+			
+			result.add(t);
+			s=s.replace(t, "");
+//			System.out.println(s);
 			while(s.startsWith("]")){
 				result.add("]");
 				s=s.substring(1);
 			}
-			result.add(s);
+			
+			while(s.startsWith("}")){
+				result.add("}");
+				s=s.substring(0,s.length()-1);
+//				System.out.println(s);
+			}
+			
 		}
+//		System.out.println(result);
 		return result;
 	}
 	
