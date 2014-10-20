@@ -195,7 +195,7 @@ public class IndexSearcher {
 				e.printStackTrace();
 			}
 			stream=filter.getStream();
-			a=stream.toString();
+			a=stream.next().toString();
 			if (flag == 1){a = "<"+a+">"; }
 			
 			if (a.startsWith("<")){
@@ -205,12 +205,14 @@ public class IndexSearcher {
 					Oprnd1List.addAll(FullDocidslist);
 				}
 				else {	
-					String[] arrtm = new String[TermMap.keySet().size()];
-					int index1 =0;
-					for(int s:IRdrObj.revDocMap.keySet()){
-						arr1[index1]=Integer.toString(s);
-						index1++;
-					}
+//					String[] arrtm = (String[]) TermMap.keySet().toArray();
+					String[] arrtm = Arrays.copyOf(TermMap.keySet().toArray(), TermMap.keySet().toArray().length, String[].class);
+//					String[] arrtm = new String[TermMap.keySet().size()];
+//					int index1 =0;
+//					for(int s:IRdrObj.revDocMap.keySet()){
+//						arrtm[index1]=Integer.toString(s);
+//						index1++;
+//					}
 					Oprnd1List = new LinkedList<String>(Arrays.asList(arrtm));
 					FullDocidslistClone.removeAll(Oprnd1List);
 					Oprnd1List.addAll(FullDocidslistClone);
@@ -228,10 +230,12 @@ public class IndexSearcher {
 					Oprnd1List.addAll(EmptyDocidslist);
 				}
 				else {	
-					String[] arrtm = (String[]) TermMap.keySet().toArray();
+//					String[] arrtm = (String[]) TermMap.keySet().toArray();
+					String[] arrtm = Arrays.copyOf(TermMap.keySet().toArray(), TermMap.keySet().toArray().length, String[].class);
 					Oprnd1List = new LinkedList<String>(Arrays.asList(arrtm));
 					
 				}
+				
 				SingQuerList.addAll(Oprnd1List);
 				// TermMap = IRdrObj.getPostings(a);
 				// convert this to string array for the key values
@@ -363,7 +367,7 @@ public class IndexSearcher {
 				e.printStackTrace();
 			}
 			stream=filter.getStream();
-			a=stream.toString();
+			a=stream.next().toString();
 			if (flag == 1){a = "<"+a+">"; }
 			
 			
@@ -374,7 +378,14 @@ public class IndexSearcher {
 					Oprnd1List.addAll(FullDocidslist);
 				}
 				else {	
-					String[] arrtm = (String[]) TermMap.keySet().toArray();
+//					String[] arrtm = (String[]) TermMap.keySet().toArray();
+					String[] arrtm = Arrays.copyOf(TermMap.keySet().toArray(), TermMap.keySet().toArray().length, String[].class);
+//					String[] arrtm = new String[TermMap.keySet().size()];
+//					int index1 =0;
+//					for(int s:IRdrObj.revDocMap.keySet()){
+//						arrtm[index1]=Integer.toString(s);
+//						index1++;
+//					}
 					Oprnd1List = new LinkedList<String>(Arrays.asList(arrtm));
 					FullDocidslistClone.removeAll(Oprnd1List);
 					Oprnd1List.addAll(FullDocidslistClone);
@@ -392,7 +403,14 @@ public class IndexSearcher {
 				}
 
 				else {	
-					String[] arrtm = (String[]) TermMap.keySet().toArray();
+//					String[] arrtm = (String[]) TermMap.keySet().toArray();
+					String[] arrtm = Arrays.copyOf(TermMap.keySet().toArray(), TermMap.keySet().toArray().length, String[].class);
+//					String[] arrtm = new String[TermMap.keySet().size()];
+//					int index1 =0;
+//					for(int s:IRdrObj.revDocMap.keySet()){
+//						arrtm[index1]=Integer.toString(s);
+//						index1++;
+//					}
 					Oprnd1List = new LinkedList<String>(Arrays.asList(arrtm));
 					
 				}
@@ -499,7 +517,7 @@ public class IndexSearcher {
 				e.printStackTrace();
 			}
 			stream=filter.getStream();
-			a=stream.toString();
+			a=stream.next().toString();
 			if (flag == 1){b = "<"+b+">"; }
 			
 			if (b.startsWith("<")){
@@ -509,7 +527,14 @@ public class IndexSearcher {
 					Oprnd2List.addAll(FullDocidslist);
 				}
 				else {	
-					String[] arrtm = (String[]) TermMap.keySet().toArray();
+//					String[] arrtm = (String[]) TermMap.keySet().toArray();
+					String[] arrtm = Arrays.copyOf(TermMap.keySet().toArray(), TermMap.keySet().toArray().length, String[].class);
+//					String[] arrtm = new String[TermMap.keySet().size()];
+//					int index1 =0;
+//					for(int s:IRdrObj.revDocMap.keySet()){
+//						arrtm[index1]=Integer.toString(s);
+//						index1++;
+//					}
 					Oprnd2List = new LinkedList<String>(Arrays.asList(arrtm));
 					FullDocidslistClone.removeAll(Oprnd1List);
 					Oprnd2List.addAll(FullDocidslistClone);
@@ -529,7 +554,7 @@ public class IndexSearcher {
 					String[] arrtm = new String[TermMap.keySet().size()];
 					int index1 =0;
 					for(int s:IRdrObj.revDocMap.keySet()){
-						arr1[index1]=Integer.toString(s);
+						arrtm[index1]=Integer.toString(s);
 						index1++;
 					}
 					Oprnd2List = new LinkedList<String>(Arrays.asList(arrtm));
@@ -673,7 +698,7 @@ public class IndexSearcher {
 				e.printStackTrace();
 			}
 			stream=filter.getStream();
-			a=stream.toString();
+			a=stream.next().toString();
 			if (flag == 1){a = "<"+a+">"; }
 			
 			
@@ -684,7 +709,14 @@ public class IndexSearcher {
 					Oprnd1List.addAll(FullDocidslist);
 				}
 				else {	
-					String[] arrtm = (String[]) TermMap.keySet().toArray();
+//					String[] arrtm = (String[]) TermMap.keySet().toArray();
+					String[] arrtm = Arrays.copyOf(TermMap.keySet().toArray(), TermMap.keySet().toArray().length, String[].class);
+//					String[] arrtm = new String[TermMap.keySet().size()];
+//					int index1 =0;
+//					for(int s:IRdrObj.revDocMap.keySet()){
+//						arrtm[index1]=Integer.toString(s);
+//						index1++;
+//					}
 					Oprnd1List = new LinkedList<String>(Arrays.asList(arrtm));
 					FullDocidslistClone.removeAll(Oprnd1List);
 					Oprnd1List.addAll(FullDocidslistClone);
@@ -701,7 +733,14 @@ public class IndexSearcher {
 				}
 
 				else {	
-					String[] arrtm = (String[]) TermMap.keySet().toArray();
+//					String[] arrtm = (String[]) TermMap.keySet().toArray();
+					String[] arrtm = Arrays.copyOf(TermMap.keySet().toArray(), TermMap.keySet().toArray().length, String[].class);
+//					String[] arrtm = new String[TermMap.keySet().size()];
+//					int index1 =0;
+//					for(int s:IRdrObj.revDocMap.keySet()){
+//						arrtm[index1]=Integer.toString(s);
+//						index1++;
+//					}
 					Oprnd1List = new LinkedList<String>(Arrays.asList(arrtm));
 					
 				}
@@ -806,7 +845,7 @@ public class IndexSearcher {
 				e.printStackTrace();
 			}
 			stream=filter.getStream();
-			a=stream.toString();
+			a=stream.next().toString();
 			if (flag == 1){b = "<"+b+">"; }
 			
 			if (b.startsWith("<")){
@@ -816,7 +855,14 @@ public class IndexSearcher {
 					Oprnd2List.addAll(FullDocidslist);
 				}
 				else {	
-					String[] arrtm = (String[]) TermMap.keySet().toArray();
+//					String[] arrtm = (String[]) TermMap.keySet().toArray();
+					String[] arrtm = Arrays.copyOf(TermMap.keySet().toArray(), TermMap.keySet().toArray().length, String[].class);
+//					String[] arrtm = new String[TermMap.keySet().size()];
+//					int index1 =0;
+//					for(int s:IRdrObj.revDocMap.keySet()){
+//						arrtm[index1]=Integer.toString(s);
+//						index1++;
+//					}
 					Oprnd2List = new LinkedList<String>(Arrays.asList(arrtm));
 					FullDocidslistClone.removeAll(Oprnd1List);
 					Oprnd2List.addAll(FullDocidslistClone);
@@ -833,7 +879,14 @@ public class IndexSearcher {
 				}
 
 				else {	
-					String[] arrtm = (String[]) TermMap.keySet().toArray();
+//					String[] arrtm = (String[]) TermMap.keySet().toArray();
+					String[] arrtm = Arrays.copyOf(TermMap.keySet().toArray(), TermMap.keySet().toArray().length, String[].class);
+//					String[] arrtm = new String[TermMap.keySet().size()];
+//					int index1 =0;
+//					for(int s:IRdrObj.revDocMap.keySet()){
+//						arrtm[index1]=Integer.toString(s);
+//						index1++;
+//					}
 					Oprnd2List = new LinkedList<String>(Arrays.asList(arrtm));
 					
 				}

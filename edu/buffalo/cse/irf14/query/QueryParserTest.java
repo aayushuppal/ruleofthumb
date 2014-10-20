@@ -22,7 +22,13 @@ public class QueryParserTest {
 		Query q =QueryParser.parse(s, "OR");
 //		System.out.println(q.toString());
 //		q.getSplitQuery();
-//		IndexReader indexer =IndexFactory.getIndexReader("C:\\Users\\Festy\\Desktop\\IR Slides\\sample");
+		IndexReader indexer =IndexFactory.getIndexReader("C:\\Users\\Festy\\Desktop\\IR Slides\\sample");
+		System.out.println(indexer.revDocMap.get(2));
+		System.out.println(indexer.revDocMap.get(5));
+		System.out.println(indexer.revDocMap.get(7));
+		System.out.println(indexer.revDocMap.get(27));
+		System.out.println(indexer.revDocMap.get(28));
+		System.out.println(indexer.revDocMap.get(44));
 		IndexSearcher s1 = new IndexSearcher("C:\\Users\\Festy\\Desktop\\IR Slides\\sample");
 		s1.search(q);
 //		String s2=q.toString();
