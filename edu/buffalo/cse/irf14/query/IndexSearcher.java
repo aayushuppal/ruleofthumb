@@ -85,7 +85,7 @@ public class IndexSearcher {
 
 	    }
 	    
-//	    System.out.println(resNumMap.lastEntry().getValue());
+	    System.out.println(resNumMap.lastEntry().getValue());
 	    
 	    
 	}
@@ -164,6 +164,7 @@ public class IndexSearcher {
 		int index =0;
 		for(int s:IRdrObj.revDocMap.keySet()){
 			arr1[index]=Integer.toString(s);
+			index++;
 		}
 		LinkedList<String> FullDocidslist = new LinkedList<String>(Arrays.asList(arr1));
 		LinkedList<String> Oprnd1List = new LinkedList<String>();
@@ -208,6 +209,7 @@ public class IndexSearcher {
 					int index1 =0;
 					for(int s:IRdrObj.revDocMap.keySet()){
 						arr1[index1]=Integer.toString(s);
+						index1++;
 					}
 					Oprnd1List = new LinkedList<String>(Arrays.asList(arrtm));
 					FullDocidslistClone.removeAll(Oprnd1List);
@@ -332,6 +334,7 @@ public class IndexSearcher {
 		int index =0;
 		for(int s:IRdrObj.revDocMap.keySet()){
 			arr1[index]=Integer.toString(s);
+			index++;
 		}
 		LinkedList<String> FullDocidslist = new LinkedList<String>(Arrays.asList(arr1));
 		LinkedList<String> Oprnd1List = new LinkedList<String>();
@@ -527,6 +530,7 @@ public class IndexSearcher {
 					int index1 =0;
 					for(int s:IRdrObj.revDocMap.keySet()){
 						arr1[index1]=Integer.toString(s);
+						index1++;
 					}
 					Oprnd2List = new LinkedList<String>(Arrays.asList(arrtm));
 					
@@ -635,6 +639,7 @@ public class IndexSearcher {
 		int index =0;
 		for(int s:IRdrObj.revDocMap.keySet()){
 			arr1[index]=Integer.toString(s);
+			index++;
 		}
 		
 		LinkedList<String> FullDocidslist = new LinkedList<String>(Arrays.asList(arr1));
