@@ -1,4 +1,6 @@
 package edu.buffalo.cse.irf14.query;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -41,7 +43,7 @@ public class IndexSearcher {
 		
 	}
 	
-	public void ConvertToStack(ArrayList<String> a){
+	public LinkedList<String> ConvertToStack(ArrayList<String> a){
 		
 		String x ="";
 		String y ="";
@@ -86,16 +88,30 @@ public class IndexSearcher {
 	    }
 	    
 	    System.out.println(resNumMap.lastEntry().getValue());
-	    
+	    return resNumMap.lastEntry().getValue();
 	    
 	}
 	
 	public String QueryProcess(String a){
 //		IndexSearcher ISobj = new IndexSearcher(); 
 		//System.out.println(TDocid.get("A"));
-		
 		//System.out.println("Query input here: "+a);
-		String[] splitQuer = a.split("\\s+");
+		int c=0;
+		String[] splitQuerClone = a.split("\\s+");
+		List<String> alternSplitQuer = new ArrayList<String>();
+		
+		
+		for (int h=0; h<splitQuerClone.length;h++){
+			if(splitQuerClone[h].contains("\"")){
+				alternSplitQuer.add(splitQuerClone[h]+" "+splitQuerClone[h+1]);
+				h++;
+			}
+			else {
+				alternSplitQuer.add(splitQuerClone[h]);
+			}
+			c++;
+		}
+		String[] splitQuer = alternSplitQuer.toArray(new String[alternSplitQuer.size()]);
 		String qresult = "";
 		int SpqLen = splitQuer.length;
 		
@@ -157,6 +173,11 @@ public class IndexSearcher {
 	
 
 	public String SingleQueryProcessor(String a){
+		if(a.contains("\"")){
+		String x = TermQuoteRem(a);
+		a = x;
+		}
+		
 		int flag = 0;
 		// define a linked list of full doc ids as a single linked list of strings. call it "FullDocidslist"
 //		String[] arr1 = (String[]) IRdrObj.revDocMap.keySet().toArray();
@@ -331,6 +352,9 @@ public class IndexSearcher {
 
 	
 	public String AndProcessor(String a, String b){
+		if(a.contains("\"")){
+			a = TermQuoteRem(a);	
+			}
 		int flag = 0;
 		resCounter++;
 		// define the FullDocidslist
@@ -501,7 +525,7 @@ public class IndexSearcher {
 		if (b.contains("Term:")){
 			b = b.substring(5);	
 			//Pass b through filters and show new "b"
-			if (a.startsWith("<")){b = a.substring(1, b.length()-1); flag = 1;}
+			if (b.startsWith("<")){b = a.substring(1, b.length()-1); flag = 1;}
 			ArrayList<Token> arr11= new ArrayList<Token>();
 			Token t= new Token();
 			t.setTermText(b);
@@ -517,7 +541,7 @@ public class IndexSearcher {
 				e.printStackTrace();
 			}
 			stream=filter.getStream();
-			a=stream.next().toString();
+			b=stream.next().toString();
 			if (flag == 1){b = "<"+b+">"; }
 			
 			if (b.startsWith("<")){
@@ -551,12 +575,13 @@ public class IndexSearcher {
 				}
 
 				else {	
-					String[] arrtm = new String[TermMap.keySet().size()];
-					int index1 =0;
-					for(int s:IRdrObj.revDocMap.keySet()){
-						arrtm[index1]=Integer.toString(s);
-						index1++;
-					}
+					String[] arrtm = Arrays.copyOf(TermMap.keySet().toArray(), TermMap.keySet().toArray().length, String[].class);
+//					String[] arrtm = new String[TermMap.keySet().size()];
+//					int index1 =0;
+//					for(int s:IRdrObj.revDocMap.keySet()){
+//						arrtm[index1]=Integer.toString(s);
+//						index1++;
+//					}
 					Oprnd2List = new LinkedList<String>(Arrays.asList(arrtm));
 					
 				}
@@ -657,6 +682,9 @@ public class IndexSearcher {
 	}
 
 	public String OrProcessor(String a, String b){
+		if(a.contains("\"")){
+			a = TermQuoteRem(a);	
+			}
 		resCounter++;
 		int flag = 0;
 		// define a linked list of full doc ids as a single linked list of strings. call it "FullDocidslist"
@@ -829,7 +857,7 @@ public class IndexSearcher {
 		if (b.contains("Term:")){
 			b = b.substring(5);	
 			//Pass b through filters and show new "b"
-			if (a.startsWith("<")){b = a.substring(1, b.length()-1); flag = 1;}
+			if (b.startsWith("<")){b = a.substring(1, b.length()-1); flag = 1;}
 			ArrayList<Token> arr11= new ArrayList<Token>();
 			Token t= new Token();
 			t.setTermText(b);
@@ -1003,6 +1031,11 @@ public class IndexSearcher {
 			resNumMap.put(orquer, OrList);
 			return orquer;
 		
+	}
+	
+	public String TermQuoteRem(String x){
+		x = x.replace("\"", "");
+		return x;
 	}
 
 
