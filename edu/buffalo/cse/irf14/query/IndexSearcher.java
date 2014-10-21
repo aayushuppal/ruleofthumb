@@ -353,7 +353,12 @@ public class IndexSearcher {
 	
 	public String AndProcessor(String a, String b){
 		if(a.contains("\"")){
-			a = TermQuoteRem(a);	
+			String x = TermQuoteRem(a);
+			a = x;
+			}
+		if(b.contains("\"")){
+			String x = TermQuoteRem(b);
+			b = x;
 			}
 		int flag = 0;
 		resCounter++;
@@ -683,7 +688,13 @@ public class IndexSearcher {
 
 	public String OrProcessor(String a, String b){
 		if(a.contains("\"")){
-			a = TermQuoteRem(a);	
+			String x = TermQuoteRem(a);
+			a = x;
+			}
+
+		if(b.contains("\"")){
+			String x = TermQuoteRem(b);
+			b = x;
 			}
 		resCounter++;
 		int flag = 0;
