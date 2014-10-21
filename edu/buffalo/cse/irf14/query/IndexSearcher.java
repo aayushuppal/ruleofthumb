@@ -1,7 +1,6 @@
 package edu.buffalo.cse.irf14.query;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -32,14 +31,14 @@ public class IndexSearcher {
 	static LinkedList<String> EmptyDocidslist = new LinkedList<String>();
 	public IndexReader IRdrObj;
 	
-	public IndexSearcher(String idr) {
+	public IndexSearcher(IndexReader i) {
 		// TODO Auto-generated constructor stub
-		IRdrObj = IndexFactory.getIndexReader(idr);
+		IRdrObj = i;
 		
 	}
-	public String search(Query query){
-		ConvertToStack(query.getSplitQuery());
-		return null;
+	public LinkedList<String> search(Query query){
+		
+		return ConvertToStack(query.getSplitQuery());
 		
 	}
 	
