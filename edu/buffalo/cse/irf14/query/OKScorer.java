@@ -20,7 +20,7 @@ public class OKScorer {
 	TreeMap<String, double[]> docVector = new TreeMap<String, double[]>();
 	IndexReader indexer ;
 	double L_ave; // Average length of documents in corpus
-	
+	LinkedHashMap< String, Double> result2;
 	
 	public OKScorer(TreeMap<String, String[]> result, Query query) {
 		// TODO Auto-generated constructor stub
@@ -28,16 +28,18 @@ public class OKScorer {
 		L_ave=indexer.averageLength();
 		createQueryTerms(query);
 		createDocMap(result);
-		System.out.println(okapi());
+		result2 =okapi();
 //		System.out.println(okapi_doc("0000005"));
 //		test();
 		
 		
 	}
 
+	public LinkedHashMap< String, Double> result(){
+		return result2;
+	}
 	
-	
-	public HashMap<String, Double> okapi() {
+	public LinkedHashMap<String, Double> okapi() {
 		HashMap<String, Double> temp = new HashMap<String, Double>();
 		for(String docID: docVector.keySet()){
 			temp.put(docID, okapi_doc(docID));

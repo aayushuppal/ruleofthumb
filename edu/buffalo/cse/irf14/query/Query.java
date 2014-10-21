@@ -14,12 +14,14 @@ import java.util.regex.Pattern;
  */
 public class Query {
 	LinkedList<String> queryString;
+	LinkedList<String> initial;
 	private int size;
 	/**
 	 * Method to convert given parsed query into string
 	 */
 	public void setQueryString(LinkedList<String> s){
 		queryString=s;
+		initial=s;
 	}
 	public String toString() {
 		//TODO: YOU MUST IMPLEMENT THIS

@@ -21,6 +21,7 @@ public class TFScorer {
 	TreeMap<String, Double> idf_query = new TreeMap<String, Double>();
 	IndexReader index ;
 	public static int MAX_QUERY_LENGTH=30;
+	LinkedHashMap< String, Double> rank;
 	public TFScorer(TreeMap<String, String[]> result, Query query) {
 		index=new IndexReader("C:\\Users\\Festy\\Desktop\\IR Slides\\sample",IndexType.TERM);
 		// TODO Auto-generated constructor stub
@@ -39,7 +40,7 @@ public class TFScorer {
 		docMap2=tf_idf(docMap2);								// Calculated tf-idf
 		docMap2=normalize(docMap2,0);
 		normalizeQuery();
-		LinkedHashMap< String, Double> rank=rank(docMap2);		// Ranked the documents
+		rank =rank(docMap2);		// Ranked the documents
 //		System.out.println(idf);
 ////-------Prints DocMap and Query Vector
 //		System.out.println(queryVector);
@@ -52,7 +53,9 @@ public class TFScorer {
 //		}
 		System.out.println(rank);
 	}
-	
+	public LinkedHashMap< String, Double> result(){
+		return rank;
+	}
 	public ArrayList<String> filterTerms(Query query){
 		LinkedList<String> queryString=query.queryString;
 		ArrayList<String> termList=new ArrayList<String>();

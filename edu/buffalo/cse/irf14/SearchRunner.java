@@ -5,12 +5,15 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import edu.buffalo.cse.irf14.index.IndexReader;
 import edu.buffalo.cse.irf14.index.IndexType;
 import edu.buffalo.cse.irf14.query.IndexSearcher;
+import edu.buffalo.cse.irf14.query.OKScorer;
 import edu.buffalo.cse.irf14.query.Query;
 import edu.buffalo.cse.irf14.query.QueryParser;
 import edu.buffalo.cse.irf14.query.ResultFormat;
@@ -24,7 +27,7 @@ import edu.buffalo.cse.irf14.query.TFScorer;
  */
 public class SearchRunner {
 	public enum ScoringModel {TFIDF, OKAPI};
-//	String indexdir="C:/Users/Festy/Dropbox/Code Repository/IR_final"; 
+//	String indexdir="C:/Users/Festy/Desktop/IR Slides/sample"; 
 
 	String corpusDir,queryString;
 	char queryMode;
@@ -54,7 +57,7 @@ public class SearchRunner {
 		queryMode=mode;
 		printstream=stream;
 		indexReader=new IndexReader(indexDir,IndexType.TERM);
-		
+		indexSearcher= new IndexSearcher(indexReader);
 	}
 	
 	
@@ -68,12 +71,13 @@ public class SearchRunner {
 	@SuppressWarnings("static-access")
 	public void query(String userQuery, ScoringModel model) {
 		//TODO: IMPLEMENT THIS METHOD
-		
-		String result;
 		queryString=userQuery;
 		query=queryParser.parse(queryString, "OR");
-		result=indexSearcher.search(query);
-		printstream.print((ResultFormat.ResultFormat(result)));
+		query.toString();
+		LinkedList<String> result=indexSearcher.search(query);
+		TreeMap<String,String[]> resultMap =new ResultFormat(result,query,indexReader).Result();
+		TFScorer scorer = new TFScorer(resultMap, query);
+		printstream.print(scorer.result());
 	}
 	
 	
@@ -106,16 +110,14 @@ public class SearchRunner {
 			for(int i=0;i<queryCount;i--){
 				queryString=reader.readLine();
 				query=queryParser.parse(queryString, "OR");
-				result=indexSearcher.search(query);
-				if(query!=null){
-					resultArray[i]=result;
-					resultCount++;
-				}
+				query.toString();
+				LinkedList<String> result1=indexSearcher.search(query);
+				TreeMap<String,String[]> resultMap =new ResultFormat(result1,query,indexReader).Result();
+				TFScorer scorer = new TFScorer(resultMap, query);
+				printstream.print(scorer.result());
 			}
 			
 		}
-		printstream.print((ResultFormat.ResultFormat(resultArray)));
-		resultCount--;
 		
 	}
 	
