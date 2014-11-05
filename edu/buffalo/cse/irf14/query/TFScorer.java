@@ -22,8 +22,8 @@ public class TFScorer {
 	IndexReader index ;
 	public static int MAX_QUERY_LENGTH=30;
 	LinkedHashMap< String, Double> rank;
-	public TFScorer(TreeMap<String, String[]> result, Query query) {
-		index=new IndexReader("C:\\Users\\Festy\\Desktop\\IR Slides\\sample",IndexType.TERM);
+	public TFScorer(TreeMap<String, String[]> result, Query query, IndexReader ir) {
+		index=ir;
 		// TODO Auto-generated constructor stub
 		ArrayList<String> termList = filterTerms(query);		// filters - operators, brackets, quotes
 		TreeMap<String,int[]> docMap = docToTermMap(result);	// create doc --> {<term freq>} and stores terms in query vector to store positions of terms in the map
@@ -51,7 +51,7 @@ public class TFScorer {
 //			}
 //			System.out.println();
 //		}
-		System.out.println(rank);
+//		System.out.println(rank);
 	}
 	public LinkedHashMap< String, Double> result(){
 		return rank;

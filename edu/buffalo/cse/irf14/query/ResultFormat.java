@@ -110,12 +110,12 @@ public class ResultFormat {
 		/////////////////////////////
 		if(!s.equals("") && !s.equals(null))
 		{
-			System.out.println(s);
+//			System.out.print(s);
 			posting=(HashMap<String, Integer>) reader.getPostings(s);
 			if(posting!=null){
 				for(String docID: result){
 					if(posting.containsKey(docID)){
-						if(!resultMap.containsKey(docID))
+						if(!resultMap.containsKey(s))
 							resultMap.put(s, new String[]{"-1"});
 						ArrayList<String> arr;
 						if(resultMap.get(s)[0].equals("-1")){
@@ -134,16 +134,16 @@ public class ResultFormat {
 						 for(int i=0;i<arr.size();i++){
 							 t[i]=arr.get(i);
 						 }
-						 resultMap.put(s,t );
+						 resultMap.put(s,t);
 					}
 				}
 			}
 			else{
-				System.out.println("no results for "+s);
+//				System.out.println("no results for "+s);
 			}
 		}
 		else{
-			System.out.println("s is filterd");
+//			System.out.println("s is filterd");
 		}
 		
 	}

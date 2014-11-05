@@ -86,7 +86,7 @@ public class IndexSearcher {
 
 	    }
 	    
-	    System.out.println(resNumMap.lastEntry().getValue());
+//	    System.out.println(resNumMap.lastEntry().getValue());
 	    return resNumMap.lastEntry().getValue();
 	    
 	}
@@ -401,6 +401,7 @@ public class IndexSearcher {
 			
 			if (a.startsWith("<")){
 				String a1 = a.substring(1, a.length()-1);
+				
 				TermMap = IRdrObj.getPostings(a1);
 				if (TermMap == null){
 					Oprnd1List.addAll(FullDocidslist);
@@ -672,7 +673,9 @@ public class IndexSearcher {
 		}
 		
 			for(String j:Oprnd1List){
+//				System.out.println("1 "+j);
 				if(Oprnd2List.contains(j)){
+//					System.out.println("2 "+j);
 					AndList.add(j);
 				}
 		}

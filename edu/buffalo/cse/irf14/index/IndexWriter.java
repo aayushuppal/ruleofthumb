@@ -190,7 +190,9 @@ public class IndexWriter {
 //		if(d.getField(FieldNames.CATEGORY)[0]==null) 
 
 		docNameKey=/*d.getField(FieldNames.CATEGORY)[0]+"*"+*/d.getField(FieldNames.FILEID)[0];
-		
+//		if(docNameKey.equals("0001882") || docNameKey.equals("0002646")|| docNameKey.equals("0001085") || docNameKey.equals("0000495")){
+//			System.out.println(docNameKey+" "+docCounter);
+//		}
 		if(docMap.get(docNameKey)==null){
 			docCounter++;
 			docMap.put(docNameKey, docCounter);
@@ -309,14 +311,18 @@ public class IndexWriter {
 			}
 			else{
 				ArrayList<Integer> postingList=indexMap.get(text);
-				if(!postingList.contains(docCounter))
+				ArrayList<Integer> postingListTemp = new ArrayList<Integer>();
+				for(int i=0;i<postingList.size();i++){
+					if(i%2==0) postingListTemp.add(postingList.get(i));
+				}
+				if(!postingListTemp.contains(docCounter))
 					{
 					postingList.add(docCounter);
 					postingList.add(1);
 					}
 				else{
-					int freq=postingList.get((postingList.indexOf(docCounter)+1))+1;
-					postingList.add(postingList.indexOf(docCounter)+1,freq);
+					int freq=postingList.get((postingListTemp.indexOf(docCounter)*2+1))+1;
+					postingList.add(postingListTemp.indexOf(docCounter)*2+1,freq);
 				}
 				indexMap.put(text, postingList);
 			
@@ -332,18 +338,32 @@ public class IndexWriter {
 			authCounter++;
 		}
 		else{
+//			ArrayList<Integer> postingList=indexMap.get(text);
+//			if(!postingList.contains(docCounter))
+//				{
+//				postingList.add(docCounter);
+//				postingList.add(1);
+//				}
+//			else{
+//				int freq=postingList.get((postingList.indexOf(docCounter)+1))+1;
+//				postingList.add(postingList.indexOf(docCounter)+1,freq);
+//			}
+//			indexMap.put(text, postingList);
 			ArrayList<Integer> postingList=indexMap.get(text);
-			if(!postingList.contains(docCounter))
+			ArrayList<Integer> postingListTemp = new ArrayList<Integer>();
+			for(int i=0;i<postingList.size();i++){
+				if(i%2==0) postingListTemp.add(postingList.get(i));
+			}
+			if(!postingListTemp.contains(docCounter))
 				{
 				postingList.add(docCounter);
 				postingList.add(1);
 				}
 			else{
-				int freq=postingList.get((postingList.indexOf(docCounter)+1))+1;
-				postingList.add(postingList.indexOf(docCounter)+1,freq);
+				int freq=postingList.get((postingListTemp.indexOf(docCounter)*2+1))+1;
+				postingList.add(postingListTemp.indexOf(docCounter)*2+1,freq);
 			}
 			indexMap.put(text, postingList);
-		
 		}
 	}
 	else if(fieldname==FieldNames.CATEGORY){
@@ -357,14 +377,18 @@ public class IndexWriter {
 		}
 		else{
 			ArrayList<Integer> postingList=indexMap.get(text);
-			if(!postingList.contains(docCounter))
+			ArrayList<Integer> postingListTemp = new ArrayList<Integer>();
+			for(int i=0;i<postingList.size();i++){
+				if(i%2==0) postingListTemp.add(postingList.get(i));
+			}
+			if(!postingListTemp.contains(docCounter))
 				{
 				postingList.add(docCounter);
 				postingList.add(1);
 				}
 			else{
-				int freq=postingList.get((postingList.indexOf(docCounter)+1))+1;
-				postingList.add(postingList.indexOf(docCounter)+1,freq);
+				int freq=postingList.get((postingListTemp.indexOf(docCounter)*2+1))+1;
+				postingList.add(postingListTemp.indexOf(docCounter)*2+1,freq);
 			}
 			indexMap.put(text, postingList);
 		
@@ -381,14 +405,18 @@ public class IndexWriter {
 		}
 		else{
 			ArrayList<Integer> postingList=indexMap.get(text);
-			if(!postingList.contains(docCounter))
+			ArrayList<Integer> postingListTemp = new ArrayList<Integer>();
+			for(int i=0;i<postingList.size();i++){
+				if(i%2==0) postingListTemp.add(postingList.get(i));
+			}
+			if(!postingListTemp.contains(docCounter))
 				{
 				postingList.add(docCounter);
 				postingList.add(1);
 				}
 			else{
-				int freq=postingList.get((postingList.indexOf(docCounter)+1))+1;
-				postingList.add(postingList.indexOf(docCounter)+1,freq);
+				int freq=postingList.get((postingListTemp.indexOf(docCounter)*2+1))+1;
+				postingList.add(postingListTemp.indexOf(docCounter)*2+1,freq);
 			}
 			indexMap.put(text, postingList);
 		

@@ -7,6 +7,7 @@ import java.util.Scanner;
 import java.util.TreeMap;
 
 import edu.buffalo.cse.irf14.SearchRunner;
+import edu.buffalo.cse.irf14.SearchRunner.ScoringModel;
 import edu.buffalo.cse.irf14.index.IndexReader;
 /////////////////////////////////
 // infinite loop query tester////
@@ -16,7 +17,8 @@ public class QueryParserTest {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		SearchRunner test = new SearchRunner("C:/Users/Festy/Desktop/IR Slides/sample", "C:/Users/Festy/Desktop/IR Slides/training_flat", 'Q', new PrintStream(System.out));
-		test.query("crop", null );
+		test.query("coconut", ScoringModel.TFIDF);
+		
 //		Scanner terminalInput = new Scanner(System.in);
 ////		while(true)
 //		{ 

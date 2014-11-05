@@ -2,12 +2,15 @@ package edu.buffalo.cse.irf14;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Scanner;
 import java.util.TreeMap;
 
 import edu.buffalo.cse.irf14.index.IndexReader;
@@ -56,10 +59,11 @@ public class SearchRunner {
 		this.corpusDir=corpusDir;
 		queryMode=mode;
 		printstream=stream;
+		System.out.println("Loading the data..");
 		indexReader=new IndexReader(indexDir,IndexType.TERM);
 		indexSearcher= new IndexSearcher(indexReader);
 	}
-	
+
 	
 	
 	
@@ -71,13 +75,102 @@ public class SearchRunner {
 	@SuppressWarnings("static-access")
 	public void query(String userQuery, ScoringModel model) {
 		//TODO: IMPLEMENT THIS METHOD
+		System.out.println("Query Mode started..");
+		System.out.println("Enter your Query:");
+		long startTime = System.nanoTime();
 		queryString=userQuery;
 		query=queryParser.parse(queryString, "OR");
-		query.toString();
+		String asdf=query.toString();
 		LinkedList<String> result=indexSearcher.search(query);
 		TreeMap<String,String[]> resultMap =new ResultFormat(result,query,indexReader).Result();
-		TFScorer scorer = new TFScorer(resultMap, query);
-		printstream.print(scorer.result());
+		TFScorer scorer1;
+		OKScorer scorer2;
+		if(model == ScoringModel.TFIDF){
+			TFScorer scorer = new TFScorer(resultMap, query,indexReader);
+			int index = 0;
+			System.out.println("Query: "+asdf);
+			for(Entry<String, Double> entry : scorer.result().entrySet()){
+//				System.out.println(Integer.parseInt(entry.getKey()));
+				printstream.println("Rank:"+(index+1)+"\n Doc ID:"+entry.getKey()+"\nRelevance:"+entry.getValue()+"\n");
+				File f = new File(corpusDir+File.separator+entry.getKey());
+				if(f.exists()){
+					try {
+						BufferedReader fstream= new BufferedReader(new FileReader(f));
+						String s11 = fstream.readLine();
+						while(s11.equals(null) || s11.trim().equals("")){
+							s11 = fstream.readLine();
+						}
+						System.out.println(s11);
+						s11 = fstream.readLine();
+						while(s11.equals(null) || s11.trim().equals("")){
+							s11 = fstream.readLine();
+						}
+						System.out.println(s11);
+						s11 = fstream.readLine();
+						System.out.println(s11);
+						s11 = fstream.readLine();
+						System.out.println(s11);
+						System.out.println("------------------------------------------------");
+					} catch (FileNotFoundException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+				
+				index++;
+				if(index==10) break;
+			}
+			long endTime = System.nanoTime();
+			long duration = (endTime - startTime);
+			System.out.printf("\n\nDuration of Execution: %fms",(double)duration/1000000);
+		}
+		else{
+			OKScorer scorer = new OKScorer(resultMap, query,indexReader);
+			int index = 0;
+			System.out.println("Query: "+asdf);
+			for(Entry<String, Double> entry : scorer.result().entrySet()){
+//				System.out.println(Integer.parseInt(entry.getKey()));
+				printstream.println("Rank:"+(index+1)+"\n Doc ID:"+entry.getKey()+"\nRelevance:"+entry.getValue()+"\n");
+				File f = new File(corpusDir+File.separator+entry.getKey());
+				if(f.exists()){
+					try {
+						BufferedReader fstream= new BufferedReader(new FileReader(f));
+						String s11 = fstream.readLine();
+						while(s11.equals(null) || s11.trim().equals("")){
+							s11 = fstream.readLine();
+						}
+						System.out.println(s11);
+						s11 = fstream.readLine();
+						while(s11.equals(null) || s11.trim().equals("")){
+							s11 = fstream.readLine();
+						}
+						System.out.println(s11);
+						s11 = fstream.readLine();
+						System.out.println(s11);
+						s11 = fstream.readLine();
+						System.out.println(s11);
+						System.out.println("------------------------------------------------");
+					} catch (FileNotFoundException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+				
+				index++;
+				if(index==10) break;
+			}
+			long endTime = System.nanoTime();
+			long duration = (endTime - startTime);
+			System.out.printf("\n\nDuration of Execution: %fms",(double)duration/1000000);
+		}
+		
+//		printstream.print(scorer.result());
 	}
 	
 	
@@ -90,6 +183,7 @@ public class SearchRunner {
 	 */
 	@SuppressWarnings("static-access")
 	public void query(File queryFile) throws IOException {
+		System.out.println("This mode doesnt work");
 		//TODO: IMPLEMENT THIS METHOD
 		String result="";
 		String[] resultArray = new String[100];
@@ -106,15 +200,21 @@ public class SearchRunner {
 		if(firstLine!=null && firstLine.contains("numQueries=")){
 			queryCount=Integer.parseInt(firstLine.split("numQueries=")[1].trim());
 		}
+		String resultString="numResults="+queryCount;
 		if(queryCount>0){
 			for(int i=0;i<queryCount;i--){
 				queryString=reader.readLine();
+				String qid = queryString.substring(0, 8);
+				queryString=queryString.substring(8);
 				query=queryParser.parse(queryString, "OR");
 				query.toString();
 				LinkedList<String> result1=indexSearcher.search(query);
 				TreeMap<String,String[]> resultMap =new ResultFormat(result1,query,indexReader).Result();
-				TFScorer scorer = new TFScorer(resultMap, query);
-				printstream.print(scorer.result());
+				OKScorer scorer = new OKScorer(resultMap, query,indexReader);
+				int resSize = scorer.result().size();
+				String s123="";
+				
+//				printstream.print(scorer.result());
 			}
 			
 		}
