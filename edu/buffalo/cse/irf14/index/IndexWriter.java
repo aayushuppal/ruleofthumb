@@ -27,39 +27,39 @@ public class IndexWriter {
 	
 	String indexDir;
 	public  HashMap<String,Integer> docMap = new HashMap<String,Integer>();
-	public  HashMap<Integer,String> revDocMap = new HashMap<Integer,String>();
-	public  HashMap<String,ArrayList<Integer>> indexMap=null;
+//	public  HashMap<Integer,String> revDocMap = new HashMap<Integer,String>();
+	public   HashMap<String,HashMap<String,Integer>> indexMap=null;
 	public  TreeMap<String,Double> doc_length = new TreeMap<String,Double>();
-	public  HashMap<String,ArrayList<Integer>> aa_an = new HashMap<String,ArrayList<Integer>>();
-	public  HashMap<String,ArrayList<Integer>> ao_az = new HashMap<String,ArrayList<Integer>>();
-	public  HashMap<String,ArrayList<Integer>> ca_cj = new HashMap<String,ArrayList<Integer>>();
-	public  HashMap<String,ArrayList<Integer>> ck_cz = new HashMap<String,ArrayList<Integer>>();
-	public  HashMap<String,ArrayList<Integer>> sa_si = new HashMap<String,ArrayList<Integer>>();
-	public  HashMap<String,ArrayList<Integer>> sj_sz = new HashMap<String,ArrayList<Integer>>();
-	public  HashMap<String,ArrayList<Integer>> b = new HashMap<String,ArrayList<Integer>>();
-	public  HashMap<String,ArrayList<Integer>> d = new HashMap<String,ArrayList<Integer>>();
-	public  HashMap<String,ArrayList<Integer>> e = new HashMap<String,ArrayList<Integer>>();
-	public  HashMap<String,ArrayList<Integer>> f = new HashMap<String,ArrayList<Integer>>();
-	public  HashMap<String,ArrayList<Integer>> g = new HashMap<String,ArrayList<Integer>>();
-	public  HashMap<String,ArrayList<Integer>> h = new HashMap<String,ArrayList<Integer>>();
-	public  HashMap<String,ArrayList<Integer>> i = new HashMap<String,ArrayList<Integer>>();
-	public  HashMap<String,ArrayList<Integer>> j = new HashMap<String,ArrayList<Integer>>();
-	public  HashMap<String,ArrayList<Integer>> k = new HashMap<String,ArrayList<Integer>>();
-	public  HashMap<String,ArrayList<Integer>> l = new HashMap<String,ArrayList<Integer>>();
-	public  HashMap<String,ArrayList<Integer>> m = new HashMap<String,ArrayList<Integer>>();
-	public  HashMap<String,ArrayList<Integer>> n = new HashMap<String,ArrayList<Integer>>();
-	public  HashMap<String,ArrayList<Integer>> o = new HashMap<String,ArrayList<Integer>>();
-	public  HashMap<String,ArrayList<Integer>> p = new HashMap<String,ArrayList<Integer>>();
-	public  HashMap<String,ArrayList<Integer>> q = new HashMap<String,ArrayList<Integer>>();
-	public  HashMap<String,ArrayList<Integer>> r = new HashMap<String,ArrayList<Integer>>();
-	public  HashMap<String,ArrayList<Integer>> t = new HashMap<String,ArrayList<Integer>>();
-	public  HashMap<String,ArrayList<Integer>> u = new HashMap<String,ArrayList<Integer>>();
-	public  HashMap<String,ArrayList<Integer>> vwxyz = new HashMap<String,ArrayList<Integer>>();
-	public  HashMap<String,ArrayList<Integer>> authM = new HashMap<String,ArrayList<Integer>>();
-	public  HashMap<String,ArrayList<Integer>> catM = new HashMap<String,ArrayList<Integer>>();
-	public  HashMap<String,ArrayList<Integer>> placeM = new HashMap<String,ArrayList<Integer>>();
+	public  HashMap<String,HashMap<String,Integer>> aa_an = new HashMap<String,HashMap<String,Integer>>();
+	public  HashMap<String,HashMap<String,Integer>> ao_az = new  HashMap<String,HashMap<String,Integer>>();
+	public   HashMap<String,HashMap<String,Integer>> ca_cj = new  HashMap<String,HashMap<String,Integer>>();
+	public   HashMap<String,HashMap<String,Integer>> ck_cz = new  HashMap<String,HashMap<String,Integer>>();
+	public HashMap<String,HashMap<String,Integer>> sa_si = new  HashMap<String,HashMap<String,Integer>>();
+	public   HashMap<String,HashMap<String,Integer>> sj_sz = new  HashMap<String,HashMap<String,Integer>>();
+	public   HashMap<String,HashMap<String,Integer>> b = new  HashMap<String,HashMap<String,Integer>>();
+	public   HashMap<String,HashMap<String,Integer>> d = new  HashMap<String,HashMap<String,Integer>>();
+	public   HashMap<String,HashMap<String,Integer>> e = new  HashMap<String,HashMap<String,Integer>>();
+	public   HashMap<String,HashMap<String,Integer>> f = new  HashMap<String,HashMap<String,Integer>>();
+	public   HashMap<String,HashMap<String,Integer>> g = new  HashMap<String,HashMap<String,Integer>>();
+	public   HashMap<String,HashMap<String,Integer>> h = new  HashMap<String,HashMap<String,Integer>>();
+	public   HashMap<String,HashMap<String,Integer>> i = new  HashMap<String,HashMap<String,Integer>>();
+	public   HashMap<String,HashMap<String,Integer>> j = new  HashMap<String,HashMap<String,Integer>>();
+	public   HashMap<String,HashMap<String,Integer>> k = new  HashMap<String,HashMap<String,Integer>>();
+	public   HashMap<String,HashMap<String,Integer>> l = new  HashMap<String,HashMap<String,Integer>>();
+	public   HashMap<String,HashMap<String,Integer>> m = new  HashMap<String,HashMap<String,Integer>>();
+	public   HashMap<String,HashMap<String,Integer>> n = new  HashMap<String,HashMap<String,Integer>>();
+	public   HashMap<String,HashMap<String,Integer>> o = new  HashMap<String,HashMap<String,Integer>>();
+	public   HashMap<String,HashMap<String,Integer>> p = new  HashMap<String,HashMap<String,Integer>>();
+	public   HashMap<String,HashMap<String,Integer>> q = new  HashMap<String,HashMap<String,Integer>>();
+	public   HashMap<String,HashMap<String,Integer>> r = new  HashMap<String,HashMap<String,Integer>>();
+	public   HashMap<String,HashMap<String,Integer>> t = new  HashMap<String,HashMap<String,Integer>>();
+	public   HashMap<String,HashMap<String,Integer>> u = new  HashMap<String,HashMap<String,Integer>>();
+	public   HashMap<String,HashMap<String,Integer>> vwxyz = new  HashMap<String,HashMap<String,Integer>>();
+	public   HashMap<String,HashMap<String,Integer>> authM = new  HashMap<String,HashMap<String,Integer>>();
+	public   HashMap<String,HashMap<String,Integer>> catM = new  HashMap<String,HashMap<String,Integer>>();
+	public   HashMap<String,HashMap<String,Integer>> placeM = new  HashMap<String,HashMap<String,Integer>>();
 //	static HashMap<String,ArrayList<Integer>> newsM = new HashMap<String,ArrayList<Integer>>();
-	public  HashMap<String,ArrayList<Integer>> symbol = new HashMap<String,ArrayList<Integer>>();
+	public  HashMap<String,HashMap<String,Integer>> symbol = new  HashMap<String,HashMap<String,Integer>>();
 	public  HashMap<String,String> list = new HashMap<String,String>();
 	public  int docCounter;
 	public  int termdocCounter;
@@ -106,7 +106,7 @@ public class IndexWriter {
 			}
 			stream=filter.getStream();
 			d.length=d.length+stream.arrListToken.size();
-			index(stream,FieldNames.CONTENT);
+			index(stream,FieldNames.CONTENT,d.getField(FieldNames.FILEID)[0]);
 			}
 			
 			if(d.getField(FieldNames.AUTHOR)!=null){
@@ -131,7 +131,7 @@ public class IndexWriter {
 				}
 				TokenStream authStream=new TokenStream(a2);
 				d.length=d.length+authStream.arrListToken.size();
-				index(authStream,FieldNames.AUTHOR);
+				index(authStream,FieldNames.AUTHOR,d.getField(FieldNames.FILEID)[0]);
 				}
 			
 			if(d.getField(FieldNames.CATEGORY)!=null){
@@ -140,7 +140,7 @@ public class IndexWriter {
 				Token t3 = new Token();
 				t3.setTermText(d.getField(FieldNames.CATEGORY)[0]);
 				a2.add(t3);
-				index(new TokenStream(a2),FieldNames.CATEGORY);
+				index(new TokenStream(a2),FieldNames.CATEGORY,d.getField(FieldNames.FILEID)[0]);
 				}
 			if(d.getField(FieldNames.NEWSDATE)!=null){
 				
@@ -149,7 +149,7 @@ public class IndexWriter {
 				while(filter.increment()){
 				}
 				stream=filter.getStream();				
-				index(stream,FieldNames.NEWSDATE);
+				index(stream,FieldNames.NEWSDATE,d.getField(FieldNames.FILEID)[0]);
 				}
 			if(d.getField(FieldNames.PLACE)!=null){
 				placedocCounter++;
@@ -159,7 +159,7 @@ public class IndexWriter {
 				}
 				stream=filter.getStream();		
 				d.length=d.length+stream.arrListToken.size();
-				index(stream,FieldNames.PLACE);
+				index(stream,FieldNames.PLACE,d.getField(FieldNames.FILEID)[0]);
 				}
 			if(d.getField(FieldNames.TITLE)!=null){
 				
@@ -171,7 +171,7 @@ public class IndexWriter {
 				}
 				stream=filter.getStream();			
 				d.length=d.length+stream.arrListToken.size();
-				index(stream,FieldNames.TITLE);
+				index(stream,FieldNames.TITLE,d.getField(FieldNames.FILEID)[0]);
 				}
 //			System.out.println(d.length);
 			addLengthIndex(d);
@@ -196,14 +196,14 @@ public class IndexWriter {
 		if(docMap.get(docNameKey)==null){
 			docCounter++;
 			docMap.put(docNameKey, docCounter);
-			revDocMap.put(docCounter,docNameKey);
+//			revDocMap.put(docCounter,docNameKey);
 //			System.out.println(docNameKey);
 			return docCounter;			//which is docID
 		}
 		else return docMap.get(docNameKey);
 	}
 	
-	public void index(TokenStream s, FieldNames fieldname){
+	public void index(TokenStream s, FieldNames fieldname, String doc){
 		String text;
 		String textLowerCase;
 		s.reset();
@@ -303,26 +303,21 @@ public class IndexWriter {
 				indexMap=symbol;
 			}
 			if(!indexMap.containsKey(text)){
-				ArrayList<Integer> postingList=new ArrayList<Integer>();
-				postingList.add(docCounter);
-				postingList.add(1);
+				HashMap<String,Integer> postingList=new HashMap<String,Integer>();
+				postingList.put(doc,1);
 				indexMap.put(text, postingList);
 				termCounter++;
 			}
 			else{
-				ArrayList<Integer> postingList=indexMap.get(text);
-				ArrayList<Integer> postingListTemp = new ArrayList<Integer>();
-				for(int i=0;i<postingList.size();i++){
-					if(i%2==0) postingListTemp.add(postingList.get(i));
-				}
-				if(!postingListTemp.contains(docCounter))
+				HashMap<String,Integer> postingList=indexMap.get(text);
+			
+				if(!postingList.keySet().contains(doc))
 					{
-					postingList.add(docCounter);
-					postingList.add(1);
+					postingList.put(doc,1);
 					}
 				else{
-					int freq=postingList.get((postingListTemp.indexOf(docCounter)*2+1))+1;
-					postingList.add(postingListTemp.indexOf(docCounter)*2+1,freq);
+					int i = postingList.get(doc);
+					postingList.put(doc, i+1);
 				}
 				indexMap.put(text, postingList);
 			
@@ -331,92 +326,68 @@ public class IndexWriter {
 	else if(fieldname==FieldNames.AUTHOR){
 		indexMap=authM;
 		if(!indexMap.containsKey(text)){
-			ArrayList<Integer> postingList=new ArrayList<Integer>();
-			postingList.add(docCounter);
-			postingList.add(1);
+			HashMap<String,Integer> postingList=new HashMap<String,Integer>();
+			postingList.put(doc,1);
 			indexMap.put(text, postingList);
-			authCounter++;
+			termCounter++;
 		}
 		else{
-//			ArrayList<Integer> postingList=indexMap.get(text);
-//			if(!postingList.contains(docCounter))
-//				{
-//				postingList.add(docCounter);
-//				postingList.add(1);
-//				}
-//			else{
-//				int freq=postingList.get((postingList.indexOf(docCounter)+1))+1;
-//				postingList.add(postingList.indexOf(docCounter)+1,freq);
-//			}
-//			indexMap.put(text, postingList);
-			ArrayList<Integer> postingList=indexMap.get(text);
-			ArrayList<Integer> postingListTemp = new ArrayList<Integer>();
-			for(int i=0;i<postingList.size();i++){
-				if(i%2==0) postingListTemp.add(postingList.get(i));
-			}
-			if(!postingListTemp.contains(docCounter))
+			HashMap<String,Integer> postingList=indexMap.get(text);
+		
+			if(!postingList.keySet().contains(doc))
 				{
-				postingList.add(docCounter);
-				postingList.add(1);
+				postingList.put(doc,1);
 				}
 			else{
-				int freq=postingList.get((postingListTemp.indexOf(docCounter)*2+1))+1;
-				postingList.add(postingListTemp.indexOf(docCounter)*2+1,freq);
+				int i = postingList.get(doc);
+				postingList.put(doc, i+1);
 			}
 			indexMap.put(text, postingList);
+		
 		}
 	}
 	else if(fieldname==FieldNames.CATEGORY){
 		indexMap=catM;
 		if(!indexMap.containsKey(text)){
-			ArrayList<Integer> postingList=new ArrayList<Integer>();
-			postingList.add(docCounter);
-			postingList.add(1);
+			HashMap<String,Integer> postingList=new HashMap<String,Integer>();
+			postingList.put(doc,1);
 			indexMap.put(text, postingList);
-			catCounter++;
+			termCounter++;
 		}
 		else{
-			ArrayList<Integer> postingList=indexMap.get(text);
-			ArrayList<Integer> postingListTemp = new ArrayList<Integer>();
-			for(int i=0;i<postingList.size();i++){
-				if(i%2==0) postingListTemp.add(postingList.get(i));
-			}
-			if(!postingListTemp.contains(docCounter))
+			HashMap<String,Integer> postingList=indexMap.get(text);
+		
+			if(!postingList.keySet().contains(doc))
 				{
-				postingList.add(docCounter);
-				postingList.add(1);
+				postingList.put(doc,1);
 				}
 			else{
-				int freq=postingList.get((postingListTemp.indexOf(docCounter)*2+1))+1;
-				postingList.add(postingListTemp.indexOf(docCounter)*2+1,freq);
+				int i = postingList.get(doc);
+				postingList.put(doc, i+1);
 			}
 			indexMap.put(text, postingList);
+		
 		
 		}
 	}
 	else if(fieldname==FieldNames.PLACE){
 		indexMap=placeM;
 		if(!indexMap.containsKey(text)){
-			ArrayList<Integer> postingList=new ArrayList<Integer>();
-			postingList.add(docCounter);
-			postingList.add(1);
+			HashMap<String,Integer> postingList=new HashMap<String,Integer>();
+			postingList.put(doc,1);
 			indexMap.put(text, postingList);
-			placeCounter++;
+			termCounter++;
 		}
 		else{
-			ArrayList<Integer> postingList=indexMap.get(text);
-			ArrayList<Integer> postingListTemp = new ArrayList<Integer>();
-			for(int i=0;i<postingList.size();i++){
-				if(i%2==0) postingListTemp.add(postingList.get(i));
-			}
-			if(!postingListTemp.contains(docCounter))
+			HashMap<String,Integer> postingList=indexMap.get(text);
+		
+			if(!postingList.keySet().contains(doc))
 				{
-				postingList.add(docCounter);
-				postingList.add(1);
+				postingList.put(doc,1);
 				}
 			else{
-				int freq=postingList.get((postingListTemp.indexOf(docCounter)*2+1))+1;
-				postingList.add(postingListTemp.indexOf(docCounter)*2+1,freq);
+				int i = postingList.get(doc);
+				postingList.put(doc, i+1);
 			}
 			indexMap.put(text, postingList);
 		
@@ -432,31 +403,14 @@ public class IndexWriter {
 			doc_length.put(d.getField(FieldNames.FILEID)[0], d.length);
 		}
 	}
-	public void printIndex(){
-		ArrayList<Integer> l;
-		int counter=0;
-		for(String s:indexMap.keySet()){
-			System.out.print(s+"> ");
-			l=indexMap.get(s);
-			for(int i=0;i<l.size();i++){
-				System.out.print(l.get(i));
-				System.out.print(", ");
-				if(i>15){
-					System.out.print("..and more..");
-					break;
-				}
-			}
-			System.out.println();
-			if(counter>20){System.out.println("....."); break;}
-		}
-		System.out.println("Total Terms: "+termCounter);
-	}
+
 	public void close() throws IndexerException {
 		//TODO
 		
 		HashMap[] listTerm={this.aa_an, this.ao_az,this.ca_cj,this.ck_cz,this.sa_si,this.sj_sz,this.b,this.d,this.e,this.f,this.g,this.h,this.i,this.j,this.k,this.l,this.m,this.n,this.o,this.p,this.q,this.r,this.t,this.u,this.vwxyz,this.symbol};
 		HashMap[] listOther={this.placeM, this.authM,this.catM};
-		HashMap[] listDoc={this.docMap,this.revDocMap};
+//		HashMap[] listDoc={this.docMap,this.revDocMap};
+		HashMap[] listDoc={this.docMap};
 		int[] listVar={this.authCounter,this.authdocCounter,this.catCounter,this.catdocCounter,this.docCounter,this.placeCounter,this.placedocCounter,this.termCounter,this.termdocCounter};
 		File Term=new File (indexDir+File.separator+"Term.ser");
 		File Other=new File (indexDir+File.separator+"Other.ser");
