@@ -27,10 +27,10 @@ public class IndexReader {
 	String iDir;
 	public IndexType iType;
 	public HashMap<String,Integer> docMap;
-	public HashMap<Integer,String> revDocMap;
+//	public HashMap<Integer,String> revDocMap;
 	int authCounter,authdocCounter,catCounter,catdocCounter,docCounter,placeCounter,placedocCounter,termCounter,termdocCounter;
-	HashMap<String,ArrayList<Integer>> aa_an,ao_az,ca_cj,ck_cz,sa_si,sj_sz,b,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,t,u,vwxyz;
-	HashMap<String,ArrayList<Integer>> symbol;
+	HashMap<String,HashMap<String,Integer>> aa_an,ao_az,ca_cj,ck_cz,sa_si,sj_sz,b,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,t,u,vwxyz;
+	HashMap<String,HashMap<String,Integer>> symbol;
 	TreeMap doc_length;
 	/**
 	 * Default constructor
@@ -70,7 +70,7 @@ public class IndexReader {
 	         ObjectInputStream ois2 = new ObjectInputStream(fis2);
 	         HashMap[] list2 = (HashMap[]) ois2.readObject();
 	         docMap=list2[0];
-	         revDocMap=list2[1];
+//	         revDocMap=list2[1];
 	         ois2.close();
 	         fis2.close();
 	         FileInputStream fis21 = new FileInputStream(new File(iDir+File.separator+"Term.ser"));
@@ -198,7 +198,7 @@ public class IndexReader {
 	public Map<String, Integer> getPostings(String term) {
 		//TODO:YOU MUST IMPLEMENT THIS
 		String textLowerCase=term.toLowerCase();
-		HashMap<String,ArrayList<Integer>> map = null;
+		HashMap<String,HashMap<String,Integer>> map = null;
 		if(iType==IndexType.TERM){
 		if(textLowerCase.equals("a")) map=aa_an;
 		else if(textLowerCase.charAt(0)=='a'){
@@ -319,21 +319,16 @@ public class IndexReader {
 			}
 		}
 		
-		ArrayList<Integer> postList = new ArrayList<Integer>();
-		HashMap<String, Integer> map2=new HashMap<String,Integer>();
+		HashMap<String,Integer> postList = new HashMap<String, Integer>();
+//		HashMap<String, Integer> map2=new HashMap<String,Integer>();
 		
 		if(map.containsKey(term)){
 			postList=map.get(term);
-		for(int i=0;i+2<=postList.size();i=i+2){
-			String docID= revDocMap.get(postList.get(i));
-			int freq1 = postList.get(i+1);
-			map2.put(docID, freq1);
-		}
 		}
 		else{
-			map2=null;
+			postList=null;
 		}
-		return map2;
+		return postList;
 	}
 	
 	/**
