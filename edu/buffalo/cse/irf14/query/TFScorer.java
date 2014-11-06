@@ -29,8 +29,9 @@ public class TFScorer {
 		TreeMap<String,int[]> docMap = docToTermMap(result);	// create doc --> {<term freq>} and stores terms in query vector to store positions of terms in the map
 		
 		TreeMap<String,double[]> docMap2;
-		if(termList.size()>1) docMap2= normalize(docMap); 	// Normalize the doc map with L2 norm of freq
-		else{
+//		if(termList.size()>1) docMap2= normalize(docMap); 	// Normalize the doc map with L2 norm of freq
+//		else
+		{
 			docMap2 = new TreeMap<String,double[]>();
 			for(Entry<String, int[]> entry :docMap.entrySet()){
 				int[] arr =entry.getValue();

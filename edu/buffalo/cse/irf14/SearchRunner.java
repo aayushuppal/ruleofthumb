@@ -220,7 +220,7 @@ public class SearchRunner {
 				LinkedList<String> result1=indexSearcher.search(query);
 				TreeMap<String,String[]> resultMap =new ResultFormat(result1,query,indexReader).Result();
 //				String s1[] = resultMap.firstEntry().getValue();
-				OKScorer scorer = new OKScorer(resultMap, query,indexReader);
+				TFScorer scorer = new TFScorer(resultMap, query,indexReader);
 //				OKScorer scorer = new OKScorer(resultMap, query,indexReader);
 				
 				if(!scorer.result().isEmpty()){

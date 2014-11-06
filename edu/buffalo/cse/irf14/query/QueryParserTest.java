@@ -19,7 +19,7 @@ public class QueryParserTest {
 	public static void main(String[] args) throws IOException {
 		// TODO Auto-generated method stub
 		SearchRunner test = new SearchRunner("/Users/utsavpatel/Desktop/sample", "/Users/utsavpatel/Desktop/sample/training_flat", 'E', new PrintStream(System.out));
-		test.query("Term:Appleton", ScoringModel.TFIDF);
+		test.query("current financial quarter", ScoringModel.TFIDF);
 //		test.query(new File("/Users/utsavpatel/Desktop/sample/123.txt"));
 	}
 
