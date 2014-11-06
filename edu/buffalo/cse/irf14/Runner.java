@@ -28,8 +28,8 @@ public class Runner {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		String ipDir = "C:/Users/Festy/Desktop/IR Slides/training";								// My Added Line
-		String indexDir = "C:/Users/Festy/Desktop/IR Slides/sample";							// My Added Line
+		String ipDir = "/Users/utsavpatel/Desktop/sample/training";								// My Added Line
+		String indexDir = "/Users/utsavpatel/Desktop/sample";							// My Added Line
 		long startTime = System.currentTimeMillis();											// My Added Line
 		int count=0;
 		long maxBytes = Runtime.getRuntime().maxMemory();

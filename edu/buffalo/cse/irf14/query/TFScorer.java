@@ -27,8 +27,22 @@ public class TFScorer {
 		// TODO Auto-generated constructor stub
 		ArrayList<String> termList = filterTerms(query);		// filters - operators, brackets, quotes
 		TreeMap<String,int[]> docMap = docToTermMap(result);	// create doc --> {<term freq>} and stores terms in query vector to store positions of terms in the map
-		TreeMap<String,double[]> docMap2= normalize(docMap); 	// Normalize the doc map with L2 norm of freq
 		
+		TreeMap<String,double[]> docMap2;
+		if(termList.size()>1) docMap2= normalize(docMap); 	// Normalize the doc map with L2 norm of freq
+		else{
+			docMap2 = new TreeMap<String,double[]>();
+			for(Entry<String, int[]> entry :docMap.entrySet()){
+				int[] arr =entry.getValue();
+				double[] arr2 = new double[arr.length];
+				int index2=0;
+				for(int i : arr){
+					arr2[index2]=(double)i;
+					index2++;
+				}
+				docMap2.put(entry.getKey(),arr2 );
+			}
+		}
 		for(String s:termList){									// add frequency of terms in query Vector
 			if(queryVector.containsKey(s)){
 				queryVector.put(s, queryVector.get(s)+1);
@@ -38,8 +52,8 @@ public class TFScorer {
 		idf();													// calculate idf and stored it in a map with same name
 		idf_query=queryVector;									// don't know why I did this. Let's just keep it that way.
 		docMap2=tf_idf(docMap2);								// Calculated tf-idf
-		docMap2=normalize(docMap2,0);
-		normalizeQuery();
+//		docMap2=normalize(docMap2,0);
+//		normalizeQuery();
 		rank =rank(docMap2);		// Ranked the documents
 //		System.out.println(idf);
 ////-------Prints DocMap and Query Vector
@@ -188,6 +202,14 @@ public class TFScorer {
 						rank.put(i,-1.0);
 					}
 				}
+			}
+			double max=0;
+			for(String s:sortedRank.keySet()){
+				 max = sortedRank.get(s);
+				 break;
+			}
+			for(String s:sortedRank.keySet()){
+				sortedRank.put(s, (double) Math.round(100000*(sortedRank.get(s)/max))/100000) ;
 			}
 		return sortedRank;
 		

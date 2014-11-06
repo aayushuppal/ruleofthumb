@@ -97,7 +97,7 @@ public class IndexWriter {
 		TokenStream stream,stream2;
 		
 		AnalyzerFactory aFactory=AnalyzerFactory.getInstance();
-		addDocID(d);
+		if(addDocID(d)){
 		try {
 			if(d.getField(FieldNames.CONTENT)!=null){
 			stream = tokenizer.consume(d.getField(FieldNames.CONTENT)[0]);
@@ -178,6 +178,7 @@ public class IndexWriter {
 		} catch (Exception e) {
 			throw new IndexerException();
 		}
+		}
 		//TODO : YOU MUST IMPLEMENT THIS
 	}
 	
@@ -186,7 +187,7 @@ public class IndexWriter {
 	 * and cleaned and that the entire indexing operation has been completed.
 	 * @throws IndexerException : In case any error occurs
 	 */
-	public int addDocID(Document d){
+	public boolean addDocID(Document d){
 //		if(d.getField(FieldNames.CATEGORY)[0]==null) 
 
 		docNameKey=/*d.getField(FieldNames.CATEGORY)[0]+"*"+*/d.getField(FieldNames.FILEID)[0];
@@ -198,9 +199,9 @@ public class IndexWriter {
 			docMap.put(docNameKey, docCounter);
 //			revDocMap.put(docCounter,docNameKey);
 //			System.out.println(docNameKey);
-			return docCounter;			//which is docID
+			return true;			//which is docID
 		}
-		else return docMap.get(docNameKey);
+		else return false;
 	}
 	
 	public void index(TokenStream s, FieldNames fieldname, String doc){

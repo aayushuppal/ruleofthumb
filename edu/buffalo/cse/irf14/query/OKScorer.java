@@ -64,6 +64,14 @@ public class OKScorer {
 				}
 			}
 		}
+		double max=0;
+		for(String s:sortedRank.keySet()){
+			 max = sortedRank.get(s);
+			 break;
+		}
+		for(String s:sortedRank.keySet()){
+			sortedRank.put(s, (double) Math.round(100000*(sortedRank.get(s)/max))/100000) ;
+		}
 		return sortedRank;
 	}
 

@@ -6,6 +6,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -60,6 +62,8 @@ public class SearchRunner {
 		queryMode=mode;
 		printstream=stream;
 		System.out.println("Loading the data..");
+		System.out.println("----------------------------");
+		System.out.println();
 		indexReader=new IndexReader(indexDir,IndexType.TERM);
 		indexSearcher= new IndexSearcher(indexReader);
 	}
@@ -75,8 +79,8 @@ public class SearchRunner {
 	@SuppressWarnings("static-access")
 	public void query(String userQuery, ScoringModel model) {
 		//TODO: IMPLEMENT THIS METHOD
-		System.out.println("Query Mode started..");
-		System.out.println("Enter your Query:");
+//		System.out.println("Query Mode started..");
+//		System.out.println("Enter your Query:");
 		long startTime = System.nanoTime();
 		queryString=userQuery;
 		query=queryParser.parse(queryString, "OR");
@@ -91,7 +95,7 @@ public class SearchRunner {
 			System.out.println("Query: "+asdf);
 			for(Entry<String, Double> entry : scorer.result().entrySet()){
 //				System.out.println(Integer.parseInt(entry.getKey()));
-				printstream.println("Rank:"+(index+1)+"\n Doc ID:"+entry.getKey()+"\nRelevance:"+entry.getValue()+"\n");
+				printstream.println("Rank:"+(index+1)+"\nDoc ID:"+entry.getKey()+"\nRelevance Score: "+entry.getValue()+"\n");
 				File f = new File(corpusDir+File.separator+entry.getKey());
 				if(f.exists()){
 					try {
@@ -110,7 +114,8 @@ public class SearchRunner {
 						System.out.println(s11);
 						s11 = fstream.readLine();
 						System.out.println(s11);
-						System.out.println("------------------------------------------------");
+						System.out.println("---------------------------------------------------------------");
+						System.out.println();
 					} catch (FileNotFoundException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -167,7 +172,7 @@ public class SearchRunner {
 			}
 			long endTime = System.nanoTime();
 			long duration = (endTime - startTime);
-			System.out.printf("\n\nDuration of Execution: %fms",(double)duration/1000000);
+			System.out.printf("\nDuration of Execution: %fms\n",(double)duration/1000000);
 		}
 		
 //		printstream.print(scorer.result());
@@ -183,7 +188,7 @@ public class SearchRunner {
 	 */
 	@SuppressWarnings("static-access")
 	public void query(File queryFile) throws IOException {
-		System.out.println("This mode doesnt work");
+
 		//TODO: IMPLEMENT THIS METHOD
 		String result="";
 		String[] resultArray = new String[100];
@@ -201,22 +206,37 @@ public class SearchRunner {
 			queryCount=Integer.parseInt(firstLine.split("numQueries=")[1].trim());
 		}
 		String resultString="numResults="+queryCount;
+		ArrayList<String> resultList = new ArrayList<String>();
 		if(queryCount>0){
-			for(int i=0;i<queryCount;i--){
+			for(int i=0;i<queryCount;i++){
 				queryString=reader.readLine();
 				String qid = queryString.substring(0, 8);
 				queryString=queryString.substring(8);
+				queryString=queryString.replace("{","");
+				queryString=queryString.replace("}", "");
 				query=queryParser.parse(queryString, "OR");
-				query.toString();
+				String s =query.toString();
+//				System.out.println(s);
 				LinkedList<String> result1=indexSearcher.search(query);
 				TreeMap<String,String[]> resultMap =new ResultFormat(result1,query,indexReader).Result();
+//				String s1[] = resultMap.firstEntry().getValue();
 				OKScorer scorer = new OKScorer(resultMap, query,indexReader);
-				int resSize = scorer.result().size();
-				String s123="";
+//				OKScorer scorer = new OKScorer(resultMap, query,indexReader);
 				
-//				printstream.print(scorer.result());
+				if(!scorer.result().isEmpty()){
+					LinkedHashMap<String,Double> temp = new LinkedHashMap<String,Double>();
+					int i1 = 0;
+					for(Entry<String, Double> entry :scorer.result().entrySet()){
+						if(i1>9) break;
+						temp.put(entry.getKey(), entry.getValue());
+					}
+					resultList.add(qid+temp.toString().replace("=", "#"));
+				}
 			}
-			
+			printstream.println("numResults="+resultList.size());
+			for(String s: resultList){
+				printstream.println(s);
+			}
 		}
 		
 	}

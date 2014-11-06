@@ -42,7 +42,7 @@ public class QueryParser {
 		Boolean quoteFlag=false;
 		for(int i=0; i<queryList.size();i++){
 			String s=queryList.get(i);
-		if((s.startsWith("\"") || s.startsWith("Author:\"")|| s.startsWith("Category:\"") || s.startsWith("Term:\"") ||s.startsWith("Place:\"")  ) && quoteFlag==false){
+		if((s.startsWith("\"") || s.startsWith("Author:\"")||s.startsWith("author:\"")|| s.startsWith("Category:\"")||s.startsWith("category:\"") || s.startsWith("Term:\"")||s.startsWith("term:\"") ||s.startsWith("Place:\"")||s.startsWith("place:\"")  ) && quoteFlag==false){
 			queryList2.add(s);
 			quoteFlag=true;
 		}
@@ -70,7 +70,7 @@ Pattern p1=Pattern.compile("");
 				for(int i1=0; i1<queryList.size();i1++){
 
 					String s1=queryList.get(i1);
-					if(!(quoteFlag==true || s1.contains("Term:")|| s1.contains("Author:") || s1.contains("Place:")|| s1.contains("Category:") || s1.equals("OR")||s1.equals("AND") || s1.equals("NOT")||s1.matches("(\\()?\\(NOT"))){
+					if(!(quoteFlag==true || s1.contains("Term:")||s1.contains("term:")|| s1.contains("Author:") ||s1.contains("author:")|| s1.contains("Place:")||s1.contains("place:")|| s1.contains("Category:")||s1.contains("category:") || s1.equals("OR")||s1.equals("AND") || s1.equals("NOT")||s1.matches("(\\()?\\(NOT"))){
 						s1="Ter##m:"+s1;
 						queryList.add(i1, s1);
 						queryList.remove(i1+1);
@@ -183,7 +183,7 @@ Pattern p1=Pattern.compile("");
 							nextIndexType=newQueryList.get(i+1).replaceAll("\\(", "").split(":")[0];
 
 						}
-						if(i>0 && !lastIndexType.equals("Ter##m") && s.contains("Ter##m")){
+						if(i>0 && !lastIndexType.equals("Ter##m") && s.contains("Ter##m") && !s.startsWith("(")){
 							crossIndexFlag=true;
 							startIndex=i;
 						}
@@ -254,8 +254,7 @@ Pattern p1=Pattern.compile("");
 //						}
 //					}
 //				}
-
-//		for(String s1: newQueryList) System.out.print(s1+" ");
+				
 		Query q= new Query();
 		q.setQueryString(newQueryList);
 		return q;
