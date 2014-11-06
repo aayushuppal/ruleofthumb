@@ -26,6 +26,7 @@ public class IndexSearcher {
 	
 	static int resCounter = 0;
 	static HashMap<String, LinkedList<String>> TDocid = new HashMap<String, LinkedList<String>>();
+	static HashMap<String, HashMap<String, Integer>> TDocid2 = new HashMap<String, HashMap<String, Integer>>();
 	static Map<String, Integer> TermMap = new HashMap<String, Integer>();
 	static TreeMap<String, LinkedList<String>> resNumMap = new TreeMap<String, LinkedList<String>>();
 	static LinkedList<String> EmptyDocidslist = new LinkedList<String>();
@@ -267,27 +268,54 @@ public class IndexSearcher {
 		}
 		
 		else { 
-			if (a.contains("Author:")){/*define the hashmap Tdocid<String, linklist<string> as a hashmap of author */
+			if (a.contains("Author:")||a.contains("author:")){/*define the hashmap Tdocid<String, linklist<string> as a hashmap of author */
 				try {
-					TDocid = IRdrObj.returnMap(IndexType.AUTHOR);
+					String termLower = "";
+					TDocid2 = IRdrObj.returnMap(IndexType.AUTHOR);
+					for(String term:TDocid2.keySet()){
+						termLower = term.toLowerCase();
+						LinkedList<String> list = new LinkedList<String>();
+						for(String doc:TDocid2.get(term).keySet()){
+							list.add(doc);
+						}
+						TDocid.put(termLower, list);
+					}
 				} catch (IndexerException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				a = a.substring(7);
 			}
-			else if(a.contains("Place:")){/*define the hashmap Tdocid<String, linklist<string> as a hashmap of place */
+			else if(a.contains("Place:") || a.contains("place:")){/*define the hashmap Tdocid<String, linklist<string> as a hashmap of place */
 				try {
-					TDocid = IRdrObj.returnMap(IndexType.PLACE);
+					String termLower = "";
+					TDocid2 = IRdrObj.returnMap(IndexType.PLACE);
+					for(String term:TDocid2.keySet()){
+						termLower = term.toLowerCase();
+						LinkedList<String> list = new LinkedList<String>();
+						for(String doc:TDocid2.get(term).keySet()){
+							list.add(doc);
+						}
+						TDocid.put(termLower, list);
+					}
 				} catch (IndexerException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				a = a.substring(6);
 			}
-			else if(a.contains("Category:")){/*define the hashmap Tdocid<String, linklist<string> as a hashmap of category */
+			else if(a.contains("Category:") || a.contains("category:")){/*define the hashmap Tdocid<String, linklist<string> as a hashmap of category */
 				try {
-					TDocid = IRdrObj.returnMap(IndexType.CATEGORY);
+					String termLower = "";
+					TDocid2 = IRdrObj.returnMap(IndexType.CATEGORY);
+					for(String term:TDocid2.keySet()){
+						termLower = term.toLowerCase();
+						LinkedList<String> list = new LinkedList<String>();
+						for(String doc:TDocid2.get(term).keySet()){
+							list.add(doc);
+						}
+						TDocid.put(termLower, list);
+					}
 				} catch (IndexerException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -316,14 +344,15 @@ public class IndexSearcher {
 		else {
 			if (a.startsWith("<")){
 				String a1 = a.substring(1, a.length()-1);
-				Oprnd1List = TDocid.get(a1);
+				Oprnd1List = TDocid.get(a1.toLowerCase());
 				if (Oprnd1List == null){
 					Oprnd1List = new LinkedList<String>();
 					Oprnd1List.addAll(EmptyDocidslist);
 				}
 				
 			}
-			else { Oprnd1List = TDocid.get(a); 
+			else { TDocid.get(a); 
+				Oprnd1List = TDocid.get(a.toLowerCase()); 
 					if (Oprnd1List == null){
 						Oprnd1List = new LinkedList<String>();
 						Oprnd1List.addAll(EmptyDocidslist);
@@ -376,7 +405,12 @@ public class IndexSearcher {
 		FullDocidslistClone.addAll(FullDocidslist); // create a clone of FullDocidslist
 		
 		if (a.contains("Term:")){
-			a = a.substring(5);	
+			a = a.substring(5);
+			if(a.contains(">")){
+				 a= a.substring(1, a.length());
+				 a = "<"+a;
+			}
+			//a = a.substring(0, a.length()-1);
 			//Pass a through filters and show new "a"
 			if (a.startsWith("<")){a = a.substring(1, a.length()-1); flag = 1;}
 			
@@ -453,32 +487,71 @@ public class IndexSearcher {
 		}
 		
 		else { 
-			if (a.contains("Author:")){/*define the hashmap Tdocid<String, linklist<string> as a hashmap of author */
+			if (a.contains("Author:") || a.contains("author:")){/*define the hashmap Tdocid<String, linklist<string> as a hashmap of author */
 				try {
-					TDocid = IRdrObj.returnMap(IndexType.AUTHOR);
+					String termLower = "";
+					TDocid2 = IRdrObj.returnMap(IndexType.AUTHOR);
+					for(String term:TDocid2.keySet()){
+						termLower = term.toLowerCase();
+						LinkedList<String> list = new LinkedList<String>();
+						for(String doc:TDocid2.get(term).keySet()){
+							list.add(doc);
+						}
+						TDocid.put(termLower, list);
+					}
 				} catch (IndexerException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				a = a.substring(7);
+				if(a.contains(">")){
+					 a= a.substring(1, a.length());
+					 a = "<"+a;
+				}
 			}
-			else if(a.contains("Place:")){/*define the hashmap Tdocid<String, linklist<string> as a hashmap of place */
+			else if(a.contains("Place:") || a.contains("place:")){/*define the hashmap Tdocid<String, linklist<string> as a hashmap of place */
 				try {
-					TDocid = IRdrObj.returnMap(IndexType.PLACE);
+					String termLower = "";
+					TDocid2 = IRdrObj.returnMap(IndexType.PLACE);
+					for(String term:TDocid2.keySet()){
+						termLower = term.toLowerCase();
+						LinkedList<String> list = new LinkedList<String>();
+						for(String doc:TDocid2.get(term).keySet()){
+							list.add(doc);
+						}
+						TDocid.put(termLower, list);
+					}
 				} catch (IndexerException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				a = a.substring(6);
+				if(a.contains(">")){
+					 a= a.substring(1, a.length());
+					 a = "<"+a;
+				}
 			}
-			else if(a.contains("Category:")){/*define the hashmap Tdocid<String, linklist<string> as a hashmap of category */
+			else if(a.contains("Category:") || a.contains("category:")){/*define the hashmap Tdocid<String, linklist<string> as a hashmap of category */
 				try {
-					TDocid = IRdrObj.returnMap(IndexType.CATEGORY);
+					String termLower = "";
+					TDocid2 = IRdrObj.returnMap(IndexType.CATEGORY);
+					for(String term:TDocid2.keySet()){
+						termLower = term.toLowerCase();
+						LinkedList<String> list = new LinkedList<String>();
+						for(String doc:TDocid2.get(term).keySet()){
+							list.add(doc);
+						}
+						TDocid.put(termLower, list);
+					}
 				} catch (IndexerException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				a = a.substring(9);
+				if(a.contains(">")){
+					 a= a.substring(1, a.length());
+					 a = "<"+a;
+				}
 			}
 			else {}
 		
@@ -502,14 +575,14 @@ public class IndexSearcher {
 		else {
 			if (a.startsWith("<")){
 				String a1 = a.substring(1, a.length()-1);
-				Oprnd1List = TDocid.get(a1);
+				Oprnd1List = TDocid.get(a1.toLowerCase());
 				if (Oprnd1List == null){
 					Oprnd1List = new LinkedList<String>();
 					Oprnd1List.addAll(EmptyDocidslist);
 				}
 				
 			}
-			else { Oprnd1List = TDocid.get(a); 
+			else { Oprnd1List = TDocid.get(a.toLowerCase()); 
 					if (Oprnd1List == null){
 						Oprnd1List = new LinkedList<String>();
 						Oprnd1List.addAll(EmptyDocidslist);
@@ -529,6 +602,10 @@ public class IndexSearcher {
 		
 		if (b.contains("Term:")){
 			b = b.substring(5);	
+			if(b.contains(">")){
+				 b= b.substring(1, b.length());
+				 b = "<"+b;
+			}
 			//Pass b through filters and show new "b"
 			if (b.startsWith("<")){b = a.substring(1, b.length()-1); flag = 1;}
 			ArrayList<Token> arr11= new ArrayList<Token>();
@@ -600,32 +677,71 @@ public class IndexSearcher {
 		}
 		
 		else { 
-			if (b.contains("Author:")){/*define the hashmap Tdocid<String, linklist<string> as a hashmap of author */
+			if (b.contains("Author:") || b.contains("author:")){/*define the hashmap Tdocid<String, linklist<string> as a hashmap of author */
 				try {
-					TDocid = IRdrObj.returnMap(IndexType.AUTHOR);
+					String termLower = "";
+					TDocid2 = IRdrObj.returnMap(IndexType.AUTHOR);
+					for(String term:TDocid2.keySet()){
+						termLower = term.toLowerCase();
+						LinkedList<String> list = new LinkedList<String>();
+						for(String doc:TDocid2.get(term).keySet()){
+							list.add(doc);
+						}
+						TDocid.put(termLower, list);
+					}
 				} catch (IndexerException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				b = b.substring(7);
+				if(b.contains(">")){
+					 b= b.substring(1, b.length());
+					 b = "<"+b;
+				}
 			}
-			else if(b.contains("Place:")){/*define the hashmap Tdocid<String, linklist<string> as a hashmap of place */
+			else if(b.contains("Place:") || b.contains("place:")){/*define the hashmap Tdocid<String, linklist<string> as a hashmap of place */
 				try {
-					TDocid = IRdrObj.returnMap(IndexType.PLACE);
+					String termLower = "";
+					TDocid2 = IRdrObj.returnMap(IndexType.PLACE);
+					for(String term:TDocid2.keySet()){
+						termLower = term.toLowerCase();
+						LinkedList<String> list = new LinkedList<String>();
+						for(String doc:TDocid2.get(term).keySet()){
+							list.add(doc);
+						}
+						TDocid.put(termLower, list);
+					}
 				} catch (IndexerException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				b = b.substring(6);
+				if(b.contains(">")){
+					 b= b.substring(1, b.length());
+					 b = "<"+b;
+				}
 			}
-			else if(b.contains("Category:")){/*define the hashmap Tdocid<String, linklist<string> as a hashmap of category */
+			else if(b.contains("Category:") || b.contains("category:")){/*define the hashmap Tdocid<String, linklist<string> as a hashmap of category */
 				try {
-					TDocid = IRdrObj.returnMap(IndexType.CATEGORY);
+					String termLower = "";
+					TDocid2 = IRdrObj.returnMap(IndexType.CATEGORY);
+					for(String term:TDocid2.keySet()){
+						termLower = term.toLowerCase();
+						LinkedList<String> list = new LinkedList<String>();
+						for(String doc:TDocid2.get(term).keySet()){
+							list.add(doc);
+						}
+						TDocid.put(termLower, list);
+					}
 				} catch (IndexerException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				b = b.substring(9);
+				if(b.contains(">")){
+					 b= b.substring(1, b.length());
+					 b = "<"+b;
+				}
 			}
 			else {}
 		
@@ -649,14 +765,14 @@ public class IndexSearcher {
 		else {
 			if (b.startsWith("<")){
 				String b1 = b.substring(1, b.length()-1);
-				Oprnd2List = TDocid.get(b1);
+				Oprnd2List = TDocid.get(b1.toLowerCase());
 				if (Oprnd2List == null){
 					Oprnd2List = new LinkedList<String>();
 					Oprnd2List.addAll(EmptyDocidslist);
 				}
 				
 			}
-			else { Oprnd2List = TDocid.get(b); 
+			else { Oprnd2List = TDocid.get(b.toLowerCase()); 
 					if (Oprnd2List == null){
 						Oprnd2List = new LinkedList<String>();
 						Oprnd2List.addAll(EmptyDocidslist);
@@ -722,8 +838,12 @@ public class IndexSearcher {
 		if (a.contains("Term:")){
 			a = a.substring(5);	
 			//Pass a through filters and show new "a"
-			if (a.startsWith("<")){a = a.substring(1, a.length()-1); flag = 1;}
-			
+			//if (a.startsWith("<")){a = a.substring(1, a.length()-1); flag = 1;}
+			if(a.contains(">")){
+				 a= a.substring(1, a.length());
+				 a = "<"+a;
+				
+			}
 			ArrayList<Token> arr11= new ArrayList<Token>();
 			Token t= new Token();
 			t.setTermText(a);
@@ -795,32 +915,71 @@ public class IndexSearcher {
 		}
 		
 		else { 
-			if (a.contains("Author:")){/*define the hashmap Tdocid<String, linklist<string> as a hashmap of author */
+			if (a.contains("Author:") || a.contains("author:")){/*define the hashmap Tdocid<String, linklist<string> as a hashmap of author */
 				try {
-					TDocid = IRdrObj.returnMap(IndexType.AUTHOR);
+					String termLower = "";
+					TDocid2 = IRdrObj.returnMap(IndexType.AUTHOR);
+					for(String term:TDocid2.keySet()){
+						termLower = term.toLowerCase();
+						LinkedList<String> list = new LinkedList<String>();
+						for(String doc:TDocid2.get(term).keySet()){
+							list.add(doc);
+						}
+						TDocid.put(termLower, list);
+					}
 				} catch (IndexerException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				a = a.substring(7);
+				if(a.contains(">")){
+					 a= a.substring(1, a.length());
+					 a = "<"+a;
+				}
 			}
-			else if(a.contains("Place:")){/*define the hashmap Tdocid<String, linklist<string> as a hashmap of place */
+			else if(a.contains("Place:") || a.contains("place:")){/*define the hashmap Tdocid<String, linklist<string> as a hashmap of place */
 				try {
-					TDocid = IRdrObj.returnMap(IndexType.PLACE);
+					String termLower = "";
+					TDocid2 = IRdrObj.returnMap(IndexType.PLACE);
+					for(String term:TDocid2.keySet()){
+						termLower = term.toLowerCase();
+						LinkedList<String> list = new LinkedList<String>();
+						for(String doc:TDocid2.get(term).keySet()){
+							list.add(doc);
+						}
+						TDocid.put(termLower, list);
+					}
 				} catch (IndexerException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				a = a.substring(6);
+				if(a.contains(">")){
+					 a= a.substring(1, a.length());
+					 a = "<"+a;
+				}
 			}
-			else if(a.contains("Category:")){/*define the hashmap Tdocid<String, linklist<string> as a hashmap of category */
+			else if(a.contains("Category:") || a.contains("category:")){/*define the hashmap Tdocid<String, linklist<string> as a hashmap of category */
 				try {
-					TDocid = IRdrObj.returnMap(IndexType.CATEGORY);
+					String termLower = "";
+					TDocid2 = IRdrObj.returnMap(IndexType.CATEGORY);
+					for(String term:TDocid2.keySet()){
+						termLower = term.toLowerCase();
+						LinkedList<String> list = new LinkedList<String>();
+						for(String doc:TDocid2.get(term).keySet()){
+							list.add(doc);
+						}
+						TDocid.put(termLower, list);
+					}
 				} catch (IndexerException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				a = a.substring(9);
+				if(a.contains(">")){
+					 a= a.substring(1, a.length());
+					 a = "<"+a;
+				}
 			}
 			else {}
 
@@ -844,14 +1003,14 @@ public class IndexSearcher {
 		else {
 			if (a.startsWith("<")){
 				String a1 = a.substring(1, a.length()-1);
-				Oprnd1List = TDocid.get(a1);
+				Oprnd1List = TDocid.get(a1.toLowerCase());
 				if (Oprnd1List == null){
 					Oprnd1List = new LinkedList<String>();
 					Oprnd1List.addAll(EmptyDocidslist);
 				}
 				
 			}
-			else { Oprnd1List = TDocid.get(a); 
+			else { Oprnd1List = TDocid.get(a.toLowerCase()); 
 					if (Oprnd1List == null){
 						Oprnd1List = new LinkedList<String>();
 						Oprnd1List.addAll(EmptyDocidslist);
@@ -870,7 +1029,12 @@ public class IndexSearcher {
 		if (b.contains("Term:")){
 			b = b.substring(5);	
 			//Pass b through filters and show new "b"
-			if (b.startsWith("<")){b = a.substring(1, b.length()-1); flag = 1;}
+			//if (b.startsWith("<")){b = a.substring(1, b.length()-1); flag = 1;}
+			if(b.contains(">")){
+				 b= b.substring(1, b.length());
+				 b = "<"+b;
+				 
+			}
 			ArrayList<Token> arr11= new ArrayList<Token>();
 			Token t= new Token();
 			t.setTermText(b);
@@ -941,32 +1105,71 @@ public class IndexSearcher {
 		}
 		
 		else { 
-			if (b.contains("Author:")){/*define the hashmap Tdocid<String, linklist<string> as a hashmap of author */
+			if (b.contains("Author:") || b.contains("author:")){/*define the hashmap Tdocid<String, linklist<string> as a hashmap of author */
 				try {
-					TDocid = IRdrObj.returnMap(IndexType.AUTHOR);
+					String termLower = "";
+					TDocid2 = IRdrObj.returnMap(IndexType.AUTHOR);
+					for(String term:TDocid2.keySet()){
+						termLower = term.toLowerCase();
+						LinkedList<String> list = new LinkedList<String>();
+						for(String doc:TDocid2.get(term).keySet()){
+							list.add(doc);
+						}
+						TDocid.put(termLower, list);
+					}
 				} catch (IndexerException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				b = b.substring(7);
+				if(b.contains(">")){
+					 b= b.substring(1, b.length());
+					 b = "<"+b;
+				}
 			}
-			else if(b.contains("Place:")){/*define the hashmap Tdocid<String, linklist<string> as a hashmap of place */
+			else if(b.contains("Place:") || b.contains("place:")){/*define the hashmap Tdocid<String, linklist<string> as a hashmap of place */
 				try {
-					TDocid = IRdrObj.returnMap(IndexType.PLACE);
+					String termLower = "";
+					TDocid2 = IRdrObj.returnMap(IndexType.PLACE);
+					for(String term:TDocid2.keySet()){
+						termLower = term.toLowerCase();
+						LinkedList<String> list = new LinkedList<String>();
+						for(String doc:TDocid2.get(term).keySet()){
+							list.add(doc);
+						}
+						TDocid.put(termLower, list);
+					}
 				} catch (IndexerException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				b = b.substring(6);
+				if(b.contains(">")){
+					 b= b.substring(1, b.length());
+					 b = "<"+b;
+				}
 			}
-			else if(b.contains("Category:")){/*define the hashmap Tdocid<String, linklist<string> as a hashmap of category */
+			else if(b.contains("Category:") || b.contains("category:")){/*define the hashmap Tdocid<String, linklist<string> as a hashmap of category */
 				try {
-					TDocid = IRdrObj.returnMap(IndexType.CATEGORY);
+					String termLower = "";
+					TDocid2 = IRdrObj.returnMap(IndexType.CATEGORY);
+					for(String term:TDocid2.keySet()){
+						termLower = term.toLowerCase();
+						LinkedList<String> list = new LinkedList<String>();
+						for(String doc:TDocid2.get(term).keySet()){
+							list.add(doc);
+						}
+						TDocid.put(termLower, list);
+					}
 				} catch (IndexerException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				b = b.substring(9);
+				if(b.contains(">")){
+					 b= b.substring(1, b.length());
+					 b = "<"+b;
+				}
 			}
 			else {}
 		
@@ -990,14 +1193,14 @@ public class IndexSearcher {
 		else {
 			if (b.startsWith("<")){
 				String b1 = b.substring(1, b.length()-1);
-				Oprnd2List = TDocid.get(b1);
+				Oprnd2List = TDocid.get(b1.toLowerCase());
 				if (Oprnd2List == null){
 					Oprnd2List = new LinkedList<String>();
 					Oprnd2List.addAll(EmptyDocidslist);
 				}
 				
 			}
-			else { Oprnd2List = TDocid.get(b); 
+			else { Oprnd2List = TDocid.get(b.toLowerCase()); 
 					if (Oprnd2List == null){
 						Oprnd2List = new LinkedList<String>();
 						Oprnd2List.addAll(EmptyDocidslist);
